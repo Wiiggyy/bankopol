@@ -12,8 +12,7 @@ class LeaderBoard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final sortedPlayers = gameState.players.toList()
-      ..sort(
-          (a, b) => b.totalInvestmentValue.compareTo(a.totalInvestmentValue));
+      ..sort((a, b) => b.totalAssetsValue.compareTo(a.totalAssetsValue));
     return Container(
       margin: const EdgeInsets.all(12.0),
       child: Card(
@@ -37,7 +36,7 @@ class LeaderBoard extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(player.name),
-                      Text(player.totalInvestmentValue.toStringAsFixed(2)),
+                      Text(player.totalAssetsValue.toStringAsFixed(2)),
                     ],
                   )
               ],

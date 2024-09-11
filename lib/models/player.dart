@@ -16,9 +16,9 @@ class Player {
     this.scannedCodes = const {},
   });
 
-  double get totalInvestmentValue {
-    return investments.fold(
-        0, (previousValue, element) => previousValue + element.value);
+  double get totalAssetsValue {
+    return investments.fold(bankAccount.amount,
+        (previousValue, element) => previousValue + element.value);
   }
 
   factory Player.fromJson(Map<String, dynamic> json) {
