@@ -14,38 +14,34 @@ class LeaderBoard extends StatelessWidget {
     final sortedPlayers = gameState.players.toList()
       ..sort(
           (a, b) => b.totalInvestmentValue.compareTo(a.totalInvestmentValue));
-    return Padding(
-      padding: const EdgeInsets.all(16),
-      child: ColoredBox(
-        color: Colors.white,
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              Container(
-                width: double.infinity,
-                color: Colors.grey,
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 16,
-                  vertical: 4,
-                ),
-                child: const Text(
-                  'Leader Board',
+    return Container(
+      margin: const EdgeInsets.all(12.0),
+      child: Card(
+        color: Colors.white.withOpacity(0.8),
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                Text(
+                  'Leader Board'.toUpperCase(),
                   style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 20,
-                  ),
+                      color: Colors.black,
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold),
                 ),
-              ),
-              for (final player in sortedPlayers)
-                Row(
-                  key: ValueKey(player.id),
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(player.name),
-                    Text(player.totalInvestmentValue.toStringAsFixed(2)),
-                  ],
-                )
-            ],
+                SizedBox(height: 16),
+                for (final player in sortedPlayers)
+                  Row(
+                    key: ValueKey(player.id),
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(player.name),
+                      Text(player.totalInvestmentValue.toStringAsFixed(2)),
+                    ],
+                  )
+              ],
+            ),
           ),
         ),
       ),

@@ -19,6 +19,7 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      theme: ThemeData(fontFamily: 'San Francisco'),
       title: 'Flutter Demo',
       home: StartScreen(
         gameProvider: gameProvider,

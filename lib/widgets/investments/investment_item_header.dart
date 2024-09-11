@@ -9,18 +9,18 @@ class InvestmentItemHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      color: Colors.grey,
       padding: const EdgeInsets.symmetric(
-        horizontal: 16,
+        // horizontal: 16,
         vertical: 4,
       ),
       child: const Row(
         children: [
           Expanded(
-            flex: 2,
+            flex: 4,
             child: Text(
               'Investering',
               textAlign: TextAlign.left,
+              style: TextStyle(fontWeight: FontWeight.bold),
             ),
           ),
           Expanded(
@@ -28,13 +28,15 @@ class InvestmentItemHeader extends StatelessWidget {
             child: Text(
               'Antal',
               textAlign: TextAlign.center,
+              style: TextStyle(fontWeight: FontWeight.bold),
             ),
           ),
           Expanded(
-            flex: 2,
+            flex: 1,
             child: Text(
               'Värde',
               textAlign: TextAlign.right,
+              style: TextStyle(fontWeight: FontWeight.bold),
             ),
           ),
         ],
