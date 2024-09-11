@@ -17,28 +17,21 @@ class InvestmentCard extends StatelessWidget {
       margin: const EdgeInsets.all(8.0),
       child: Stack(
         children: [
-          // rounded corners image
-
           Positioned.fill(
             child: ClipRRect(
-              borderRadius:
-                  BorderRadius.circular(12.0), // Adjust the radius as needed
+              borderRadius: BorderRadius.circular(12.0),
               child: Image.asset(
                 'assets/${investment.investmentType.name}.webp',
                 fit: BoxFit.cover,
               ),
             ),
           ),
-          // Card with content
           ClipRRect(
-            borderRadius:
-                BorderRadius.circular(12.0), // Adjust the radius as needed
+            borderRadius: BorderRadius.circular(12.0),
             child: Container(
-              // margin: const EdgeInsets.all(32.0),
               width: double.infinity,
               padding: const EdgeInsets.all(32.0),
               color: Colors.white.withOpacity(0.6),
-              // height: 400,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [

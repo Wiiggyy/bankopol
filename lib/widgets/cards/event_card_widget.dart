@@ -33,24 +33,37 @@ class EventCardWidget extends StatelessWidget {
         onFlipDone: (status) {},
         front: Container(
           decoration: BoxDecoration(
-            color: darkGreen,
-            borderRadius: const BorderRadius.all(Radius.circular(8.0)),
+            // color: darkGreen,
+            borderRadius: const BorderRadius.all(Radius.circular(12.0)),
             border: Border.all(color: Colors.grey),
           ),
-          child: const Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Icon(
-                Icons.question_mark,
-                size: 60,
-                color: Colors.yellow,
-                shadows: [
-                  Shadow(
-                    blurRadius: 20,
-                    color: Colors.black,
+          child: Stack(
+            children: [
+              Positioned.fill(
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(12.0),
+                  child: Image.asset(
+                    'assets/eventCard.webp',
+                    fit: BoxFit.cover,
                   ),
-                ],
+                ),
               ),
+              // const Column(
+              //   mainAxisAlignment: MainAxisAlignment.center,
+              //   children: <Widget>[
+              //     Icon(
+              //       Icons.question_mark,
+              //       size: 60,
+              //       color: Colors.yellow,
+              //       shadows: [
+              //         Shadow(
+              //           blurRadius: 20,
+              //           color: Colors.black,
+              //         ),
+              //       ],
+              //     ),
+              //   ],
+              // ),
             ],
           ),
         ),
@@ -61,28 +74,32 @@ class EventCardWidget extends StatelessWidget {
             borderRadius: const BorderRadius.all(Radius.circular(8.0)),
             border: Border.all(color: Colors.grey),
           ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Text(
-                eventCard.description,
-                style: const TextStyle(color: Colors.white),
+          child: Stack(
+            children: [
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Text(
+                    eventCard.description,
+                    style: const TextStyle(color: Colors.white),
+                  ),
+                  if (eventCard.eventAction.amount != null)
+                    Text(
+                      eventCard.eventAction.amount!.toString(),
+                      style: const TextStyle(color: Colors.white),
+                    ),
+                  if (eventCard.eventAction.amountValue != null)
+                    Text(
+                      eventCard.eventAction.amountValue!.toString(),
+                      style: const TextStyle(color: Colors.white),
+                    ),
+                  if (eventCard.eventAction.percentValue != null)
+                    Text(
+                      eventCard.eventAction.percentValue!.toString(),
+                      style: const TextStyle(color: Colors.white),
+                    ),
+                ],
               ),
-              if (eventCard.eventAction.amount != null)
-                Text(
-                  eventCard.eventAction.amount!.toString(),
-                  style: const TextStyle(color: Colors.white),
-                ),
-              if (eventCard.eventAction.amountValue != null)
-                Text(
-                  eventCard.eventAction.amountValue!.toString(),
-                  style: const TextStyle(color: Colors.white),
-                ),
-              if (eventCard.eventAction.percentValue != null)
-                Text(
-                  eventCard.eventAction.percentValue!.toString(),
-                  style: const TextStyle(color: Colors.white),
-                ),
             ],
           ),
         ),
