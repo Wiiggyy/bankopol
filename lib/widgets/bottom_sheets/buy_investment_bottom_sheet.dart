@@ -8,11 +8,13 @@ class BuyInvestmentBottomSheet extends StatefulWidget {
   final GameProvider gameProvider;
   final void Function() onPressed;
   final void Function() onPressedSell;
+  final void Function() onPressedClose;
 
   const BuyInvestmentBottomSheet({
     required this.gameProvider,
     required this.onPressed,
     required this.onPressedSell,
+    required this.onPressedClose,
     super.key,
   });
 
@@ -54,9 +56,7 @@ class _BuyInvestmentBottomSheetState extends State<BuyInvestmentBottomSheet> {
                   title: 'Köp',
                 ),
               ActionButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
+                onPressed: widget.onPressedClose,
                 title: 'Köp inte',
               )
             ],

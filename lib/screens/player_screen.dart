@@ -54,6 +54,13 @@ class _PlayerScreenState extends State<PlayerScreen> {
             Navigator.of(context).pop();
           },
           onPressedSell: showSellInvestmentList,
+          onPressedClose: () {
+            widget.gameProvider.generateCard();
+            setState(() {
+              shouldDrawCard = true;
+            });
+            Navigator.of(context).pop();
+          },
         );
       },
     );
