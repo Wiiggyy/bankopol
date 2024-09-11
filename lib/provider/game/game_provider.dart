@@ -89,21 +89,12 @@ class GameProvider with ChangeNotifier {
       );
 
       if (player != null) {
-        final investment = player.investments
-            .where((playerInvestment) =>
-                playerInvestment.investmentType ==
-                sellInvestment.investmentType)
-            .toList();
+        final investment = player.investments.firstWhereOrNull(
+          (playerInvestment) =>
+              playerInvestment.investmentType == sellInvestment.investmentType,
+        );
 
-        if (investment.isNotEmpty) {
-          final nextInvestment = investment.first.copyWith(
-            quantity: investment.first.quantity - sellInvestment.quantity,
-            value: investment.first.value - sellInvestment.value,
-          );
-          player.investments.removeWhere((playerInvestment) =>
-              playerInvestment.investmentType == sellInvestment.investmentType);
-          player.investments.add(nextInvestment);
-        }
+        if (investment == null) return;
 
         final newBankAccount = player.bankAccount.copyWith(
           amount: player.bankAccount.amount + sellInvestment.value,
@@ -111,6 +102,11 @@ class GameProvider with ChangeNotifier {
 
         final updatedPlayer = player.copyWith(
           bankAccount: newBankAccount,
+          investments: player.investments
+              .where((playerInvestment) =>
+                  playerInvestment.investmentType !=
+                  sellInvestment.investmentType)
+              .toSet(),
         );
 
         final nextGameState = gameState.copyWith(

@@ -58,13 +58,20 @@ class InvestmentCard extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 8.0),
+
                   Text(
-                    'Ränta: ${investment.interest}',
+                    'Pris: ${investment.value.toInt()}',
                     style: const TextStyle(
-                      fontSize: 14.0,
-                      color: Colors.grey,
+                      fontSize: 16.0,
                     ),
                   ),
+                  // Text(
+                  //   'Ränta: ${investment.interest}',
+                  //   style: const TextStyle(
+                  //     fontSize: 14.0,
+                  //     color: Colors.grey,
+                  //   ),
+                  // ),
                 ],
               ),
             ),

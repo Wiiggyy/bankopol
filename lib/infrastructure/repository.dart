@@ -29,7 +29,7 @@ class Repository {
     debugPrint('Getting stream');
 
     await for (final message in _channel.stream) {
-      debugPrint('Received: $message');
+      debugPrint('Received message');
       if (message is String) {
         final jsonData = jsonDecode(message);
         final gameState = GameState.fromJson(jsonData);
