@@ -3,6 +3,8 @@ import 'package:bankopol/models/investment.dart';
 import 'package:bankopol/provider/game/game_provider.dart';
 import 'package:bankopol/screens/start_screen.dart';
 import 'package:bankopol/widgets/action_button.dart';
+import 'package:bankopol/widgets/bottom_sheets/buy_investment_bottom_sheet.dart';
+import 'package:bankopol/widgets/bottom_sheets/sell_investment_bottom_sheet.dart';
 import 'package:bankopol/widgets/cards/event_card_widget.dart';
 import 'package:bankopol/widgets/investments/investment_card.dart';
 import 'package:bankopol/widgets/investments/investment_list.dart';
@@ -29,90 +31,29 @@ class _PlayerScreenState extends State<PlayerScreen> {
   showSellInvestmentList() {
     showModalBottomSheet(
       context: context,
-      builder: (context) {
-        return SingleChildScrollView(
-          child: ListenableBuilder(
-            listenable: widget.gameProvider,
-            builder: (context, __) {
-              return Column(
-                children: [
-                  for (final investment
-                      in widget.gameProvider.currentPlayer?.investments ??
-                          <Investment>{})
-                    Container(
-                      margin: const EdgeInsets.symmetric(vertical: 8),
-                      child: Dismissible(
-                        key: ObjectKey(investment),
-                        onDismissed: (direction) {
-                          widget.gameProvider.sellInvestment(investment);
-                          Navigator.of(context).pop();
-                        },
-                        background: Container(
-                          color: Colors.red.shade500,
-                          child: const Icon(Icons.delete),
-                        ),
-                        child: InvestmentCard(
-                            key: ObjectKey(investment), investment: investment),
-                      ),
-                    )
-                ],
-              );
-            },
-          ),
-        );
+      builder: (_) {
+        return SellInvestmentBottomSheet(gameProvider: widget.gameProvider);
       },
     );
   }
 
   handleScan(String code) async {
     print('------------Scanned code: $code');
-    final randomInvestment = Investment.generateRandomInvestment();
 
-    final canBuy =
-        (widget.gameProvider.currentPlayer?.bankAccount.amount ?? 0) >=
-            randomInvestment.value;
     await showModalBottomSheet(
       context: context,
       isDismissible: false,
       backgroundColor: Colors.transparent,
-      builder: (context) {
-        return ListenableBuilder(
-          listenable: widget.gameProvider,
-          builder: (context, __) {
-            return Container(
-              color: Colors.white60,
-              height: 500,
-              width: double.infinity,
-              child: Column(
-                children: [
-                  Text('Scanned code: $code'),
-                  InvestmentCard(investment: randomInvestment),
-                  if (!canBuy)
-                    ActionButton(
-                      onPressed: showSellInvestmentList,
-                      title: 'Sälj investeringar',
-                    ),
-                  if (!shouldDrawCard && canBuy)
-                    ActionButton(
-                      onPressed: () {
-                        widget.gameProvider.buyInvestment(randomInvestment);
-                        setState(() {
-                          shouldDrawCard = true;
-                        });
-                        Navigator.of(context).pop();
-                      },
-                      title: 'Köp',
-                    ),
-                  ActionButton(
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                    title: 'Köp inte',
-                  )
-                ],
-              ),
-            );
+      builder: (_) {
+        return BuyInvestmentBottomSheet(
+          gameProvider: widget.gameProvider,
+          onPressed: () {
+            setState(() {
+              shouldDrawCard = true;
+            });
+            Navigator.of(context).pop();
           },
+          onPressedSell: showSellInvestmentList,
         );
       },
     );
