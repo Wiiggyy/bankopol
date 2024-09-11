@@ -31,7 +31,7 @@ class InvestmentCard extends StatelessWidget {
             child: Container(
               width: double.infinity,
               padding: const EdgeInsets.all(32.0),
-              color: Colors.white.withOpacity(0.6),
+              color: Colors.white.withOpacity(0.8),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [

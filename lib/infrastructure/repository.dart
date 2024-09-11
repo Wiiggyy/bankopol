@@ -17,7 +17,7 @@ class Repository {
 
   factory Repository() {
     const uri =
-        'ws://hackstatehandler-djcyf9c6bbetfvfy.swedencentral-01.azurewebsites.net/api/Player/connect/';
+        'wss://hackstatehandler-djcyf9c6bbetfvfy.swedencentral-01.azurewebsites.net/api/Player/connect/';
     debugPrint('Connecting to socket');
     final channel = WebSocketChannel.connect(Uri.parse(uri));
     final dio = Dio();

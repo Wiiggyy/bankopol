@@ -47,23 +47,28 @@ class _BuyInvestmentBottomSheetState extends State<BuyInvestmentBottomSheet> {
               children: [
                 // Text('Scanned code: $code'),
                 InvestmentCard(investment: investment),
-                if (!canBuy)
-                  ActionButton(
-                    onPressed: widget.onPressedSell,
-                    title: 'Sälj investeringar',
-                  ),
-                if (canBuy)
-                  ActionButton(
-                    onPressed: () {
-                      widget.gameProvider.buyInvestment(investment);
-                      widget.onPressed();
-                    },
-                    title: 'Köp',
-                  ),
-                ActionButton(
-                  onPressed: widget.onPressedClose,
-                  title: 'Köp inte',
-                )
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    if (!canBuy)
+                      ActionButton(
+                        onPressed: widget.onPressedSell,
+                        title: 'Sälj investeringar',
+                      ),
+                    ActionButton(
+                      onPressed: widget.onPressedClose,
+                      title: 'Köp inte',
+                    ),
+                    if (canBuy)
+                      ActionButton(
+                        onPressed: () {
+                          widget.gameProvider.buyInvestment(investment);
+                          widget.onPressed();
+                        },
+                        title: 'Köp',
+                      ),
+                  ],
+                ),
               ],
             ),
           ),

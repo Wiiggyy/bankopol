@@ -25,7 +25,7 @@ class SellInvestmentBottomSheet extends StatelessWidget {
                       in gameProvider.currentPlayer?.investments ??
                           <Investment>{})
                     Container(
-                      margin: const EdgeInsets.symmetric(vertical: 8),
+                      margin: const EdgeInsets.all(8),
                       child: Dismissible(
                         key: ObjectKey(investment),
                         onDismissed: (direction) {
@@ -33,11 +33,20 @@ class SellInvestmentBottomSheet extends StatelessWidget {
                           Navigator.of(context).pop();
                         },
                         background: Container(
-                          color: Colors.red.shade500,
+                          margin: const EdgeInsets.all(8),
+                          decoration: BoxDecoration(
+                            color: Colors.red.shade500,
+                            borderRadius: BorderRadius.circular(
+                                16.0), // Border radius for the background
+                          ),
                           child: const Icon(Icons.delete),
                         ),
-                        child: InvestmentCard(
-                            key: ObjectKey(investment), investment: investment),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(16.0),
+                          child: InvestmentCard(
+                              key: ObjectKey(investment),
+                              investment: investment),
+                        ),
                       ),
                     )
                 ],
