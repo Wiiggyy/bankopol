@@ -1,12 +1,10 @@
 import 'package:bankopol/constants/colors.dart';
-import 'package:bankopol/models/investment.dart';
 import 'package:bankopol/provider/game/game_provider.dart';
 import 'package:bankopol/screens/start_screen.dart';
 import 'package:bankopol/widgets/action_button.dart';
 import 'package:bankopol/widgets/bottom_sheets/buy_investment_bottom_sheet.dart';
 import 'package:bankopol/widgets/bottom_sheets/sell_investment_bottom_sheet.dart';
 import 'package:bankopol/widgets/cards/event_card_widget.dart';
-import 'package:bankopol/widgets/investments/investment_card.dart';
 import 'package:bankopol/widgets/investments/investment_list.dart';
 import 'package:bankopol/widgets/investments/leader_board.dart';
 import 'package:bankopol/widgets/qr_scanner.dart';
@@ -86,9 +84,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
                     ),
                   if (widget.gameProvider.gameState case final gameState?)
                     LeaderBoard(gameState: gameState),
-                  if (!shouldDrawCard &&
-                      widget.gameProvider.currentEventCard == null)
-                    QrScannerToggle(onCode: handleScan),
+
                   // ActionButton(
                   //   onPressed: () {
                   //     widget.gameProvider.buyInvestment(
@@ -140,6 +136,9 @@ class _PlayerScreenState extends State<PlayerScreen> {
                       },
                       title: 'dra kort',
                     ),
+                  if (!shouldDrawCard &&
+                      widget.gameProvider.currentEventCard == null)
+                    QrScannerToggle(onCode: handleScan),
                   Row(
                     children: [
                       InkWell(

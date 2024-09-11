@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:bankopol/widgets/action_button.dart';
 import 'package:camera/camera.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
@@ -20,20 +21,21 @@ class _QrScannerState extends State<QrScanner> {
 
   @override
   Widget build(BuildContext context) {
-    return ElevatedButton(
-        onPressed: () {
-          _qrBarCodeScannerDialogPlugin.getScannedQrBarCode(
-              context: context,
-              onCode: (code) {
-                if (code case final code?) {
-                  widget.onCode(code);
-                }
-                setState(() {
-                  this.code = code;
-                });
+    return ActionButton(
+      onPressed: () {
+        _qrBarCodeScannerDialogPlugin.getScannedQrBarCode(
+            context: context,
+            onCode: (code) {
+              if (code case final code?) {
+                widget.onCode(code);
+              }
+              setState(() {
+                this.code = code;
               });
-        },
-        child: Text(code ?? "Click me"));
+            });
+      },
+      title: code ?? "Scanna",
+    );
   }
 }
 
