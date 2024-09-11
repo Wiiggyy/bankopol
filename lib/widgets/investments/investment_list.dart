@@ -17,12 +17,14 @@ class InvestmentList extends StatelessWidget {
       padding: const EdgeInsets.all(16),
       child: ColoredBox(
         color: Colors.white,
-        child: Column(
-          children: [
-            const InvestmentItemHeader(),
-            for (final investment in player.investments)
-              InvestmentItem(investment: investment),
-          ],
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              const InvestmentItemHeader(),
+              for (final investment in player.investments)
+                InvestmentItem(investment: investment),
+            ],
+          ),
         ),
       ),
     );

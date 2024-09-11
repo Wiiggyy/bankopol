@@ -4,172 +4,42 @@ import 'package:camera/camera.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:google_mlkit_barcode_scanning/google_mlkit_barcode_scanning.dart';
+import 'package:qr_bar_code_scanner_dialog/qr_bar_code_scanner_dialog.dart';
 
 class QrScanner extends StatefulWidget {
-  const QrScanner({super.key});
+  final Function(String code) onCode;
+  const QrScanner({super.key, required this.onCode});
 
   @override
   State<QrScanner> createState() => _QrScannerState();
 }
 
 class _QrScannerState extends State<QrScanner> {
-  late final BarcodeScanner barcodeScanner;
-  CameraController? cameraController;
-  bool initialized = false;
-  bool isProcessing = false;
-
-  @override
-  void initState() {
-    barcodeScanner = BarcodeScanner(formats: [BarcodeFormat.qrCode]);
-
-    _getCamera(CameraLensDirection.back).then(
-      (camera) {
-        if (camera == null) return;
-        cameraController = CameraController(
-          camera,
-          ResolutionPreset.high,
-          enableAudio: false,
-          imageFormatGroup: Platform.isIOS
-              ? ImageFormatGroup.bgra8888
-              : ImageFormatGroup.nv21,
-        )..initialize().then((_) {
-            setState(() {
-              initialized = true;
-            });
-            cameraController?.startImageStream(
-              (image) async {
-                if (isProcessing) return;
-                isProcessing = true;
-                try {
-                  const orientations = {
-                    DeviceOrientation.portraitUp: 0,
-                    DeviceOrientation.landscapeLeft: 90,
-                    DeviceOrientation.portraitDown: 180,
-                    DeviceOrientation.landscapeRight: 270,
-                  };
-
-                  final sensorOrientation = camera.sensorOrientation;
-                  InputImageRotation? rotation;
-
-                  if (Platform.isIOS) {
-                    rotation =
-                        InputImageRotationValue.fromRawValue(sensorOrientation);
-                  } else if (Platform.isAndroid) {
-                    var rotationCompensation =
-                        orientations[cameraController!.value.deviceOrientation];
-                    if (rotationCompensation == null) return;
-                    if (camera.lensDirection == CameraLensDirection.front) {
-                      // front-facing
-                      rotationCompensation =
-                          (sensorOrientation + rotationCompensation) % 360;
-                    } else {
-                      // back-facing
-                      rotationCompensation =
-                          (sensorOrientation - rotationCompensation + 360) %
-                              360;
-                    }
-                    rotation = InputImageRotationValue.fromRawValue(
-                        rotationCompensation);
-                  }
-
-                  // get image format
-                  final format =
-                      InputImageFormatValue.fromRawValue(image.format.raw);
-                  // validate format depending on platform
-                  // only supported formats:
-                  // * nv21 for Android
-                  // * bgra8888 for iOS
-                  var planeBytes = image.planes.first.bytes;
-                  if (format == null) throw 'No format';
-                  if ((Platform.isAndroid && format != InputImageFormat.nv21) ||
-                      (Platform.isIOS && format != InputImageFormat.bgra8888)) {
-                    if (format == InputImageFormat.yuv_420_888) {
-                      planeBytes = convertYuv420(image);
-                    } else {
-                      throw 'Format error got $format';
-                    }
-                  }
-
-                  if (rotation == null) throw 'No rotation';
-                  final inputImage = InputImage.fromBytes(
-                    bytes: planeBytes,
-                    metadata: InputImageMetadata(
-                      size:
-                          Size(image.width.toDouble(), image.height.toDouble()),
-                      rotation: rotation, // used only in Android
-                      format: format, // used only in iOS
-                      bytesPerRow:
-                          image.planes.first.bytesPerRow, // used only in iOS
-                    ),
-                  );
-                  print('HIIIIIII');
-                  print(inputImage.type);
-                  await _scanQrCode(inputImage);
-                } catch (e, stackTrace) {
-                  print('NOOOOOOOOOO');
-                  print(e);
-                  debugPrintStack(stackTrace: stackTrace);
-                } finally {
-                  isProcessing = false;
-                }
-              },
-            );
-          });
-        setState(() {});
-      },
-    );
-    super.initState();
-  }
-
-  Future<CameraDescription?> _getCamera(CameraLensDirection dir) async {
-    final cameras = await availableCameras();
-    final camera = cameras.firstWhereOrNull(
-      (camera) => camera.lensDirection == dir,
-    );
-    return camera ?? cameras.firstOrNull;
-  }
-
-  @override
-  void dispose() {
-    barcodeScanner.close();
-    cameraController?.dispose();
-    super.dispose();
-  }
-
-  Future<String?> _scanQrCode(InputImage inputImage) {
-    return barcodeScanner.processImage(inputImage).then(
-      (value) {
-        final text = value.firstOrNull?.rawValue;
-        if (text == null) {
-          return null;
-        }
-        print(text);
-        return text;
-      },
-    );
-  }
+  final _qrBarCodeScannerDialogPlugin = QrBarCodeScannerDialog();
+  String? code;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-        padding: const EdgeInsets.all(32),
-        height: MediaQuery.of(context).size.width,
-        width: MediaQuery.of(context).size.width,
-        child: switch (cameraController) {
-          final controller? when initialized => AspectRatio(
-              aspectRatio: 1 / controller.value.aspectRatio,
-              child: CameraPreview(
-                controller,
-              ),
-            ),
-          _ => const CircularProgressIndicator.adaptive(),
-        });
+    return ElevatedButton(
+        onPressed: () {
+          _qrBarCodeScannerDialogPlugin.getScannedQrBarCode(
+              context: context,
+              onCode: (code) {
+                if (code case final code?) {
+                  widget.onCode(code);
+                }
+                setState(() {
+                  this.code = code;
+                });
+              });
+        },
+        child: Text(code ?? "Click me"));
   }
 }
 
 class QrScannerToggle extends StatefulWidget {
-  const QrScannerToggle({super.key});
+  final Function(String code) onCode;
+  const QrScannerToggle({super.key, required this.onCode});
 
   @override
   State<QrScannerToggle> createState() => _QrScannerToggleState();
@@ -181,7 +51,7 @@ class _QrScannerToggleState extends State<QrScannerToggle> {
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        if (isOn) const QrScanner(),
+        if (isOn) QrScanner(onCode: widget.onCode),
         IconButton(
           onPressed: () {
             setState(() {

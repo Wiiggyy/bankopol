@@ -33,12 +33,26 @@ class Investment {
     };
   }
 
+  Investment copyWith({
+    InvestmentType? investmentType,
+    double? value,
+    int? quantity,
+    double? interest,
+  }) {
+    return Investment(
+      investmentType: investmentType ?? this.investmentType,
+      value: value ?? this.value,
+      quantity: quantity ?? this.quantity,
+      interest: interest ?? this.interest,
+    );
+  }
+
   factory Investment.generateRandomInvestment() {
     final random = Random();
     final investmentType =
         InvestmentType.values[random.nextInt(InvestmentType.values.length)];
     final value = random.nextDouble() * 1000;
-    final quantity = random.nextInt(100) + 1;
+    final quantity = 1; //random.nextInt(100) + 1;
     final interest = random.nextDouble() * 0.2;
 
     return Investment(

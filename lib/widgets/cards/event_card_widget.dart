@@ -5,26 +5,17 @@ import 'package:flutter/material.dart';
 
 class EventCardWidget extends StatelessWidget {
   final EventCard eventCard;
+  final void Function() onFlip;
 
   const EventCardWidget({
     required this.eventCard,
+    required this.onFlip,
     super.key,
   });
 
   _renderBg() {
     return Container(
       decoration: const BoxDecoration(color: Color(0xFFFFFFFF)),
-    );
-  }
-
-  _renderAppBar(context) {
-    return MediaQuery.removePadding(
-      context: context,
-      removeBottom: true,
-      child: AppBar(
-        elevation: 0.0,
-        backgroundColor: const Color(0x00FFFFFF),
-      ),
     );
   }
 
@@ -38,6 +29,7 @@ class EventCardWidget extends StatelessWidget {
         direction: FlipDirection.HORIZONTAL,
         side: CardSide.FRONT,
         speed: 1000,
+        onFlip: onFlip,
         onFlipDone: (status) {
           print(status);
         },
@@ -109,7 +101,6 @@ class EventCardWidget extends StatelessWidget {
         Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
-            _renderAppBar(context),
             Expanded(
               flex: 4,
               child: _renderContent(context),

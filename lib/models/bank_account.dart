@@ -14,6 +14,16 @@ class BankAccount {
     );
   }
 
+  BankAccount copyWith({
+    double? amount,
+    double? interest,
+  }) {
+    return BankAccount(
+      amount: amount ?? this.amount,
+      interest: interest ?? this.interest,
+    );
+  }
+
   toJson() {
     return {
       'amount': amount,

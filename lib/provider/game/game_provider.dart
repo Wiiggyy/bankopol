@@ -39,20 +39,15 @@ class GameProvider with ChangeNotifier {
     return null;
   }
 
-  void setState() {
-    // final response = repository.streamGameState();
-    notifyListeners();
-  }
-
-  Future<void> joinGame() async {
+  Future<void> joinGame(String name) async {
     final player = Player(
-      id: Uuid().v4(),
-      name: 'Z',
-      bankAccount: BankAccount(
+      id: const Uuid().v4(),
+      name: name,
+      bankAccount: const BankAccount(
         amount: 5000,
         interest: 0.025,
       ),
-      investments: [],
+      investments: {},
     );
     await repository.joinGame(player);
     _currentPlayerId = player.id;
@@ -63,7 +58,6 @@ class GameProvider with ChangeNotifier {
     Set<InvestmentType> investmentTypes = {};
 
     if (gameState case final gameState?) {
-      print(11113);
       for (final Player player in gameState.players) {
         for (final Investment investment in player.investments) {
           investmentTypes.add(investment.investmentType);
@@ -84,5 +78,113 @@ class GameProvider with ChangeNotifier {
 
       notifyListeners();
     }
+  }
+
+  void saveInvestment(Investment newInvestment) async {
+    if (gameState case final gameState?) {
+      final player = gameState.players.firstWhereOrNull(
+        (player) => player.id == _currentPlayerId,
+      );
+
+      if (player != null) {
+        final investment = player.investments
+            .where((playerInvestment) =>
+                playerInvestment.investmentType == newInvestment.investmentType)
+            .toList();
+
+        if (investment.isNotEmpty) {
+          final nextInvestment = investment.first.copyWith(
+            quantity: investment.first.quantity + newInvestment.quantity,
+            value: investment.first.value + newInvestment.value,
+          );
+          player.investments.removeWhere((playerInvestment) =>
+              playerInvestment.investmentType == newInvestment.investmentType);
+          player.investments.add(nextInvestment);
+        } else {
+          player.investments.add(newInvestment);
+          player.bankAccount.copyWith(
+              amount: player.bankAccount.amount - newInvestment.value);
+        }
+
+        player.bankAccount.copyWith(
+          amount: player.bankAccount.amount - newInvestment.value,
+        );
+
+        final nextGameState = gameState.copyWith(
+          players: {...gameState.players}
+            ..removeWhere((player) => player.id == _currentPlayerId)
+            ..add(player),
+        );
+        await repository.updateGameState(nextGameState);
+      }
+    }
+  }
+
+  void updatePlayers() {
+    final investmentType = _currentEventCard?.eventAction.investmentType;
+    final amount = _currentEventCard?.eventAction.amount;
+    final amountValue = _currentEventCard?.eventAction.amountValue;
+    final percentValue = 1 + (_currentEventCard?.eventAction.percentValue ?? 0);
+
+    final playersWithInvestment = gameState?.players
+        .where((player) => player.investments
+            .where(
+              (investment) => investment.investmentType == investmentType,
+            )
+            .toList()
+            .isNotEmpty)
+        .toList();
+
+    final updatedPlayersWithInvestments = playersWithInvestment?.map((player) {
+      final investment = player.investments.firstWhere(
+          (investment) => investment.investmentType == investmentType);
+
+      final newQuantity = investment.quantity + (amount ?? 0);
+      final newAmount = amountValue != null
+          ? investment.value + amountValue
+          : investment.value * percentValue;
+      late Investment updatedInvestment;
+      if (newQuantity == 0 || newAmount <= 0) {
+        player.investments.remove(investment);
+      } else {
+        updatedInvestment = investment.copyWith(
+          quantity: newQuantity,
+          value: amountValue != null
+              ? investment.value + amountValue
+              : investment.value * percentValue,
+        );
+      }
+
+      return player.copyWith(
+          investments: player.investments
+              .map((investment) => investment.investmentType == investmentType
+                  ? updatedInvestment
+                  : investment)
+              .toSet());
+    }).toSet();
+
+    repository.updateGameState(
+      gameState!.copyWith(
+        players: {
+          ...gameState!.players
+            ..removeWhere(
+                (player) => playersWithInvestment?.contains(player) ?? false)
+            ..addAll(updatedPlayersWithInvestments ?? {}),
+        },
+      ),
+    );
+  }
+
+  void removeCard() {
+    _currentEventCard = null;
+    notifyListeners();
+  }
+
+  void clearGameState() {
+    _gameState = null;
+    _currentEventCard = null;
+    _currentPlayerId = null;
+
+    repository.clearGame();
   }
 }

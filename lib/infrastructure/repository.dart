@@ -71,7 +71,7 @@ class Repository {
         amount: 1000,
         interest: 0.1,
       ),
-      investments: [Investment.generateRandomInvestment()],
+      investments: {Investment.generateRandomInvestment()},
     );
     final currentGameState = await getCurrentGameState();
     print('Current game state: $currentGameState');

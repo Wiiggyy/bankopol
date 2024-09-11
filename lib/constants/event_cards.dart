@@ -105,7 +105,7 @@ final eventCards = [
         'Fonden har höga avgifter som äter upp en del av din avkastning',
     eventAction: EventAction(
       investmentType: InvestmentType.funds,
-      amount: 100,
+      amountValue: -100,
     ),
   ),
   const EventCard(
