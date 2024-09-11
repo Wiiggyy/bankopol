@@ -30,17 +30,35 @@ class _PlayerScreenState extends State<PlayerScreen> {
     showModalBottomSheet(
       context: context,
       builder: (context) {
-        return Column(
-          children: [
-            for (final investment
-                in widget.gameProvider.currentPlayer?.investments ??
-                    <Investment>{})
-              Container(
-                margin: const EdgeInsets.symmetric(vertical: 8),
-                child: InvestmentCard(
-                    key: ObjectKey(investment), investment: investment),
-              ),
-          ],
+        return SingleChildScrollView(
+          child: ListenableBuilder(
+            listenable: widget.gameProvider,
+            builder: (context, __) {
+              return Column(
+                children: [
+                  for (final investment
+                      in widget.gameProvider.currentPlayer?.investments ??
+                          <Investment>{})
+                    Container(
+                      margin: const EdgeInsets.symmetric(vertical: 8),
+                      child: Dismissible(
+                        key: ObjectKey(investment),
+                        onDismissed: (direction) {
+                          widget.gameProvider.sellInvestment(investment);
+                          Navigator.of(context).pop();
+                        },
+                        background: Container(
+                          color: Colors.red.shade500,
+                          child: const Icon(Icons.delete),
+                        ),
+                        child: InvestmentCard(
+                            key: ObjectKey(investment), investment: investment),
+                      ),
+                    )
+                ],
+              );
+            },
+          ),
         );
       },
     );
@@ -54,44 +72,50 @@ class _PlayerScreenState extends State<PlayerScreen> {
         (widget.gameProvider.currentPlayer?.bankAccount.amount ?? 0) >=
             randomInvestment.value;
     await showModalBottomSheet(
-        context: context,
-        isDismissible: false,
-        backgroundColor: Colors.transparent,
-        builder: (context) {
-          return Container(
-            color: Colors.white60,
-            height: 500,
-            width: double.infinity,
-            child: Column(
-              children: [
-                Text('Scanned code: $code'),
-                InvestmentCard(investment: randomInvestment),
-                if (!canBuy)
-                  ActionButton(
-                    onPressed: showSellInvestmentList,
-                    title: 'Sälj investeringar',
-                  ),
-                if (!shouldDrawCard && canBuy)
+      context: context,
+      isDismissible: false,
+      backgroundColor: Colors.transparent,
+      builder: (context) {
+        return ListenableBuilder(
+          listenable: widget.gameProvider,
+          builder: (context, __) {
+            return Container(
+              color: Colors.white60,
+              height: 500,
+              width: double.infinity,
+              child: Column(
+                children: [
+                  Text('Scanned code: $code'),
+                  InvestmentCard(investment: randomInvestment),
+                  if (!canBuy)
+                    ActionButton(
+                      onPressed: showSellInvestmentList,
+                      title: 'Sälj investeringar',
+                    ),
+                  if (!shouldDrawCard && canBuy)
+                    ActionButton(
+                      onPressed: () {
+                        widget.gameProvider.buyInvestment(randomInvestment);
+                        setState(() {
+                          shouldDrawCard = true;
+                        });
+                        Navigator.of(context).pop();
+                      },
+                      title: 'Köp',
+                    ),
                   ActionButton(
                     onPressed: () {
-                      widget.gameProvider.buyInvestment(randomInvestment);
-                      setState(() {
-                        shouldDrawCard = true;
-                      });
                       Navigator.of(context).pop();
                     },
-                    title: 'Köp',
-                  ),
-                ActionButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                  title: 'Köp inte',
-                )
-              ],
-            ),
-          );
-        });
+                    title: 'Köp inte',
+                  )
+                ],
+              ),
+            );
+          },
+        );
+      },
+    );
   }
 
   @override
@@ -121,7 +145,9 @@ class _PlayerScreenState extends State<PlayerScreen> {
                     ),
                   if (widget.gameProvider.gameState case final gameState?)
                     LeaderBoard(gameState: gameState),
-                  QrScannerToggle(onCode: handleScan),
+                  if (!shouldDrawCard &&
+                      widget.gameProvider.currentEventCard == null)
+                    QrScannerToggle(onCode: handleScan),
                   // ActionButton(
                   //   onPressed: () {
                   //     widget.gameProvider.buyInvestment(

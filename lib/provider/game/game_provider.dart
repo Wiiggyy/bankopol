@@ -44,7 +44,7 @@ class GameProvider with ChangeNotifier {
       id: const Uuid().v4(),
       name: name,
       bankAccount: const BankAccount(
-        amount: 00,
+        amount: 1000,
         interest: 0.025,
       ),
       investments: {},
@@ -77,6 +77,47 @@ class GameProvider with ChangeNotifier {
           .elementAt(randomCardIndex);
 
       notifyListeners();
+    }
+  }
+
+  void sellInvestment(Investment sellInvestment) async {
+    if (gameState case final gameState?) {
+      final player = gameState.players.firstWhereOrNull(
+        (player) => player.id == _currentPlayerId,
+      );
+
+      if (player != null) {
+        final investment = player.investments
+            .where((playerInvestment) =>
+                playerInvestment.investmentType ==
+                sellInvestment.investmentType)
+            .toList();
+
+        if (investment.isNotEmpty) {
+          final nextInvestment = investment.first.copyWith(
+            quantity: investment.first.quantity - sellInvestment.quantity,
+            value: investment.first.value - sellInvestment.value,
+          );
+          player.investments.removeWhere((playerInvestment) =>
+              playerInvestment.investmentType == sellInvestment.investmentType);
+          player.investments.add(nextInvestment);
+        }
+
+        final newBankAccount = player.bankAccount.copyWith(
+          amount: player.bankAccount.amount + sellInvestment.value,
+        );
+
+        final updatedPlayer = player.copyWith(
+          bankAccount: newBankAccount,
+        );
+
+        final nextGameState = gameState.copyWith(
+          players: {...gameState.players}
+            ..removeWhere((player) => player.id == _currentPlayerId)
+            ..add(updatedPlayer),
+        );
+        await repository.updateGameState(nextGameState);
+      }
     }
   }
 
