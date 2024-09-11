@@ -41,11 +41,13 @@ class _PlayerScreenState extends State<PlayerScreen> {
     await showModalBottomSheet(
       context: context,
       isDismissible: false,
+      enableDrag: false,
       backgroundColor: Colors.transparent,
       builder: (_) {
         return BuyInvestmentBottomSheet(
           gameProvider: widget.gameProvider,
           onPressed: () {
+            widget.gameProvider.generateCard();
             setState(() {
               shouldDrawCard = true;
             });
@@ -113,6 +115,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
                                 if (didFlip) {
                                   setState(() {
                                     didFlip = false;
+                                    shouldDrawCard = false;
                                   });
                                   widget.gameProvider.removeCard();
                                 } else {
@@ -126,16 +129,16 @@ class _PlayerScreenState extends State<PlayerScreen> {
                           : const SizedBox.shrink(),
                     ),
                   ),
-                  if (shouldDrawCard)
-                    ActionButton(
-                      onPressed: () {
-                        widget.gameProvider.generateCard();
-                        setState(() {
-                          shouldDrawCard = false;
-                        });
-                      },
-                      title: 'dra kort',
-                    ),
+                  // if (shouldDrawCard)
+                  //   ActionButton(
+                  //     onPressed: () {
+                  //       widget.gameProvider.generateCard();
+                  //       setState(() {
+                  //         shouldDrawCard = false;
+                  //       });
+                  //     },
+                  //     title: 'dra kort',
+                  //   ),
                   if (!shouldDrawCard &&
                       widget.gameProvider.currentEventCard == null)
                     QrScannerToggle(onCode: handleScan),

@@ -39,6 +39,9 @@ class GameProvider with ChangeNotifier {
   }
 
   Future<void> joinGame(String name) async {
+    if (name.isEmpty) {
+      name = 'Player ${DateTime.now().millisecondsSinceEpoch}';
+    }
     final player = Player(
       id: const Uuid().v4(),
       name: name,

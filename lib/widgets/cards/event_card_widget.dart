@@ -68,37 +68,57 @@ class EventCardWidget extends StatelessWidget {
           ),
         ),
         back: Container(
-          padding: const EdgeInsets.all(16),
+          // padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
-            color: primaryGreen,
-            borderRadius: const BorderRadius.all(Radius.circular(8.0)),
+            // color: primaryGreen,
+            borderRadius: const BorderRadius.all(Radius.circular(12.0)),
             border: Border.all(color: Colors.grey),
           ),
           child: Stack(
             children: [
-              Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Text(
-                    eventCard.description,
-                    style: const TextStyle(color: Colors.white),
+              Positioned.fill(
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(12.0),
+                  child: Image.asset(
+                    'assets/eventCardB.webp',
+                    fit: BoxFit.cover,
                   ),
-                  if (eventCard.eventAction.amount != null)
-                    Text(
-                      eventCard.eventAction.amount!.toString(),
-                      style: const TextStyle(color: Colors.white),
-                    ),
-                  if (eventCard.eventAction.amountValue != null)
-                    Text(
-                      eventCard.eventAction.amountValue!.toString(),
-                      style: const TextStyle(color: Colors.white),
-                    ),
-                  if (eventCard.eventAction.percentValue != null)
-                    Text(
-                      eventCard.eventAction.percentValue!.toString(),
-                      style: const TextStyle(color: Colors.white),
-                    ),
-                ],
+                ),
+              ),
+              ClipRRect(
+                borderRadius: BorderRadius.circular(12.0),
+                child: Container(
+                  padding: const EdgeInsets.all(32),
+                  color: Colors.white.withOpacity(0.6),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Text(
+                        eventCard.description,
+                        style: const TextStyle(
+                            color: Colors.black, fontWeight: FontWeight.bold),
+                      ),
+                      if (eventCard.eventAction.amount != null)
+                        Text(
+                          eventCard.eventAction.amount!.toString(),
+                          style: const TextStyle(
+                              color: Colors.black, fontWeight: FontWeight.bold),
+                        ),
+                      if (eventCard.eventAction.amountValue != null)
+                        Text(
+                          eventCard.eventAction.amountValue!.toString(),
+                          style: const TextStyle(
+                              color: Colors.black, fontWeight: FontWeight.bold),
+                        ),
+                      if (eventCard.eventAction.percentValue != null)
+                        Text(
+                          eventCard.eventAction.percentValue!.toString(),
+                          style: const TextStyle(
+                              color: Colors.black, fontWeight: FontWeight.bold),
+                        ),
+                    ],
+                  ),
+                ),
               ),
             ],
           ),
@@ -112,7 +132,7 @@ class EventCardWidget extends StatelessWidget {
     return Stack(
       fit: StackFit.expand,
       children: <Widget>[
-        _renderBg(),
+        // _renderBg(),
         Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
