@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:bankopol/constants/colors.dart';
 import 'package:bankopol/provider/game/game_provider.dart';
 import 'package:bankopol/screens/start_screen.dart';
@@ -72,110 +74,122 @@ class _PlayerScreenState extends State<PlayerScreen> {
       listenable: widget.gameProvider,
       builder: (context, __) {
         return Scaffold(
-          backgroundColor: Colors.grey,
-          body: SafeArea(
-            bottom: false,
-            child: ColoredBox(
-              color: primaryGreen,
-              child: Column(
-                children: [
-                  if (widget.gameProvider.currentPlayer case final player?)
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text('Namn: ${player.name}'),
-                          Text(
-                              'Bankkonto: ${player.bankAccount.amount.toStringAsFixed(2)}'),
-                        ],
-                      ),
-                    ),
-                  if (widget.gameProvider.gameState case final gameState?)
-                    LeaderBoard(gameState: gameState),
-
-                  // ActionButton(
-                  //   onPressed: () {
-                  //     widget.gameProvider.buyInvestment(
-                  //       Investment.generateRandomInvestment(),
-                  //     );
-
-                  //     setState(() {
-                  //       shouldDrawCard = true;
-                  //     });
-                  //   },
-                  //   title: 'Få Investering',
-                  // ),
-                  if (widget.gameProvider.currentPlayer case final player?)
-                    Expanded(
-                      child: InvestmentList(
-                        player: player,
-                      ),
-                    ),
-                  Flexible(
-                    child: Padding(
-                      padding: const EdgeInsets.all(16),
-                      child: widget.gameProvider.currentEventCard != null
-                          ? EventCardWidget(
-                              eventCard: widget.gameProvider.currentEventCard!,
-                              onFlip: () {
-                                if (didFlip) {
-                                  setState(() {
-                                    didFlip = false;
-                                    shouldDrawCard = false;
-                                  });
-                                  widget.gameProvider.removeCard();
-                                } else {
-                                  widget.gameProvider.updatePlayers();
-                                  setState(() {
-                                    didFlip = true;
-                                  });
-                                }
-                              },
-                            )
-                          : const SizedBox.shrink(),
-                    ),
+          // backgroundColor: Colors.grey,
+          body: Stack(
+            fit: StackFit.expand,
+            children: [
+              Positioned.fill(
+                child: ImageFiltered(
+                  imageFilter: ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),
+                  child: Image.asset(
+                    'assets/background2.webp',
+                    fit: BoxFit.cover,
                   ),
-                  // if (shouldDrawCard)
-                  //   ActionButton(
-                  //     onPressed: () {
-                  //       widget.gameProvider.generateCard();
-                  //       setState(() {
-                  //         shouldDrawCard = false;
-                  //       });
-                  //     },
-                  //     title: 'dra kort',
-                  //   ),
-                  if (!shouldDrawCard &&
-                      widget.gameProvider.currentEventCard == null)
-                    QrScannerToggle(onCode: handleScan),
-                  Row(
-                    children: [
-                      InkWell(
-                        onTap: () {
-                          widget.gameProvider.clearGameState();
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (context) => StartScreen(
-                                gameProvider: widget.gameProvider,
-                              ),
-                            ),
-                          );
-                        },
-                        child: Container(
-                          height: 50,
-                          color: Colors.white,
-                          child: const Text('Clear Game'),
+                ),
+              ),
+              SafeArea(
+                bottom: false,
+                child: Column(
+                  children: [
+                    if (widget.gameProvider.currentPlayer case final player?)
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text('Namn: ${player.name}'),
+                            Text(
+                                'Bankkonto: ${player.bankAccount.amount.toStringAsFixed(2)}'),
+                          ],
                         ),
                       ),
-                    ],
-                  ),
-                  const Padding(
-                    padding: EdgeInsets.only(bottom: 40),
-                  )
-                ],
+                    if (widget.gameProvider.gameState case final gameState?)
+                      LeaderBoard(gameState: gameState),
+
+                    // ActionButton(
+                    //   onPressed: () {
+                    //     widget.gameProvider.buyInvestment(
+                    //       Investment.generateRandomInvestment(),
+                    //     );
+
+                    //     setState(() {
+                    //       shouldDrawCard = true;
+                    //     });
+                    //   },
+                    //   title: 'Få Investering',
+                    // ),
+                    if (widget.gameProvider.currentPlayer case final player?)
+                      Expanded(
+                        child: InvestmentList(
+                          player: player,
+                        ),
+                      ),
+                    Flexible(
+                      child: Padding(
+                        padding: const EdgeInsets.all(16),
+                        child: widget.gameProvider.currentEventCard != null
+                            ? EventCardWidget(
+                                eventCard:
+                                    widget.gameProvider.currentEventCard!,
+                                onFlip: () {
+                                  if (didFlip) {
+                                    setState(() {
+                                      didFlip = false;
+                                      shouldDrawCard = false;
+                                    });
+                                    widget.gameProvider.removeCard();
+                                  } else {
+                                    widget.gameProvider.updatePlayers();
+                                    setState(() {
+                                      didFlip = true;
+                                    });
+                                  }
+                                },
+                              )
+                            : const SizedBox.shrink(),
+                      ),
+                    ),
+                    // if (shouldDrawCard)
+                    //   ActionButton(
+                    //     onPressed: () {
+                    //       widget.gameProvider.generateCard();
+                    //       setState(() {
+                    //         shouldDrawCard = false;
+                    //       });
+                    //     },
+                    //     title: 'dra kort',
+                    //   ),
+                    if (!shouldDrawCard &&
+                        widget.gameProvider.currentEventCard == null)
+                      QrScannerToggle(onCode: handleScan),
+                    Row(
+                      children: [
+                        InkWell(
+                          onTap: () {
+                            widget.gameProvider.clearGameState();
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) => StartScreen(
+                                  gameProvider: widget.gameProvider,
+                                ),
+                              ),
+                            );
+                          },
+                          child: Container(
+                            height: 50,
+                            color: Colors.white,
+                            child: const Text('Clear Game'),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const Padding(
+                      padding: EdgeInsets.only(bottom: 40),
+                    )
+                  ],
+                ),
               ),
-            ),
+            ],
           ),
         );
       },

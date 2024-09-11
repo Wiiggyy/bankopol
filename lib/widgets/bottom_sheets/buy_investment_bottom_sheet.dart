@@ -34,32 +34,38 @@ class _BuyInvestmentBottomSheetState extends State<BuyInvestmentBottomSheet> {
         final bool canBuy =
             (widget.gameProvider.currentPlayer?.bankAccount.amount ?? 0) >=
                 investment.value;
-        return Container(
-          color: Colors.white60,
-          height: 500,
-          width: double.infinity,
-          child: Column(
-            children: [
-              // Text('Scanned code: $code'),
-              InvestmentCard(investment: investment),
-              if (!canBuy)
+        return ClipRRect(
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(16.0),
+            topRight: Radius.circular(16.0),
+          ),
+          child: Container(
+            color: Colors.white60,
+            height: 500,
+            width: double.infinity,
+            child: Column(
+              children: [
+                // Text('Scanned code: $code'),
+                InvestmentCard(investment: investment),
+                if (!canBuy)
+                  ActionButton(
+                    onPressed: widget.onPressedSell,
+                    title: 'Sälj investeringar',
+                  ),
+                if (canBuy)
+                  ActionButton(
+                    onPressed: () {
+                      widget.gameProvider.buyInvestment(investment);
+                      widget.onPressed();
+                    },
+                    title: 'Köp',
+                  ),
                 ActionButton(
-                  onPressed: widget.onPressedSell,
-                  title: 'Sälj investeringar',
-                ),
-              if (canBuy)
-                ActionButton(
-                  onPressed: () {
-                    widget.gameProvider.buyInvestment(investment);
-                    widget.onPressed();
-                  },
-                  title: 'Köp',
-                ),
-              ActionButton(
-                onPressed: widget.onPressedClose,
-                title: 'Köp inte',
-              )
-            ],
+                  onPressed: widget.onPressedClose,
+                  title: 'Köp inte',
+                )
+              ],
+            ),
           ),
         );
       },
