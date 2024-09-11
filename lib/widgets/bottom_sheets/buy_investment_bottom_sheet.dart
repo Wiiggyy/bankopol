@@ -41,6 +41,10 @@ class _BuyInvestmentBottomSheetState extends State<BuyInvestmentBottomSheet> {
           ),
           child: Container(
             color: Colors.white60,
+            constraints: BoxConstraints(
+              minHeight: 500,
+              maxWidth: double.infinity,
+            ),
             height: 500,
             width: double.infinity,
             child: Column(

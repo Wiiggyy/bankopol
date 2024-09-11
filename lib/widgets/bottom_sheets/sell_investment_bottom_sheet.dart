@@ -18,38 +18,55 @@ class SellInvestmentBottomSheet extends StatelessWidget {
         return ListenableBuilder(
           listenable: gameProvider,
           builder: (context, __) {
-            return SingleChildScrollView(
-              child: Column(
-                children: [
-                  for (final investment
-                      in gameProvider.currentPlayer?.investments ??
-                          <Investment>{})
-                    Container(
-                      margin: const EdgeInsets.all(8),
-                      child: Dismissible(
-                        key: ObjectKey(investment),
-                        onDismissed: (direction) {
-                          gameProvider.sellInvestment(investment);
-                          Navigator.of(context).pop();
-                        },
-                        background: Container(
-                          margin: const EdgeInsets.all(8),
-                          decoration: BoxDecoration(
-                            color: Colors.red.shade500,
-                            borderRadius: BorderRadius.circular(
-                                16.0), // Border radius for the background
-                          ),
-                          child: const Icon(Icons.delete),
-                        ),
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(16.0),
-                          child: InvestmentCard(
-                              key: ObjectKey(investment),
-                              investment: investment),
+            return Container(
+              constraints: BoxConstraints(
+                minHeight: 500, // Set minimum height to 500
+                maxWidth: double.infinity,
+              ),
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(top: 16.0),
+                      child: Text(
+                        'Swipa för att sälja investering',
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontWeight: FontWeight.bold,
                         ),
                       ),
-                    )
-                ],
+                    ),
+                    for (final investment
+                        in gameProvider.currentPlayer?.investments ??
+                            <Investment>{})
+                      Container(
+                        margin: const EdgeInsets.all(8),
+                        child: Dismissible(
+                          key: ObjectKey(investment),
+                          onDismissed: (direction) {
+                            gameProvider.sellInvestment(investment);
+                            Navigator.of(context).pop();
+                          },
+                          background: Container(
+                            margin: const EdgeInsets.all(8),
+                            decoration: BoxDecoration(
+                              color: Colors.red.shade500,
+                              borderRadius: BorderRadius.circular(
+                                  16.0), // Border radius for the background
+                            ),
+                            child: const Icon(Icons.delete),
+                          ),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(16.0),
+                            child: InvestmentCard(
+                                key: ObjectKey(investment),
+                                investment: investment),
+                          ),
+                        ),
+                      ),
+                    SizedBox(height: 32),
+                  ],
+                ),
               ),
             );
           },
