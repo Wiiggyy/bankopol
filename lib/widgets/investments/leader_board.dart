@@ -1,7 +1,4 @@
 import 'package:bankopol/models/game_state.dart';
-import 'package:bankopol/models/player.dart';
-import 'package:bankopol/widgets/investments/investment_item.dart';
-import 'package:bankopol/widgets/investments/investment_item_header.dart';
 import 'package:flutter/material.dart';
 
 class LeaderBoard extends StatelessWidget {

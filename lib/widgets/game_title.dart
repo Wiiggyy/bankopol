@@ -7,7 +7,7 @@ class GameTitle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const Center(
-      child: const Text(
+      child: Text(
         'Skandopoly',
         style: TextStyle(
           fontSize: 42,

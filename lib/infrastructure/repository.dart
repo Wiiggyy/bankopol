@@ -1,13 +1,12 @@
 import 'dart:convert';
 
-import 'package:bankopol/enums/investment_type.dart';
 import 'package:bankopol/models/bank_account.dart';
 import 'package:bankopol/models/game_state.dart';
 import 'package:bankopol/models/investment.dart';
 import 'package:bankopol/models/player.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
-import 'package:web_socket_channel/status.dart' as status;
 import 'package:web_socket_channel/web_socket_channel.dart';
 
 class Repository {
@@ -19,7 +18,7 @@ class Repository {
   factory Repository() {
     const uri =
         'ws://hackstatehandler-djcyf9c6bbetfvfy.swedencentral-01.azurewebsites.net/api/Player/connect/';
-    print('Connecting to socket');
+    debugPrint('Connecting to socket');
     final channel = WebSocketChannel.connect(Uri.parse(uri));
     final dio = Dio();
     return Repository._(channel, dio);
@@ -27,10 +26,10 @@ class Repository {
 
   Stream<GameState> streamGameState() async* {
     await _channel.ready;
-    print('Getting stream');
+    debugPrint('Getting stream');
 
     await for (final message in _channel.stream) {
-      print('Received: $message');
+      debugPrint('Received: $message');
       if (message is String) {
         final jsonData = jsonDecode(message);
         final gameState = GameState.fromJson(jsonData);
@@ -59,23 +58,23 @@ class Repository {
     try {
       _channel.sink.add(jsonEncode(gameState.toJson()));
     } catch (e) {
-      print('Error: $e');
+      debugPrint('Error: $e');
     }
   }
 
   Future<Player> joinGame([Player? player]) async {
     player ??= Player(
-      id: Uuid().v4(),
+      id: const Uuid().v4(),
       name: 'Z',
-      bankAccount: BankAccount(
+      bankAccount: const BankAccount(
         amount: 1000,
         interest: 1000,
       ),
       investments: {Investment.generateRandomInvestment()},
     );
     final currentGameState = await getCurrentGameState();
-    print('Current game state: $currentGameState');
-    print('Players: ${currentGameState?.players.length}');
+    debugPrint('Current game state: $currentGameState');
+    debugPrint('Players: ${currentGameState?.players.length}');
     GameState nextGameState;
     if (currentGameState case final currentGameState?) {
       nextGameState = currentGameState.copyWith(
@@ -91,7 +90,7 @@ class Repository {
     try {
       _channel.sink.add(jsonEncode(nextGameState.toJson()));
     } catch (e) {
-      print('Error: $e');
+      debugPrint('Error: $e');
     }
     return player;
   }

@@ -30,9 +30,7 @@ class EventCardWidget extends StatelessWidget {
         side: CardSide.FRONT,
         speed: 1000,
         onFlip: onFlip,
-        onFlipDone: (status) {
-          print(status);
-        },
+        onFlipDone: (status) {},
         front: Container(
           decoration: BoxDecoration(
             color: darkGreen,

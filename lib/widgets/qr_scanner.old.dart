@@ -103,12 +103,8 @@ class _QrScannerState extends State<QrScanner> {
                           image.planes.first.bytesPerRow, // used only in iOS
                     ),
                   );
-                  print('HIIIIIII');
-                  print(inputImage.type);
                   await _scanQrCode(inputImage);
                 } catch (e, stackTrace) {
-                  print('NOOOOOOOOOO');
-                  print(e);
                   debugPrintStack(stackTrace: stackTrace);
                 } finally {
                   isProcessing = false;
@@ -144,7 +140,6 @@ class _QrScannerState extends State<QrScanner> {
         if (text == null) {
           return null;
         }
-        print(text);
         return text;
       },
     );

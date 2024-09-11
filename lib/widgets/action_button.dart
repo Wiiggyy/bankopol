@@ -15,17 +15,17 @@ class ActionButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return ElevatedButton(
       onPressed: onPressed,
-      child: Text(
-        title,
-        style: TextStyle(
-          color: Colors.white,
-        ),
-      ),
       style: ButtonStyle(
         backgroundColor: WidgetStateProperty.resolveWith(
           (states) {
             return primaryGreen;
           },
+        ),
+      ),
+      child: Text(
+        title,
+        style: const TextStyle(
+          color: Colors.white,
         ),
       ),
     );

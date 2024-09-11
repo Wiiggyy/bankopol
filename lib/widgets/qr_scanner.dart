@@ -1,8 +1,5 @@
-import 'dart:io';
-
 import 'package:bankopol/widgets/action_button.dart';
 import 'package:camera/camera.dart';
-import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:qr_bar_code_scanner_dialog/qr_bar_code_scanner_dialog.dart';

@@ -23,7 +23,6 @@ class GameProvider with ChangeNotifier {
     final gameStateStream = repository.streamGameState().asBroadcastStream();
     gameStateStream.listen((state) {
       _gameState = state;
-      print('GameProvider1222: $state');
       notifyListeners();
     });
   }
@@ -128,7 +127,6 @@ class GameProvider with ChangeNotifier {
       );
 
       if (player != null) {
-        print('a: ${player.investments.length}');
         final investment = player.investments
             .where((playerInvestment) =>
                 playerInvestment.investmentType == newInvestment.investmentType)
@@ -150,13 +148,9 @@ class GameProvider with ChangeNotifier {
           amount: player.bankAccount.amount - newInvestment.value,
         );
 
-        print('b: ${player.investments.length}');
-
         final updatedPlayer = player.copyWith(
           bankAccount: newBankAccount,
         );
-
-        print(updatedPlayer.bankAccount.amount);
 
         final nextGameState = gameState.copyWith(
           players: {...gameState.players}

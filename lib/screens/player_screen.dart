@@ -36,7 +36,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
   }
 
   handleScan(String code) async {
-    print('------------Scanned code: $code');
+    debugPrint('------------Scanned code: $code');
 
     await showModalBottomSheet(
       context: context,

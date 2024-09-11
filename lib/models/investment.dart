@@ -52,7 +52,7 @@ class Investment {
     final investmentType =
         InvestmentType.values[random.nextInt(InvestmentType.values.length)];
     final value = random.nextDouble() * 1000;
-    final quantity = 1; //random.nextInt(100) + 1;
+    const quantity = 1; //random.nextInt(100) + 1;
     final interest = random.nextDouble() * 0.2;
 
     return Investment(
