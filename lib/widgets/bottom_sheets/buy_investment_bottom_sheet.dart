@@ -26,13 +26,12 @@ class _BuyInvestmentBottomSheetState extends State<BuyInvestmentBottomSheet> {
   Widget build(BuildContext context) {
     final Investment investment = Investment.generateRandomInvestment();
 
-    final bool canBuy =
-        (widget.gameProvider.currentPlayer?.bankAccount.amount ?? 0) >=
-            investment.value;
-
     return ListenableBuilder(
       listenable: widget.gameProvider,
       builder: (context, __) {
+        final bool canBuy =
+            (widget.gameProvider.currentPlayer?.bankAccount.amount ?? 0) >=
+                investment.value;
         return Container(
           color: Colors.white60,
           height: 500,

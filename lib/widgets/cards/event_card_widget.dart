@@ -32,6 +32,8 @@ class EventCardWidget extends StatelessWidget {
         onFlip: onFlip,
         onFlipDone: (status) {},
         front: Container(
+          height: 200,
+          width: double.infinity,
           decoration: BoxDecoration(
             // color: darkGreen,
             borderRadius: const BorderRadius.all(Radius.circular(12.0)),
@@ -69,6 +71,8 @@ class EventCardWidget extends StatelessWidget {
         ),
         back: Container(
           // padding: const EdgeInsets.all(16),
+          height: 200,
+          width: double.infinity,
           decoration: BoxDecoration(
             // color: primaryGreen,
             borderRadius: const BorderRadius.all(Radius.circular(12.0)),
