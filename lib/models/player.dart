@@ -6,12 +6,14 @@ class Player {
   final String name;
   final BankAccount bankAccount;
   final Set<Investment> investments;
+  final Set<int> scannedCodes;
 
   const Player({
     required this.id,
     required this.name,
     required this.bankAccount,
     required this.investments,
+    this.scannedCodes = const {},
   });
 
   double get totalInvestmentValue {
@@ -35,12 +37,14 @@ class Player {
     String? name,
     BankAccount? bankAccount,
     Set<Investment>? investments,
+    Set<int>? scannedCodes,
   }) {
     return Player(
       id: id ?? this.id,
       name: name ?? this.name,
       bankAccount: bankAccount ?? this.bankAccount,
       investments: investments ?? this.investments,
+      scannedCodes: scannedCodes ?? this.scannedCodes,
     );
   }
 
@@ -51,6 +55,7 @@ class Player {
       'bankAccount': bankAccount.toJson(),
       'investments':
           investments.map((investment) => investment.toJson()).toList(),
+      'scannedCodes': scannedCodes.toList(),
     };
   }
 }

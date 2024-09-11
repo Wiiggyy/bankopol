@@ -51,18 +51,7 @@ class _QrScannerToggleState extends State<QrScannerToggle> {
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        if (isOn) QrScanner(onCode: widget.onCode),
-        IconButton(
-          onPressed: () {
-            setState(() {
-              isOn = !isOn;
-            });
-          },
-          icon: Icon(switch (isOn) {
-            true => Icons.camera_alt,
-            false => Icons.camera_alt_outlined,
-          }),
-        ),
+        QrScanner(onCode: widget.onCode),
       ],
     );
   }

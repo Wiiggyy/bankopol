@@ -4,6 +4,7 @@ import 'package:bankopol/provider/game/game_provider.dart';
 import 'package:bankopol/screens/start_screen.dart';
 import 'package:bankopol/widgets/action_button.dart';
 import 'package:bankopol/widgets/cards/event_card_widget.dart';
+import 'package:bankopol/widgets/investments/investment_card.dart';
 import 'package:bankopol/widgets/investments/investment_list.dart';
 import 'package:bankopol/widgets/investments/leader_board.dart';
 import 'package:bankopol/widgets/qr_scanner.dart';
@@ -25,6 +26,74 @@ class _PlayerScreenState extends State<PlayerScreen> {
   bool shouldDrawCard = false;
   bool didFlip = false;
 
+  showSellInvestmentList() {
+    showModalBottomSheet(
+      context: context,
+      builder: (context) {
+        return Column(
+          children: [
+            for (final investment
+                in widget.gameProvider.currentPlayer?.investments ??
+                    <Investment>{})
+              Container(
+                margin: const EdgeInsets.symmetric(vertical: 8),
+                child: InvestmentCard(
+                    key: ObjectKey(investment), investment: investment),
+              ),
+          ],
+        );
+      },
+    );
+  }
+
+  handleScan(String code) async {
+    print('------------Scanned code: $code');
+    final randomInvestment = Investment.generateRandomInvestment();
+
+    final canBuy =
+        (widget.gameProvider.currentPlayer?.bankAccount.amount ?? 0) >=
+            randomInvestment.value;
+    await showModalBottomSheet(
+        context: context,
+        isDismissible: false,
+        backgroundColor: Colors.transparent,
+        builder: (context) {
+          return Container(
+            color: Colors.white60,
+            height: 500,
+            width: double.infinity,
+            child: Column(
+              children: [
+                Text('Scanned code: $code'),
+                InvestmentCard(investment: randomInvestment),
+                if (!canBuy)
+                  ActionButton(
+                    onPressed: showSellInvestmentList,
+                    title: 'Sälj investeringar',
+                  ),
+                if (!shouldDrawCard && canBuy)
+                  ActionButton(
+                    onPressed: () {
+                      widget.gameProvider.buyInvestment(randomInvestment);
+                      setState(() {
+                        shouldDrawCard = true;
+                      });
+                      Navigator.of(context).pop();
+                    },
+                    title: 'Köp',
+                  ),
+                ActionButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  title: 'Köp inte',
+                )
+              ],
+            ),
+          );
+        });
+  }
+
   @override
   Widget build(BuildContext context) {
     return ListenableBuilder(
@@ -45,29 +114,26 @@ class _PlayerScreenState extends State<PlayerScreen> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text('Namn: ${player.name}'),
-                          Text('Bankkonto: ${player.bankAccount.amount}'),
+                          Text(
+                              'Bankkonto: ${player.bankAccount.amount.toStringAsFixed(2)}'),
                         ],
                       ),
                     ),
                   if (widget.gameProvider.gameState case final gameState?)
                     LeaderBoard(gameState: gameState),
-                  QrScannerToggle(
-                    onCode: (code) {
-                      print('------------Scanned code: $code');
-                    },
-                  ),
-                  ActionButton(
-                    onPressed: () {
-                      widget.gameProvider.saveInvestment(
-                        Investment.generateRandomInvestment(),
-                      );
+                  QrScannerToggle(onCode: handleScan),
+                  // ActionButton(
+                  //   onPressed: () {
+                  //     widget.gameProvider.buyInvestment(
+                  //       Investment.generateRandomInvestment(),
+                  //     );
 
-                      setState(() {
-                        shouldDrawCard = true;
-                      });
-                    },
-                    title: 'Få Investering',
-                  ),
+                  //     setState(() {
+                  //       shouldDrawCard = true;
+                  //     });
+                  //   },
+                  //   title: 'Få Investering',
+                  // ),
                   if (widget.gameProvider.currentPlayer case final player?)
                     Expanded(
                       child: InvestmentList(

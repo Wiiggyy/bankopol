@@ -69,7 +69,7 @@ class Repository {
       name: 'Z',
       bankAccount: BankAccount(
         amount: 1000,
-        interest: 0.1,
+        interest: 1000,
       ),
       investments: {Investment.generateRandomInvestment()},
     );

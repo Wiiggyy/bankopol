@@ -360,7 +360,7 @@ final eventCards = [
     description: 'Försäkringen ger en extra bonus när ditt barn fyller 18 år',
     eventAction: EventAction(
       investmentType: InvestmentType.childInsurance,
-      amountValue: 700,
+      amountValue: 100,
     ),
   ),
   const EventCard(

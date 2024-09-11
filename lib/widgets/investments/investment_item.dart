@@ -1,3 +1,4 @@
+import 'package:bankopol/enums/investment_type.dart';
 import 'package:bankopol/models/investment.dart';
 import 'package:flutter/material.dart';
 
@@ -13,16 +14,16 @@ class InvestmentItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      padding: EdgeInsets.symmetric(
+      padding: const EdgeInsets.symmetric(
         horizontal: 16,
         vertical: 4,
       ),
       child: Row(
         children: [
           Expanded(
-            flex: 2,
+            flex: 3,
             child: Text(
-              investment.investmentType.name,
+              getInvestmentTypeName(investment.investmentType),
               textAlign: TextAlign.left,
             ),
           ),
@@ -34,9 +35,9 @@ class InvestmentItem extends StatelessWidget {
             ),
           ),
           Expanded(
-            flex: 2,
+            flex: 3,
             child: Text(
-              (investment.value * investment.quantity).toString(),
+              (investment.value * investment.quantity).toStringAsFixed(2),
               textAlign: TextAlign.right,
             ),
           ),

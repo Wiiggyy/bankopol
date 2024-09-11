@@ -45,7 +45,7 @@ class LeaderBoard extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(player.name),
-                    Text(player.totalInvestmentValue.toString()),
+                    Text(player.totalInvestmentValue.toStringAsFixed(2)),
                   ],
                 )
             ],

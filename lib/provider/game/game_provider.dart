@@ -44,7 +44,7 @@ class GameProvider with ChangeNotifier {
       id: const Uuid().v4(),
       name: name,
       bankAccount: const BankAccount(
-        amount: 5000,
+        amount: 00,
         interest: 0.025,
       ),
       investments: {},
@@ -80,13 +80,14 @@ class GameProvider with ChangeNotifier {
     }
   }
 
-  void saveInvestment(Investment newInvestment) async {
+  void buyInvestment(Investment newInvestment) async {
     if (gameState case final gameState?) {
       final player = gameState.players.firstWhereOrNull(
         (player) => player.id == _currentPlayerId,
       );
 
       if (player != null) {
+        print('a: ${player.investments.length}');
         final investment = player.investments
             .where((playerInvestment) =>
                 playerInvestment.investmentType == newInvestment.investmentType)
@@ -102,22 +103,32 @@ class GameProvider with ChangeNotifier {
           player.investments.add(nextInvestment);
         } else {
           player.investments.add(newInvestment);
-          player.bankAccount.copyWith(
-              amount: player.bankAccount.amount - newInvestment.value);
         }
 
-        player.bankAccount.copyWith(
+        final newBankAccount = player.bankAccount.copyWith(
           amount: player.bankAccount.amount - newInvestment.value,
         );
+
+        print('b: ${player.investments.length}');
+
+        final updatedPlayer = player.copyWith(
+          bankAccount: newBankAccount,
+        );
+
+        print(updatedPlayer.bankAccount.amount);
 
         final nextGameState = gameState.copyWith(
           players: {...gameState.players}
             ..removeWhere((player) => player.id == _currentPlayerId)
-            ..add(player),
+            ..add(updatedPlayer),
         );
         await repository.updateGameState(nextGameState);
       }
     }
+  }
+
+  void onCodeScan(String code) {
+    final randomInvestment = Investment.generateRandomInvestment();
   }
 
   void updatePlayers() {
