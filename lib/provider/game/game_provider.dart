@@ -19,13 +19,26 @@ class GameProvider with ChangeNotifier {
   GameState? _gameState;
   EventCard? _currentEventCard;
   String? _currentPlayerId;
+  bool shouldClose = false;
 
   GameProvider() {
     final gameStateStream = repository.streamGameState().asBroadcastStream();
-    gameStateStream.listen((state) {
-      _gameState = state;
-      notifyListeners();
-    });
+    gameStateStream.listen(
+      (state) {
+        _gameState = state;
+        notifyListeners();
+      },
+      onDone: () {
+        clearGameState(sendClear: false);
+        shouldClose = true;
+        notifyListeners();
+      },
+      onError: (error) {
+        clearGameState(sendClear: false);
+        shouldClose = true;
+        notifyListeners();
+      },
+    );
   }
 
   GameState? get gameState => _gameState;
@@ -224,11 +237,11 @@ class GameProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void clearGameState() {
+  void clearGameState({bool sendClear = true}) {
     _gameState = null;
     _currentEventCard = null;
     _currentPlayerId = null;
 
-    repository.clearGame();
+    if (sendClear) repository.clearGame();
   }
 }

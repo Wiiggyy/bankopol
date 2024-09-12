@@ -77,6 +77,12 @@ class _PlayerScreenState extends State<PlayerScreen> {
       builder: (context, __) {
         final player = widget.gameProvider.currentPlayer;
 
+        Future.microtask(() {
+          if (widget.gameProvider.shouldClose) {
+            if (context.mounted) Navigator.pop(context);
+          }
+        });
+
         return Scaffold(
           floatingActionButton:
               !shouldDrawCard && widget.gameProvider.currentEventCard == null
