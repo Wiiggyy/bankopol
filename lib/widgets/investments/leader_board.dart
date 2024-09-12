@@ -23,47 +23,55 @@ class LeaderBoard extends StatelessWidget {
         minChildSize: 0.2,
         maxChildSize: 1,
         builder: (context, _) {
-          return SingleChildScrollView(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Center(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                      vertical: 8,
-                    ),
-                    child: Text(
-                      'Leaderboard'.toUpperCase(),
-                      style: const TextStyle(
-                          color: Colors.black,
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold),
-                    ),
+          return Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Center(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 8,
+                  ),
+                  child: Text(
+                    'Leaderboard'.toUpperCase(),
+                    style: const TextStyle(
+                        color: Colors.black,
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold),
                   ),
                 ),
-                const Divider(
-                  height: 0,
+              ),
+              const Divider(
+                height: 0,
+              ),
+              Expanded(
+                child: ListView(
+                  children: [
+                    for (int index = 0;
+                        index < sortedPlayers.length;
+                        index++) ...[
+                      ListTile(
+                        leading: SizedBox(
+                          width: 30,
+                          child: index == 0 ? const Icon(Icons.star) : null,
+                        ),
+                        title: Text(
+                          sortedPlayers[index].name,
+                          style: const TextStyle(fontSize: 12),
+                        ),
+                        trailing: Text(
+                          sortedPlayers[index]
+                              .totalAssetsValue
+                              .toStringAsFixed(2),
+                        ),
+                      ),
+                      const Divider(
+                        height: 0,
+                      )
+                    ]
+                  ],
                 ),
-                for (int index = 0; index < sortedPlayers.length; index++) ...[
-                  ListTile(
-                    leading: SizedBox(
-                      width: 30,
-                      child: index == 0 ? const Icon(Icons.star) : null,
-                    ),
-                    title: Text(
-                      sortedPlayers[index].name,
-                      style: const TextStyle(fontSize: 12),
-                    ),
-                    trailing: Text(
-                      sortedPlayers[index].totalAssetsValue.toStringAsFixed(2),
-                    ),
-                  ),
-                  const Divider(
-                    height: 0,
-                  )
-                ]
-              ],
-            ),
+              )
+            ],
           );
         },
       ),
