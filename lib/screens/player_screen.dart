@@ -100,7 +100,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
                         alignment: Alignment.centerLeft,
                         child: IconButton(
                           onPressed: showLeaderboardBottomSheet,
-                          icon: const Icon(Icons.monetization_on),
+                          icon: const Icon(Icons.emoji_events_rounded),
                         ),
                       ),
                     ),
