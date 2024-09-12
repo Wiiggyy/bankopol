@@ -14,6 +14,7 @@ import 'package:uuid/uuid.dart';
 
 class GameProvider with ChangeNotifier {
   final Repository repository = Repository();
+
   // late Stream<GameState> gameStateStream;
   GameState? _gameState;
   EventCard? _currentEventCard;
@@ -28,7 +29,9 @@ class GameProvider with ChangeNotifier {
   }
 
   GameState? get gameState => _gameState;
+
   EventCard? get currentEventCard => _currentEventCard;
+
   Player? get currentPlayer {
     if (gameState case final gameState?) {
       return gameState.players.firstWhereOrNull(
@@ -57,15 +60,14 @@ class GameProvider with ChangeNotifier {
   }
 
   void generateCard() {
-    Set<InvestmentType> investmentTypes = {};
-
     if (gameState case final gameState?) {
-      for (final Player player in gameState.players) {
-        for (final Investment investment in player.investments) {
-          investmentTypes.add(investment.investmentType);
-        }
-      }
+      Set<InvestmentType> investmentTypes = {
+        for (final Player player in gameState.players)
+          for (final Investment investment in player.investments)
+            investment.investmentType,
+      };
 
+      if (investmentTypes.isEmpty) return;
       int randomIndex = Random().nextInt(investmentTypes.length);
 
       int randomCardIndex = Random().nextInt(2);
