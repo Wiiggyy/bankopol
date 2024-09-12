@@ -391,7 +391,7 @@ final eventCards = [
         'Du hittar en bortglömd spargris med en oväntad summa pengar i',
     eventAction: EventAction(
       investmentType: InvestmentType.piggyBank,
-      amountValue: 200,
+      amount: 1,
     ),
   ),
   const EventCard(
@@ -399,7 +399,7 @@ final eventCards = [
         'Spargrisen går sönder och alla mynt trillar ut och försvinner',
     eventAction: EventAction(
       investmentType: InvestmentType.piggyBank,
-      amountValue: -200,
+      amount: -1,
     ),
   ),
   const EventCard(

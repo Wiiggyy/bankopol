@@ -5,6 +5,7 @@ import 'package:bankopol/provider/game/game_provider.dart';
 import 'package:bankopol/screens/start_screen.dart';
 import 'package:bankopol/widgets/action_button.dart';
 import 'package:bankopol/widgets/bottom_sheets/buy_investment_bottom_sheet.dart';
+import 'package:bankopol/widgets/bottom_sheets/leader_board_bottom_sheet.dart';
 import 'package:bankopol/widgets/bottom_sheets/sell_investment_bottom_sheet.dart';
 import 'package:bankopol/widgets/cards/event_card_widget.dart';
 import 'package:bankopol/widgets/investments/investment_list.dart';
@@ -27,6 +28,15 @@ class PlayerScreen extends StatefulWidget {
 class _PlayerScreenState extends State<PlayerScreen> {
   bool shouldDrawCard = false;
   bool didFlip = false;
+
+  showLeaderboardBottomSheet() {
+    showModalBottomSheet(
+      context: context,
+      builder: (_) {
+        return LeaderBoardBottomSheet(gameProvider: widget.gameProvider);
+      },
+    );
+  }
 
   showSellInvestmentList() {
     showModalBottomSheet(
@@ -73,8 +83,45 @@ class _PlayerScreenState extends State<PlayerScreen> {
     return ListenableBuilder(
       listenable: widget.gameProvider,
       builder: (context, __) {
+        final player = widget.gameProvider.currentPlayer;
+
         return Scaffold(
           // backgroundColor: Colors.grey,
+          appBar: AppBar(
+              automaticallyImplyLeading: false,
+              flexibleSpace: Padding(
+                padding: const EdgeInsets.only(top: 40.0, right: 16),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Expanded(
+                      flex: 1,
+                      child: Align(
+                        alignment: Alignment.centerLeft,
+                        child: IconButton(
+                          onPressed: showLeaderboardBottomSheet,
+                          icon: const Icon(Icons.monetization_on),
+                        ),
+                      ),
+                    ),
+                    Expanded(
+                      flex: 2,
+                      child: Center(child: Text(player?.name ?? '')),
+                    ),
+                    Expanded(
+                      flex: 1,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          const Icon(Icons.wallet),
+                          Text(player?.bankAccount.amount.toStringAsFixed(2) ??
+                              '0'),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              )),
           body: Stack(
             fit: StackFit.expand,
             children: [
@@ -91,20 +138,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
                 bottom: false,
                 child: Column(
                   children: [
-                    if (widget.gameProvider.currentPlayer case final player?)
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text('Namn: ${player.name}'),
-                            Text(
-                                'Bankkonto: ${player.bankAccount.amount.toStringAsFixed(2)}'),
-                          ],
-                        ),
-                      ),
-                    if (widget.gameProvider.gameState case final gameState?)
-                      LeaderBoard(gameState: gameState),
+                    //
 
                     // ActionButton(
                     //   onPressed: () {
