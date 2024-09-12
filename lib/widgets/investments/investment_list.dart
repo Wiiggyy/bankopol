@@ -22,16 +22,6 @@ class InvestmentList extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             const InvestmentItemHeader(),
-            const Divider(
-              height: 1,
-              color: Colors.grey,
-            ),
-            InvestmentItem(investment: Investment.generateRandomInvestment()),
-            const Divider(
-              height: 1,
-              color: Colors.grey,
-            ),
-            InvestmentItem(investment: Investment.generateRandomInvestment()),
             for (final investment in player.investments) ...[
               const Divider(
                 height: 1,
