@@ -59,19 +59,21 @@ class _StartScreenState extends State<StartScreen> {
                             width: double.infinity,
                             padding: const EdgeInsets.only(bottom: 20),
                             child: ActionButton(
-                              onPressed: () async {
-                                await widget.gameProvider.joinGame(name);
+                              onPressed: name.isNotEmpty
+                                  ? () async {
+                                      await widget.gameProvider.joinGame(name);
 
-                                if (!context.mounted) return;
+                                      if (!context.mounted) return;
 
-                                Navigator.of(context).push(
-                                  MaterialPageRoute(
-                                    builder: (context) => PlayerScreen(
-                                      gameProvider: widget.gameProvider,
-                                    ),
-                                  ),
-                                );
-                              },
+                                      Navigator.of(context).push(
+                                        MaterialPageRoute(
+                                          builder: (context) => PlayerScreen(
+                                            gameProvider: widget.gameProvider,
+                                          ),
+                                        ),
+                                      );
+                                    }
+                                  : null,
                               title: 'Börja spela',
                             ),
                           ),
