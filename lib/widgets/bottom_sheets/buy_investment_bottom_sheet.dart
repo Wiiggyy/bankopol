@@ -41,6 +41,7 @@ class _BuyInvestmentBottomSheetState extends State<BuyInvestmentBottomSheet> {
           ),
           child: Container(
             color: Colors.white60,
+            padding: const EdgeInsets.only(bottom: 24.0),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
