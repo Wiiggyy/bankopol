@@ -346,7 +346,7 @@ final eventCards = [
         'Staten höjer avdragsrätten för pensionssparande, alla med pensionsförsäkring får mer pengar tillbaka på skatten',
     eventAction: EventAction(
       investmentType: InvestmentType.pensionInsurance,
-      percentValue: 300,
+      percentValue: 0.03,
     ),
   ),
   const EventCard(
