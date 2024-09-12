@@ -86,7 +86,10 @@ class _PlayerScreenState extends State<PlayerScreen> {
         final player = widget.gameProvider.currentPlayer;
 
         return Scaffold(
-          // backgroundColor: Colors.grey,
+          floatingActionButton:
+              !shouldDrawCard && widget.gameProvider.currentEventCard == null
+                  ? QrScannerToggle(onCode: handleScan)
+                  : null,
           appBar: AppBar(
               automaticallyImplyLeading: false,
               flexibleSpace: Padding(
@@ -138,20 +141,6 @@ class _PlayerScreenState extends State<PlayerScreen> {
                 bottom: false,
                 child: Column(
                   children: [
-                    //
-
-                    // ActionButton(
-                    //   onPressed: () {
-                    //     widget.gameProvider.buyInvestment(
-                    //       Investment.generateRandomInvestment(),
-                    //     );
-
-                    //     setState(() {
-                    //       shouldDrawCard = true;
-                    //     });
-                    //   },
-                    //   title: 'Få Investering',
-                    // ),
                     if (widget.gameProvider.currentPlayer case final player?)
                       Flexible(
                         child: InvestmentList(
@@ -183,19 +172,6 @@ class _PlayerScreenState extends State<PlayerScreen> {
                             : const SizedBox.shrink(),
                       ),
                     ),
-                    // if (shouldDrawCard)
-                    //   ActionButton(
-                    //     onPressed: () {
-                    //       widget.gameProvider.generateCard();
-                    //       setState(() {
-                    //         shouldDrawCard = false;
-                    //       });
-                    //     },
-                    //     title: 'dra kort',
-                    //   ),
-                    if (!shouldDrawCard &&
-                        widget.gameProvider.currentEventCard == null)
-                      QrScannerToggle(onCode: handleScan),
                     Row(
                       children: [
                         InkWell(

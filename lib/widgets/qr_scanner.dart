@@ -1,3 +1,4 @@
+import 'package:bankopol/constants/colors.dart';
 import 'package:bankopol/scanner/ocr_camera.dart';
 import 'package:bankopol/widgets/action_button.dart';
 import 'package:flutter/foundation.dart';
@@ -24,7 +25,12 @@ class _QrScannerWebState extends State<QrScannerWeb> {
 
   @override
   Widget build(BuildContext context) {
-    return ActionButton(
+    return FloatingActionButton(
+      backgroundColor: primaryGreen,
+      child: Icon(
+        Icons.camera_alt,
+        color: Colors.white.withOpacity(0.9),
+      ),
       onPressed: () {
         if (kIsWeb) {
           _qrBarCodeScannerDialogPlugin.getScannedQrBarCode(
@@ -62,22 +68,9 @@ class _QrScannerWebState extends State<QrScannerWeb> {
                     ),
                   ),
                 );
-
-                return Center(
-                  child: AspectRatio(
-                    aspectRatio: 1,
-                    child: OcrCamera(
-                      onSuccessScanned: (result) {
-                        Navigator.of(context).pop();
-                        widget.onCode(result);
-                      },
-                    ),
-                  ),
-                );
               });
         }
       },
-      title: "Skanna",
     );
   }
 }
