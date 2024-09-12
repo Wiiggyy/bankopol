@@ -36,10 +36,7 @@ class _QrScannerState extends State<QrScanner> {
           _qrBarCodeScannerDialogPlugin.getScannedQrBarCode(
               context: context,
               onCode: (code) {
-                if (hasGottenScan) return;
-                hasGottenScan = true;
                 if (code case final code?) {
-                  hasGottenScan;
                   widget.onCode(code);
                 }
               });
@@ -60,7 +57,6 @@ class _QrScannerState extends State<QrScanner> {
                           child: OcrCamera(
                             key: const ValueKey("ocr_camera"),
                             onSuccessScanned: (result) {
-                              if (hasGottenScan) return;
                               hasGottenScan = true;
                               widget.onCode(result);
                               Navigator.of(context).pop();
