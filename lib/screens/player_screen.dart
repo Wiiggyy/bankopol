@@ -101,9 +101,15 @@ class _PlayerScreenState extends State<PlayerScreen> {
                       flex: 1,
                       child: Align(
                         alignment: Alignment.centerLeft,
-                        child: IconButton(
-                          onPressed: showLeaderboardBottomSheet,
-                          icon: const Icon(Icons.emoji_events_rounded),
+                        child: Row(
+                          children: [
+                            IconButton(
+                              onPressed: showLeaderboardBottomSheet,
+                              icon: const Icon(Icons.emoji_events_rounded),
+                            ),
+                            Text(player?.totalAssetsValue.toStringAsFixed(0) ??
+                                '0'),
+                          ],
                         ),
                       ),
                     ),
@@ -117,7 +123,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
                           const Icon(Icons.wallet),
-                          Text(player?.bankAccount.amount.toStringAsFixed(2) ??
+                          Text(player?.bankAccount.amount.toStringAsFixed(0) ??
                               '0'),
                         ],
                       ),
