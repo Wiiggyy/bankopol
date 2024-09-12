@@ -29,6 +29,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
   showLeaderboardBottomSheet() {
     showModalBottomSheet(
       context: context,
+      useSafeArea: true,
       builder: (_) {
         return LeaderBoardBottomSheet(gameProvider: widget.gameProvider);
       },
@@ -37,6 +38,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
 
   showSellInvestmentList() {
     showModalBottomSheet(
+      useSafeArea: true,
       context: context,
       isScrollControlled: true,
       builder: (_) {
@@ -53,6 +55,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
       isDismissible: false,
       enableDrag: false,
       backgroundColor: Colors.transparent,
+      useSafeArea: true,
       builder: (_) {
         return BuyInvestmentBottomSheet(
           gameProvider: widget.gameProvider,

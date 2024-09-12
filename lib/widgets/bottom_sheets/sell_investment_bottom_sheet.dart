@@ -65,7 +65,6 @@ class SellInvestmentBottomSheet extends StatelessWidget {
                                       investment: investment),
                                 ),
                               ),
-                            const SizedBox(height: 32),
                           ],
                         ),
                       )

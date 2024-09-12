@@ -1,4 +1,3 @@
-import 'package:bankopol/models/investment.dart';
 import 'package:bankopol/models/player.dart';
 import 'package:bankopol/widgets/investments/investment_item.dart';
 import 'package:bankopol/widgets/investments/investment_item_header.dart';
