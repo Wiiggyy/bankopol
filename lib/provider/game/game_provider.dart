@@ -163,10 +163,6 @@ class GameProvider with ChangeNotifier {
     }
   }
 
-  void onCodeScan(String code) {
-    final randomInvestment = Investment.generateRandomInvestment();
-  }
-
   void updatePlayers() {
     final investmentType = _currentEventCard?.eventAction.investmentType;
     final amount = _currentEventCard?.eventAction.amount;

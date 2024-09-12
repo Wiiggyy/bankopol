@@ -20,7 +20,6 @@ class _LeaderBoardBottomSheetState extends State<LeaderBoardBottomSheet> {
     return ListenableBuilder(
       listenable: widget.gameProvider,
       builder: (context, __) {
-        print(1111);
         if (widget.gameProvider.gameState case final gameState?) {
           return LeaderBoard(gameState: gameState);
         }

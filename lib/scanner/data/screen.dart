@@ -18,12 +18,8 @@ class Screen {
 
   // region Image size independent fields
   static const _targetImageWidth = 720;
-  static const _targetImageHeight = 1280;
 
   num get _widthMultiplier => min(imageHeight, imageWidth) / _targetImageWidth;
-
-  num get _heightMultiplier =>
-      max(imageHeight, imageWidth) / _targetImageHeight;
 
   // endregion Image size independent fields
 

@@ -176,7 +176,7 @@ final eventCards = [
         'Låntagaren betalar tillbaka i tid med ränta, du tjänar pengar',
     eventAction: EventAction(
       investmentType: InvestmentType.peerToPeerLending,
-      amount: 1000,
+      amountValue: 1000,
     ),
   ),
   const EventCard(

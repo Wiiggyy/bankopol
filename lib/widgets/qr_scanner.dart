@@ -1,6 +1,5 @@
 import 'package:bankopol/constants/colors.dart';
 import 'package:bankopol/scanner/ocr_camera.dart';
-import 'package:bankopol/widgets/action_button.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:qr_bar_code_scanner_dialog/qr_bar_code_scanner_dialog.dart';

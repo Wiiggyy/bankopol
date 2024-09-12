@@ -1,15 +1,12 @@
 import 'dart:ui';
 
-import 'package:bankopol/constants/colors.dart';
 import 'package:bankopol/provider/game/game_provider.dart';
 import 'package:bankopol/screens/start_screen.dart';
-import 'package:bankopol/widgets/action_button.dart';
 import 'package:bankopol/widgets/bottom_sheets/buy_investment_bottom_sheet.dart';
 import 'package:bankopol/widgets/bottom_sheets/leader_board_bottom_sheet.dart';
 import 'package:bankopol/widgets/bottom_sheets/sell_investment_bottom_sheet.dart';
 import 'package:bankopol/widgets/cards/event_card_widget.dart';
 import 'package:bankopol/widgets/investments/investment_list.dart';
-import 'package:bankopol/widgets/investments/leader_board.dart';
 import 'package:bankopol/widgets/qr_scanner.dart';
 import 'package:flutter/material.dart';
 

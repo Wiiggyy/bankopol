@@ -1,4 +1,3 @@
-import 'package:bankopol/constants/colors.dart';
 import 'package:flutter/material.dart';
 
 class GameTitle extends StatelessWidget {

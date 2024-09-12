@@ -1,4 +1,3 @@
-import 'package:bankopol/constants/colors.dart';
 import 'package:bankopol/models/event_card.dart';
 import 'package:flip_card/flip_card.dart';
 import 'package:flutter/material.dart';
@@ -12,12 +11,6 @@ class EventCardWidget extends StatelessWidget {
     required this.onFlip,
     super.key,
   });
-
-  _renderBg() {
-    return Container(
-      decoration: const BoxDecoration(color: Color(0xFFFFFFFF)),
-    );
-  }
 
   _renderContent(context) {
     return Card(
@@ -136,7 +129,6 @@ class EventCardWidget extends StatelessWidget {
     return Stack(
       fit: StackFit.expand,
       children: <Widget>[
-        // _renderBg(),
         Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
