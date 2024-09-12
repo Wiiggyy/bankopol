@@ -43,24 +43,22 @@ class _QrScannerWebState extends State<QrScannerWeb> {
           showDialog(
               context: context,
               builder: (context) {
-                return Expanded(
-                  child: Center(
-                    child: Padding(
-                      padding: const EdgeInsets.all(12),
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(12),
-                        child: AspectRatio(
-                          aspectRatio: 1,
-                          child: UnconstrainedBox(
-                            constrainedAxis: Axis.horizontal,
-                            clipBehavior: Clip.antiAlias,
-                            child: OcrCamera(
-                              key: const ValueKey("ocr_camera"),
-                              onSuccessScanned: (result) {
-                                Navigator.of(context).pop();
-                                widget.onCode(result);
-                              },
-                            ),
+                return Center(
+                  child: Padding(
+                    padding: const EdgeInsets.all(12),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(12),
+                      child: AspectRatio(
+                        aspectRatio: 1,
+                        child: UnconstrainedBox(
+                          constrainedAxis: Axis.horizontal,
+                          clipBehavior: Clip.antiAlias,
+                          child: OcrCamera(
+                            key: const ValueKey("ocr_camera"),
+                            onSuccessScanned: (result) {
+                              Navigator.of(context).pop();
+                              widget.onCode(result);
+                            },
                           ),
                         ),
                       ),
