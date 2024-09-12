@@ -28,7 +28,7 @@ class _QrScannerWebState extends State<QrScannerWeb> {
     return FloatingActionButton(
       backgroundColor: primaryGreen,
       child: Icon(
-        Icons.camera_alt,
+        Icons.qr_code_scanner,
         color: Colors.white.withOpacity(0.9),
       ),
       onPressed: () {
