@@ -44,6 +44,7 @@ class OcrScanner {
           ),
         );
         if (!subject.isClosed && result != null) subject.add(result);
+        await Future.delayed(const Duration(milliseconds: 300));
       } catch (_) {
         rethrow;
       } finally {
