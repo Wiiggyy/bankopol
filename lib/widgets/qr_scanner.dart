@@ -25,7 +25,7 @@ class _QrScannerWebState extends State<QrScannerWeb> {
   @override
   Widget build(BuildContext context) {
     return FloatingActionButton(
-      backgroundColor: primaryGreen,
+      backgroundColor: primaryColor,
       child: Icon(
         Icons.qr_code_scanner,
         color: Colors.white.withOpacity(0.9),

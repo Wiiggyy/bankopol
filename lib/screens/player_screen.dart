@@ -3,7 +3,6 @@ import 'dart:ui';
 import 'package:bankopol/provider/game/game_provider.dart';
 import 'package:bankopol/screens/start_screen.dart';
 import 'package:bankopol/widgets/bottom_sheets/buy_investment_bottom_sheet.dart';
-import 'package:bankopol/widgets/bottom_sheets/leader_board_bottom_sheet.dart';
 import 'package:bankopol/widgets/bottom_sheets/sell_investment_bottom_sheet.dart';
 import 'package:bankopol/widgets/cards/event_card_widget.dart';
 import 'package:bankopol/widgets/investments/investment_list.dart';
@@ -29,7 +28,6 @@ class _PlayerScreenState extends State<PlayerScreen> {
 
   showSellInvestmentList() {
     showModalBottomSheet(
-      useSafeArea: true,
       context: context,
       isScrollControlled: true,
       builder: (_) {
@@ -46,7 +44,6 @@ class _PlayerScreenState extends State<PlayerScreen> {
       isDismissible: false,
       enableDrag: false,
       backgroundColor: Colors.transparent,
-      useSafeArea: true,
       builder: (_) {
         return BuyInvestmentBottomSheet(
           gameProvider: widget.gameProvider,

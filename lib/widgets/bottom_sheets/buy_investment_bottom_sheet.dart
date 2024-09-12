@@ -82,6 +82,7 @@ class _BuyInvestmentBottomSheetState extends State<BuyInvestmentBottomSheet> {
                     )
                   ],
                 ),
+                const SizedBox(height: 20),
               ],
             ),
           ),

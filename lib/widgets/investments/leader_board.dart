@@ -44,6 +44,7 @@ class LeaderBoard extends StatelessWidget {
                       sortedPlayers[index].totalAssetsValue.toStringAsFixed(2),
                     ),
                   ),
+                const SizedBox(height: 20),
               ],
             ),
           ),

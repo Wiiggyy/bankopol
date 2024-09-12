@@ -17,7 +17,7 @@ class StartScreen extends StatefulWidget {
 }
 
 class _StartScreenState extends State<StartScreen> {
-  final TextEditingController nameController = TextEditingController();
+  String name = '';
 
   @override
   Widget build(BuildContext context) {
@@ -33,29 +33,52 @@ class _StartScreenState extends State<StartScreen> {
                 fit: BoxFit.cover,
               ),
               SafeArea(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                child: Stack(
                   children: [
                     const GameTitle(),
-                    TextField(
-                      controller: nameController,
-                    ),
-                    ActionButton(
-                      onPressed: () async {
-                        await widget.gameProvider.joinGame(nameController.text);
-
-                        if (!context.mounted) return;
-
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (context) => PlayerScreen(
-                              gameProvider: widget.gameProvider,
+                    Align(
+                      alignment: Alignment.bottomCenter,
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Container(
+                            color: Colors.white,
+                            padding: const EdgeInsets.all(8),
+                            child: TextField(
+                              decoration: const InputDecoration(
+                                  hintText: 'Spelarnamn',
+                                  hintStyle: TextStyle(color: Colors.black26)),
+                              onChanged: (value) {
+                                setState(() {
+                                  name = value;
+                                });
+                              },
                             ),
                           ),
-                        );
-                      },
-                      title: 'Börja spela',
+                          Container(
+                            width: double.infinity,
+                            padding: const EdgeInsets.only(bottom: 20),
+                            child: ActionButton(
+                              onPressed: name.isNotEmpty
+                                  ? () async {
+                                      await widget.gameProvider.joinGame(name);
+
+                                      if (!context.mounted) return;
+
+                                      Navigator.of(context).push(
+                                        MaterialPageRoute(
+                                          builder: (context) => PlayerScreen(
+                                            gameProvider: widget.gameProvider,
+                                          ),
+                                        ),
+                                      );
+                                    }
+                                  : null,
+                              title: 'Börja spela',
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ],
                 ),
