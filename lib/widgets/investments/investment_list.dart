@@ -26,6 +26,8 @@ class InvestmentList extends StatelessWidget {
                 const InvestmentItemHeader(),
                 InvestmentItem(
                     investment: Investment.generateRandomInvestment()),
+                InvestmentItem(
+                    investment: Investment.generateRandomInvestment()),
                 for (final investment in player.investments)
                   InvestmentItem(investment: investment),
               ],

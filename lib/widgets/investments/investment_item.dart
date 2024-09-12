@@ -36,12 +36,8 @@ class InvestmentItem extends StatelessWidget {
           ),
         ],
       ),
-      title: Text(
-        investment.quantity.toString(),
-        textAlign: TextAlign.center,
-      ),
       trailing: Text(
-        (investment.value * investment.quantity).toStringAsFixed(0),
+        '${(investment.value * investment.quantity).toStringAsFixed(0)} (${investment.quantity.toString()})',
         textAlign: TextAlign.right,
       ),
     );

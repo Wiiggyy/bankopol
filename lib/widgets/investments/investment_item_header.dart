@@ -19,11 +19,6 @@ class InvestmentItemHeader extends StatelessWidget {
           ),
         ],
       ),
-      title: Text(
-        'Antal',
-        textAlign: TextAlign.center,
-        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
-      ),
       trailing: Text(
         'Värde',
         textAlign: TextAlign.right,
