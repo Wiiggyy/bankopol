@@ -13,9 +13,28 @@ class InvestmentItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      leading: Text(
-        getInvestmentTypeName(investment.investmentType),
-        textAlign: TextAlign.left,
+      leading: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          SizedBox(
+            height: 40,
+            width: 40,
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(40.0),
+              child: Image.asset(
+                'assets/${investment.investmentType.name}.webp',
+                fit: BoxFit.cover,
+              ),
+            ),
+          ),
+          const SizedBox(
+            width: 8,
+          ),
+          Text(
+            getInvestmentTypeName(investment.investmentType),
+            textAlign: TextAlign.left,
+          ),
+        ],
       ),
       title: Text(
         investment.quantity.toString(),

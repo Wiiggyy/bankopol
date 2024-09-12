@@ -10,6 +10,7 @@ class InvestmentItemHeader extends StatelessWidget {
     return const ListTile(
       dense: true,
       leading: Row(
+        mainAxisSize: MainAxisSize.min,
         children: [
           Text(
             'Investering',
