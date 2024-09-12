@@ -10,6 +10,7 @@ import 'package:bankopol/models/investment.dart';
 import 'package:bankopol/models/player.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uuid/uuid.dart';
 
 class GameProvider with ChangeNotifier {
@@ -45,6 +46,12 @@ class GameProvider with ChangeNotifier {
 
   EventCard? get currentEventCard => _currentEventCard;
 
+  bool? get isLoggedIn => switch ((gameState, _currentPlayerId)) {
+        (null, _) => null,
+        (_?, null) => false,
+        (_?, _?) => true,
+      };
+
   Player? get currentPlayer {
     if (gameState case final gameState?) {
       return gameState.players.firstWhereOrNull(
@@ -70,6 +77,23 @@ class GameProvider with ChangeNotifier {
     );
     await repository.joinGame(player);
     _currentPlayerId = player.id;
+
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('id', player.id);
+
+    notifyListeners();
+  }
+
+  Future<void> tryRejoin() async {
+    final prefs = await SharedPreferences.getInstance();
+    _gameState = await repository.getCurrentGameState();
+    final playerId = prefs.getString('id');
+
+    _currentPlayerId = playerId;
+    if (currentPlayer == null) {
+      await prefs.remove('id');
+      _currentPlayerId = null;
+    }
     notifyListeners();
   }
 
