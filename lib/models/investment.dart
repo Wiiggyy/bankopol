@@ -88,6 +88,5 @@ class Investment {
       case _:
         return Investment.generateRandomInvestment();
     }
-    ;
   }
 }

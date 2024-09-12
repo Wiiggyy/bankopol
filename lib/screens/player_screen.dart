@@ -2,7 +2,6 @@ import 'dart:ui';
 
 import 'package:bankopol/models/investment.dart';
 import 'package:bankopol/provider/game/game_provider.dart';
-import 'package:bankopol/screens/start_screen.dart';
 import 'package:bankopol/widgets/bottom_sheets/buy_investment_bottom_sheet.dart';
 import 'package:bankopol/widgets/bottom_sheets/sell_investment_bottom_sheet.dart';
 import 'package:bankopol/widgets/cards/event_card_widget.dart';
@@ -120,7 +119,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
                           const Icon(Icons.wallet),
-                          SizedBox(width: 4),
+                          const SizedBox(width: 4),
                           Text(
                               player?.bankAccount.amount.toStringAsFixed(0) ??
                                   '0',
@@ -179,27 +178,28 @@ class _PlayerScreenState extends State<PlayerScreen> {
                             : const SizedBox.shrink(),
                       ),
                     ),
-                    Row(
-                      children: [
-                        InkWell(
-                          onTap: () {
-                            widget.gameProvider.clearGameState();
-                            Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (context) => StartScreen(
-                                  gameProvider: widget.gameProvider,
-                                ),
-                              ),
-                            );
-                          },
-                          child: Container(
-                            height: 50,
-                            color: Colors.white,
-                            child: const Text('Clear Game'),
-                          ),
-                        ),
-                      ],
-                    ),
+                    // if (kDebugMode)
+                    //   Row(
+                    //     children: [
+                    //       InkWell(
+                    //         onTap: () {
+                    //           widget.gameProvider.clearGameState();
+                    //           Navigator.of(context).push(
+                    //             MaterialPageRoute(
+                    //               builder: (context) => StartScreen(
+                    //                 gameProvider: widget.gameProvider,
+                    //               ),
+                    //             ),
+                    //           );
+                    //         },
+                    //         child: Container(
+                    //           height: 50,
+                    //           color: Colors.white,
+                    //           child: const Text('Clear Game'),
+                    //         ),
+                    //       ),
+                    //     ],
+                    //   ),
                     const Padding(
                       padding: EdgeInsets.only(bottom: 40),
                     )
