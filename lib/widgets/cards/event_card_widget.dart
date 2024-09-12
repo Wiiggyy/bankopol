@@ -1,3 +1,4 @@
+import 'package:bankopol/constants/text_style.dart';
 import 'package:bankopol/models/event_card.dart';
 import 'package:flip_card/flip_card.dart';
 import 'package:flutter/material.dart';
@@ -92,26 +93,22 @@ class EventCardWidget extends StatelessWidget {
                     children: <Widget>[
                       Text(
                         eventCard.description,
-                        style: const TextStyle(
-                            color: Colors.black, fontWeight: FontWeight.bold),
+                        style: eventCardTextStyle,
                       ),
                       if (eventCard.eventAction.amount != null)
                         Text(
                           eventCard.eventAction.amount!.toString(),
-                          style: const TextStyle(
-                              color: Colors.black, fontWeight: FontWeight.bold),
+                          style: eventCardTextStyle,
                         ),
                       if (eventCard.eventAction.amountValue != null)
                         Text(
                           '${eventCard.eventAction.amountValue!}kr',
-                          style: const TextStyle(
-                              color: Colors.black, fontWeight: FontWeight.bold),
+                          style: eventCardTextStyle,
                         ),
                       if (eventCard.eventAction.percentValue != null)
                         Text(
                           '${eventCard.eventAction.percentValue!}%',
-                          style: const TextStyle(
-                              color: Colors.black, fontWeight: FontWeight.bold),
+                          style: eventCardTextStyle,
                         ),
                     ],
                   ),

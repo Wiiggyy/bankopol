@@ -219,7 +219,7 @@ final eventCards = [
   ),
   const EventCard(
     description:
-        'Vinet du lagrat har nått sin topp, du kan sälja det för ett högt pris',
+        'Allt lagrat har nått sin topp, alla kan sälja det för ett högt pris',
     eventAction: EventAction(
       investmentType: InvestmentType.wine,
       amountValue: 1200,
@@ -227,7 +227,7 @@ final eventCards = [
   ),
   const EventCard(
     description:
-        'Vinet blir dåligt lagrat och förstörs, du förlorar din investering',
+        'Allt vinet blir dåligt lagrat och förstörs, alla med vin förlorar sina investeringar',
     eventAction: EventAction(
       investmentType: InvestmentType.wine,
       amount: -1,
@@ -235,7 +235,7 @@ final eventCards = [
   ),
   const EventCard(
     description:
-        'Ett samlarobjekt du äger blir plötsligt väldigt eftertraktat, värdet stiger',
+        'Alla samlarobjekt blir plötsligt väldigt eftertraktade, värdet stiger',
     eventAction: EventAction(
       investmentType: InvestmentType.collectibles,
       percentValue: 0.5,
@@ -257,21 +257,22 @@ final eventCards = [
     ),
   ),
   const EventCard(
-    description: 'En hackerattack stjäl dina kryptovalutor, du förlorar allt',
+    description:
+        'En hackerattack stjäl allas kryptovalutor, alla förlorar allt',
     eventAction: EventAction(
       investmentType: InvestmentType.cryptocurrencies,
       amount: -1,
     ),
   ),
   const EventCard(
-    description: 'Din NFT blir viral, du får ett högt bud på den',
+    description: 'NFTs blir viralt, alla får höga bud',
     eventAction: EventAction(
       investmentType: InvestmentType.nfts,
       amountValue: 3000,
     ),
   ),
   const EventCard(
-    description: 'Intresset för NFT:er svalnar, värdet på din NFT sjunker',
+    description: 'Intresset för NFT:er svalnar, värdet på NFT sjunker',
     eventAction: EventAction(
       investmentType: InvestmentType.nfts,
       percentValue: -0.8,
@@ -279,7 +280,7 @@ final eventCards = [
   ),
   const EventCard(
     description:
-        'Projektet du investerat i blir en succé, du får både ränta och gör gott för miljön',
+        'Projekten som investerats i blir succé, alla får både ränta och gör gott för miljön',
     eventAction: EventAction(
       investmentType: InvestmentType.greenBonds,
       percentValue: 0.2,
@@ -311,7 +312,7 @@ final eventCards = [
   ),
   const EventCard(
     description:
-        'Företaget du investerat i gör en positiv skillnad och genererar samtidigt vinst, du får utdelning',
+        'Företagen som investerat i gör en positiv skillnad och genererar samtidigt vinst, alla får utdelning',
     eventAction: EventAction(
       investmentType: InvestmentType.socialEnterprises,
       amountValue: 2000,
@@ -319,7 +320,7 @@ final eventCards = [
   ),
   const EventCard(
     description:
-        'Företaget kämpar ekonomiskt trots sitt goda syfte, din investering är i riskzonen',
+        'Företaget kämpar ekonomiskt trots sitt goda syfte, investeringarna är i riskzonen',
     eventAction: EventAction(
       investmentType: InvestmentType.socialEnterprises,
       amountValue: -1000,
@@ -327,7 +328,7 @@ final eventCards = [
   ),
   const EventCard(
     description:
-        'Entreprenören du lånat ut till lyckas med sitt företag och betalar tillbaka med ränta',
+        'Entreprenörer som lånats pengar lyckas med sitt företag och betalar tillbaka med ränta',
     eventAction: EventAction(
       investmentType: InvestmentType.microfinancing,
       amountValue: 1500,
@@ -342,7 +343,7 @@ final eventCards = [
   ),
   const EventCard(
     description:
-        'Staten höjer avdragsrätten för pensionssparande, du får mer pengar tillbaka på skatten',
+        'Staten höjer avdragsrätten för pensionssparande, alla med pensionsförsäkring får mer pengar tillbaka på skatten',
     eventAction: EventAction(
       investmentType: InvestmentType.pensionInsurance,
       percentValue: 300,
@@ -350,14 +351,14 @@ final eventCards = [
   ),
   const EventCard(
     description:
-        'Avgifterna för din pensionsförsäkring höjs, din avkastning minskar',
+        'Avgifterna för din pensionsförsäkring höjs, avkastningen minskar',
     eventAction: EventAction(
       investmentType: InvestmentType.pensionInsurance,
       percentValue: -0.05,
     ),
   ),
   const EventCard(
-    description: 'Försäkringen ger en extra bonus när ditt barn fyller 18 år',
+    description: 'Försäkringen ger en extra bonus när barn fyller 18 år',
     eventAction: EventAction(
       investmentType: InvestmentType.childInsurance,
       amountValue: 100,
@@ -365,15 +366,14 @@ final eventCards = [
   ),
   const EventCard(
     description:
-        'Du behöver pengarna akut men kan inte ta ut dem från barnförsäkringen utan att förlora förmåner',
+        'Alla spelare behöver pengar akut men kan inte ta ut dem från barnförsäkringen utan att förlora förmåner',
     eventAction: EventAction(
       investmentType: InvestmentType.childInsurance,
       amountValue: -300,
     ),
   ),
   const EventCard(
-    description:
-        'Du får rabatt på din livförsäkringspremie tack vare din goda hälsa',
+    description: 'Rabatt på livförsäkringspremie tack vare god hälsa',
     eventAction: EventAction(
       investmentType: InvestmentType.lifeInsurance,
       amountValue: 400,
@@ -403,7 +403,7 @@ final eventCards = [
     ),
   ),
   const EventCard(
-    description: 'Du klarar din sparutmaning och får din belöning!',
+    description: 'Avklarad sparutmaning och får din belöning!',
     eventAction: EventAction(
       investmentType: InvestmentType.savingsChallenges,
       amountValue: 300,
@@ -411,7 +411,7 @@ final eventCards = [
   ),
   const EventCard(
     description:
-        'En oväntad utgift gör att du missar din sparutmaning denna månad',
+        'En oväntad utgift gör att alla missar sina sparutmaningar denna månad',
     eventAction: EventAction(
       investmentType: InvestmentType.savingsChallenges,
       amountValue: -300,
@@ -419,7 +419,7 @@ final eventCards = [
   ),
   const EventCard(
     description:
-        'Du gör en lyckad investering baserat på din egen analys och tjänar pengar',
+        'Lyckade investeringar baserat på egena analyser, alla tjänar pengar',
     eventAction: EventAction(
       investmentType: InvestmentType.diyInvestments,
       percentValue: 0.1,
@@ -427,7 +427,7 @@ final eventCards = [
   ),
   const EventCard(
     description:
-        'Din analys visar sig vara felaktig, du förlorar pengar på din investering',
+        'Analyserna visar sig vara felaktiga, alla förlorar pengar på din investering',
     eventAction: EventAction(
       investmentType: InvestmentType.diyInvestments,
       percentValue: -0.05,

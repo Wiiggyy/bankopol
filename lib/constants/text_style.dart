@@ -1,3 +1,4 @@
+import 'package:bankopol/constants/colors.dart';
 import 'package:flutter/material.dart';
 
 const investmentListTextStyle = TextStyle(
@@ -9,6 +10,19 @@ const investmentListTextStyle = TextStyle(
       offset: Offset(2, 2),
       blurRadius: 2,
       color: Colors.black,
+    ),
+  ],
+);
+
+const eventCardTextStyle = TextStyle(
+  color: secondaryColor,
+  fontWeight: FontWeight.bold,
+  fontSize: 16,
+  shadows: [
+    Shadow(
+      offset: Offset(1, 1),
+      blurRadius: 2,
+      color: Colors.white,
     ),
   ],
 );
