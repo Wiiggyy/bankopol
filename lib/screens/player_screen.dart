@@ -93,15 +93,22 @@ class _PlayerScreenState extends State<PlayerScreen> {
                         child: Row(
                           children: [
                             LeaderIcon(gameProvider: widget.gameProvider),
-                            Text(player?.totalAssetsValue.toStringAsFixed(0) ??
-                                '0'),
+                            Text(
+                                player?.totalAssetsValue.toStringAsFixed(0) ??
+                                    '0',
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.bold)),
                           ],
                         ),
                       ),
                     ),
                     Expanded(
                       flex: 2,
-                      child: Center(child: Text(player?.name ?? '')),
+                      child: Center(
+                        child: Text(player?.name ?? '',
+                            style:
+                                const TextStyle(fontWeight: FontWeight.bold)),
+                      ),
                     ),
                     Expanded(
                       flex: 1,
@@ -109,8 +116,12 @@ class _PlayerScreenState extends State<PlayerScreen> {
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
                           const Icon(Icons.wallet),
-                          Text(player?.bankAccount.amount.toStringAsFixed(0) ??
-                              '0'),
+                          SizedBox(width: 4),
+                          Text(
+                              player?.bankAccount.amount.toStringAsFixed(0) ??
+                                  '0',
+                              style:
+                                  const TextStyle(fontWeight: FontWeight.bold)),
                         ],
                       ),
                     ),
