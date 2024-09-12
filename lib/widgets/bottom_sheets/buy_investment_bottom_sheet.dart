@@ -41,36 +41,44 @@ class _BuyInvestmentBottomSheetState extends State<BuyInvestmentBottomSheet> {
           ),
           child: Container(
             color: Colors.white60,
-            constraints: const BoxConstraints(
-              minHeight: 500,
-              maxWidth: double.infinity,
-            ),
-            height: 500,
-            width: double.infinity,
             child: Column(
+              mainAxisSize: MainAxisSize.min,
               children: [
-                // Text('Scanned code: $code'),
                 InvestmentCard(investment: investment),
-                Row(
+                Column(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    if (!canBuy)
-                      ActionButton(
-                        onPressed: widget.onPressedSell,
-                        title: 'Sälj investeringar',
+                    SizedBox(
+                      width: double.infinity,
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: ActionButton(
+                              onPressed: widget.onPressedClose,
+                              title: 'Köp inte',
+                            ),
+                          ),
+                          const SizedBox(width: 1),
+                          if (canBuy)
+                            Expanded(
+                              child: ActionButton(
+                                onPressed: () {
+                                  widget.gameProvider.buyInvestment(investment);
+                                  widget.onPressed();
+                                },
+                                title: 'Köp',
+                              ),
+                            ),
+                          if (!canBuy)
+                            Expanded(
+                              child: ActionButton(
+                                onPressed: widget.onPressedSell,
+                                title: 'Sälj investeringar',
+                              ),
+                            ),
+                        ],
                       ),
-                    ActionButton(
-                      onPressed: widget.onPressedClose,
-                      title: 'Köp inte',
-                    ),
-                    if (canBuy)
-                      ActionButton(
-                        onPressed: () {
-                          widget.gameProvider.buyInvestment(investment);
-                          widget.onPressed();
-                        },
-                        title: 'Köp',
-                      ),
+                    )
                   ],
                 ),
               ],

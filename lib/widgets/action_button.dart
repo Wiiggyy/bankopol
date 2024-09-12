@@ -16,6 +16,11 @@ class ActionButton extends StatelessWidget {
     return ElevatedButton(
       onPressed: onPressed,
       style: ButtonStyle(
+        shape: WidgetStateProperty.resolveWith((states) {
+          return const RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.zero),
+          );
+        }),
         backgroundColor: WidgetStateProperty.resolveWith(
           (states) {
             return primaryGreen;

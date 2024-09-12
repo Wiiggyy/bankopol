@@ -41,6 +41,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
   showSellInvestmentList() {
     showModalBottomSheet(
       context: context,
+      isScrollControlled: true,
       builder: (_) {
         return SellInvestmentBottomSheet(gameProvider: widget.gameProvider);
       },
