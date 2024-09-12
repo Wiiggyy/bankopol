@@ -46,7 +46,7 @@ class GameProvider with ChangeNotifier {
 
   EventCard? get currentEventCard => _currentEventCard;
 
-  bool? get isLoggedIn => switch ((gameState, _currentPlayerId)) {
+  bool? get isLoggedIn => switch ((gameState, currentPlayer)) {
         (null, _) => null,
         (_?, null) => false,
         (_?, _?) => true,
