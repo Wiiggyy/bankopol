@@ -1,0 +1,28 @@
+
+[[plugins]]
+  package = "netlify-plugin-flutter"
+
+  [plugins.inputs]
+    #channel = "flutter-3.24-candidate.1"
+    channel = "stable"
+
+[build]
+  command = """
+
+  set -euo pipefail
+
+  echo "Starting build process..."
+
+  # Install dependencies
+  echo "Installing dependencies..."
+  dart pub get
+
+  # Build Flutter web app
+  echo "Building Flutter web app..."
+  flutter build web --release 
+
+
+  echo "Build process completed successfully."
+
+  """
+  publish = "build/web"
