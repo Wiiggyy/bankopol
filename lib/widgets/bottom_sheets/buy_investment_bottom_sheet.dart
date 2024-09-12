@@ -40,7 +40,7 @@ class _BuyInvestmentBottomSheetState extends State<BuyInvestmentBottomSheet> {
             topRight: Radius.circular(16.0),
           ),
           child: Container(
-            color: Colors.white60,
+            color: Colors.white70,
             padding: const EdgeInsets.only(bottom: 24.0),
             child: Column(
               mainAxisSize: MainAxisSize.min,
@@ -64,7 +64,8 @@ class _BuyInvestmentBottomSheetState extends State<BuyInvestmentBottomSheet> {
                             Expanded(
                               child: ActionButton(
                                 onPressed: () {
-                                  widget.gameProvider.buyInvestment(widget.investment);
+                                  widget.gameProvider
+                                      .buyInvestment(widget.investment);
                                   widget.onPressed();
                                 },
                                 title: 'Köp',

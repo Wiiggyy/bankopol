@@ -97,7 +97,7 @@ class EventCardWidget extends StatelessWidget {
                       ),
                       if (eventCard.eventAction.amount != null)
                         Text(
-                          eventCard.eventAction.amount!.toString(),
+                          '${eventCard.eventAction.amount!}st',
                           style: eventCardTextStyle,
                         ),
                       if (eventCard.eventAction.amountValue != null)
@@ -107,7 +107,7 @@ class EventCardWidget extends StatelessWidget {
                         ),
                       if (eventCard.eventAction.percentValue != null)
                         Text(
-                          '${eventCard.eventAction.percentValue!}%',
+                          '${eventCard.eventAction.percentValue! * 100}%',
                           style: eventCardTextStyle,
                         ),
                     ],
