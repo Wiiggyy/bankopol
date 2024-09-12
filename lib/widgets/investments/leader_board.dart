@@ -13,24 +13,38 @@ class LeaderBoard extends StatelessWidget {
   Widget build(BuildContext context) {
     final sortedPlayers = gameState.players.toList()
       ..sort((a, b) => b.totalAssetsValue.compareTo(a.totalAssetsValue));
-    return Container(
-      margin: const EdgeInsets.all(12.0),
-      child: Card(
-        color: Colors.white.withOpacity(0.8),
-        child: Padding(
-          padding: const EdgeInsets.all(16),
-          child: SingleChildScrollView(
+    return ConstrainedBox(
+      constraints: const BoxConstraints(
+        maxHeight: 300,
+        minHeight: 100,
+      ),
+      child: DraggableScrollableSheet(
+        initialChildSize: 1,
+        minChildSize: 0.2,
+        maxChildSize: 1,
+        builder: (context, _) {
+          return SingleChildScrollView(
             child: Column(
+              mainAxisSize: MainAxisSize.min,
               children: [
-                Text(
-                  'Leader Board'.toUpperCase(),
-                  style: const TextStyle(
-                      color: Colors.black,
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold),
+                Center(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                      vertical: 8,
+                    ),
+                    child: Text(
+                      'Leaderboard'.toUpperCase(),
+                      style: const TextStyle(
+                          color: Colors.black,
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold),
+                    ),
+                  ),
                 ),
-                const SizedBox(height: 16),
-                for (int index = 0; index < sortedPlayers.length; index++)
+                const Divider(
+                  height: 0,
+                ),
+                for (int index = 0; index < sortedPlayers.length; index++) ...[
                   ListTile(
                     leading: SizedBox(
                       width: 30,
@@ -44,11 +58,14 @@ class LeaderBoard extends StatelessWidget {
                       sortedPlayers[index].totalAssetsValue.toStringAsFixed(2),
                     ),
                   ),
-                const SizedBox(height: 20),
+                  const Divider(
+                    height: 0,
+                  )
+                ]
               ],
             ),
-          ),
-        ),
+          );
+        },
       ),
     );
   }
