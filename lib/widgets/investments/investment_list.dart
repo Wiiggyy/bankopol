@@ -1,3 +1,4 @@
+import 'package:bankopol/models/investment.dart';
 import 'package:bankopol/models/player.dart';
 import 'package:bankopol/widgets/investments/investment_item.dart';
 import 'package:bankopol/widgets/investments/investment_item_header.dart';
@@ -23,6 +24,8 @@ class InvestmentList extends StatelessWidget {
             child: Column(
               children: [
                 const InvestmentItemHeader(),
+                InvestmentItem(
+                    investment: Investment.generateRandomInvestment()),
                 for (final investment in player.investments)
                   InvestmentItem(investment: investment),
               ],

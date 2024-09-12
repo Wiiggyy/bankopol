@@ -35,13 +35,13 @@ class _BuyInvestmentBottomSheetState extends State<BuyInvestmentBottomSheet> {
             (widget.gameProvider.currentPlayer?.bankAccount.amount ?? 0) >=
                 investment.value;
         return ClipRRect(
-          borderRadius: BorderRadius.only(
+          borderRadius: const BorderRadius.only(
             topLeft: Radius.circular(16.0),
             topRight: Radius.circular(16.0),
           ),
           child: Container(
             color: Colors.white60,
-            constraints: BoxConstraints(
+            constraints: const BoxConstraints(
               minHeight: 500,
               maxWidth: double.infinity,
             ),

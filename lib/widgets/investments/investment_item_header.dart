@@ -7,39 +7,26 @@ class InvestmentItemHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.symmetric(
-        // horizontal: 16,
-        vertical: 4,
-      ),
-      child: const Row(
+    return const ListTile(
+      dense: true,
+      leading: Row(
         children: [
-          Expanded(
-            flex: 4,
-            child: Text(
-              'Investering',
-              textAlign: TextAlign.left,
-              style: TextStyle(fontWeight: FontWeight.bold),
-            ),
-          ),
-          Expanded(
-            flex: 1,
-            child: Text(
-              'Antal',
-              textAlign: TextAlign.center,
-              style: TextStyle(fontWeight: FontWeight.bold),
-            ),
-          ),
-          Expanded(
-            flex: 1,
-            child: Text(
-              'Värde',
-              textAlign: TextAlign.right,
-              style: TextStyle(fontWeight: FontWeight.bold),
-            ),
+          Text(
+            'Investering',
+            textAlign: TextAlign.left,
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
           ),
         ],
+      ),
+      title: Text(
+        'Antal',
+        textAlign: TextAlign.center,
+        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
+      ),
+      trailing: Text(
+        'Värde',
+        textAlign: TextAlign.right,
+        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
       ),
     );
   }

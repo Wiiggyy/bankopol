@@ -12,41 +12,18 @@ class InvestmentItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.symmetric(
-        // horizontal: 16,
-        vertical: 4,
+    return ListTile(
+      leading: Text(
+        getInvestmentTypeName(investment.investmentType),
+        textAlign: TextAlign.left,
       ),
-      child: DefaultTextStyle(
-        style: const TextStyle(
-          color: Colors.black,
-        ),
-        child: Row(
-          children: [
-            Expanded(
-              flex: 4,
-              child: Text(
-                getInvestmentTypeName(investment.investmentType),
-                textAlign: TextAlign.left,
-              ),
-            ),
-            Expanded(
-              flex: 1,
-              child: Text(
-                investment.quantity.toString(),
-                textAlign: TextAlign.center,
-              ),
-            ),
-            Expanded(
-              flex: 1,
-              child: Text(
-                (investment.value * investment.quantity).toStringAsFixed(0),
-                textAlign: TextAlign.right,
-              ),
-            ),
-          ],
-        ),
+      title: Text(
+        investment.quantity.toString(),
+        textAlign: TextAlign.center,
+      ),
+      trailing: Text(
+        (investment.value * investment.quantity).toStringAsFixed(0),
+        textAlign: TextAlign.right,
       ),
     );
   }
