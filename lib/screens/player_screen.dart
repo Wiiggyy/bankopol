@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:bankopol/models/investment.dart';
 import 'package:bankopol/provider/game/game_provider.dart';
 import 'package:bankopol/screens/start_screen.dart';
 import 'package:bankopol/widgets/bottom_sheets/buy_investment_bottom_sheet.dart';
@@ -39,6 +40,8 @@ class _PlayerScreenState extends State<PlayerScreen> {
   handleScan(String code) async {
     debugPrint('------------Scanned code: $code');
 
+    final investment = Investment.fromCode(code);
+
     await showModalBottomSheet(
       context: context,
       isDismissible: false,
@@ -46,6 +49,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
       backgroundColor: Colors.transparent,
       builder: (_) {
         return BuyInvestmentBottomSheet(
+          investment: investment,
           gameProvider: widget.gameProvider,
           onPressed: () {
             widget.gameProvider.generateCard();
@@ -77,7 +81,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
         return Scaffold(
           floatingActionButton:
               !shouldDrawCard && widget.gameProvider.currentEventCard == null
-                  ? QrScannerToggle(onCode: handleScan)
+                  ? QrScanner(onCode: handleScan)
                   : null,
           appBar: AppBar(
               automaticallyImplyLeading: false,

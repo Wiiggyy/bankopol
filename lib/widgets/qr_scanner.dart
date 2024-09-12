@@ -4,16 +4,16 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:qr_bar_code_scanner_dialog/qr_bar_code_scanner_dialog.dart';
 
-class QrScannerWeb extends StatefulWidget {
+class QrScanner extends StatefulWidget {
   final Function(String code) onCode;
 
-  const QrScannerWeb({super.key, required this.onCode});
+  const QrScanner({super.key, required this.onCode});
 
   @override
-  State<QrScannerWeb> createState() => _QrScannerWebState();
+  State<QrScanner> createState() => _QrScannerState();
 }
 
-class _QrScannerWebState extends State<QrScannerWeb> {
+class _QrScannerState extends State<QrScanner> {
   late final QrBarCodeScannerDialog _qrBarCodeScannerDialogPlugin;
 
   @override
@@ -68,30 +68,6 @@ class _QrScannerWebState extends State<QrScannerWeb> {
               });
         }
       },
-    );
-  }
-}
-
-class QrScannerMobile extends StatelessWidget {
-  const QrScannerMobile({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container();
-  }
-}
-
-class QrScannerToggle extends StatelessWidget {
-  final Function(String code) onCode;
-
-  const QrScannerToggle({super.key, required this.onCode});
-
-  @override
-  Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        QrScannerWeb(onCode: onCode),
-      ],
     );
   }
 }

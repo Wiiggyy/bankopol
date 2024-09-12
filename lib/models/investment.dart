@@ -47,8 +47,9 @@ class Investment {
     );
   }
 
+  static final random = Random();
+
   factory Investment.generateRandomInvestment() {
-    final random = Random();
     final investmentType =
         InvestmentType.values[random.nextInt(InvestmentType.values.length)];
     final value = random.nextDouble() * 1000;
@@ -61,5 +62,32 @@ class Investment {
       quantity: quantity,
       interest: interest,
     );
+  }
+
+  static Investment fromCode(String code) {
+    final separated = code.split(':');
+    switch (separated) {
+      case ['event', final code]:
+        final intCode = int.tryParse(code);
+        if (intCode == null || intCode >= InvestmentType.values.length) {
+          continue random;
+        }
+        final investmentType = InvestmentType.values[intCode];
+        final value = random.nextDouble() * 1000;
+        const quantity = 1; //random.nextInt(100) + 1;
+        final interest = random.nextDouble() * 0.2;
+
+        return Investment(
+          investmentType: investmentType,
+          value: value,
+          quantity: quantity,
+          interest: interest,
+        );
+      // "event:$event"
+      random:
+      case _:
+        return Investment.generateRandomInvestment();
+    }
+    ;
   }
 }

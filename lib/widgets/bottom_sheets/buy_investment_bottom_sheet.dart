@@ -5,12 +5,14 @@ import 'package:bankopol/widgets/investments/investment_card.dart';
 import 'package:flutter/material.dart';
 
 class BuyInvestmentBottomSheet extends StatefulWidget {
+  final Investment investment;
   final GameProvider gameProvider;
   final void Function() onPressed;
   final void Function() onPressedSell;
   final void Function() onPressedClose;
 
   const BuyInvestmentBottomSheet({
+    required this.investment,
     required this.gameProvider,
     required this.onPressed,
     required this.onPressedSell,
@@ -26,14 +28,12 @@ class BuyInvestmentBottomSheet extends StatefulWidget {
 class _BuyInvestmentBottomSheetState extends State<BuyInvestmentBottomSheet> {
   @override
   Widget build(BuildContext context) {
-    final Investment investment = Investment.generateRandomInvestment();
-
     return ListenableBuilder(
       listenable: widget.gameProvider,
       builder: (context, __) {
         final bool canBuy =
             (widget.gameProvider.currentPlayer?.bankAccount.amount ?? 0) >=
-                investment.value;
+                widget.investment.value;
         return ClipRRect(
           borderRadius: const BorderRadius.only(
             topLeft: Radius.circular(16.0),
@@ -45,7 +45,7 @@ class _BuyInvestmentBottomSheetState extends State<BuyInvestmentBottomSheet> {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                InvestmentCard(investment: investment),
+                InvestmentCard(investment: widget.investment),
                 Column(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
@@ -64,7 +64,7 @@ class _BuyInvestmentBottomSheetState extends State<BuyInvestmentBottomSheet> {
                             Expanded(
                               child: ActionButton(
                                 onPressed: () {
-                                  widget.gameProvider.buyInvestment(investment);
+                                  widget.gameProvider.buyInvestment(widget.investment);
                                   widget.onPressed();
                                 },
                                 title: 'Köp',
