@@ -15,6 +15,7 @@ class QrScanner extends StatefulWidget {
 
 class _QrScannerState extends State<QrScanner> {
   late final QrBarCodeScannerDialog _qrBarCodeScannerDialogPlugin;
+  bool hasGottenScan = false;
 
   @override
   void initState() {
@@ -56,8 +57,9 @@ class _QrScannerState extends State<QrScanner> {
                           child: OcrCamera(
                             key: const ValueKey("ocr_camera"),
                             onSuccessScanned: (result) {
-                              Navigator.of(context).pop();
+                              hasGottenScan = true;
                               widget.onCode(result);
+                              Navigator.of(context).pop();
                             },
                           ),
                         ),
