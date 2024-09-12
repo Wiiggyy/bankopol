@@ -31,27 +31,19 @@ class LeaderBoard extends StatelessWidget {
                 ),
                 const SizedBox(height: 16),
                 for (int index = 0; index < sortedPlayers.length; index++)
-                  Row(
-                    key: ValueKey(sortedPlayers[index].id),
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Row(
-                        children: [
-                          SizedBox(
-                            width: 30,
-                            child: index == 0 ? const Icon(Icons.star) : null,
-                          ),
-                          Align(
-                            alignment: Alignment.centerLeft,
-                            child: Text(sortedPlayers[index].name),
-                          ),
-                        ],
-                      ),
-                      Text(sortedPlayers[index]
-                          .totalAssetsValue
-                          .toStringAsFixed(2)),
-                    ],
-                  )
+                  ListTile(
+                    leading: SizedBox(
+                      width: 30,
+                      child: index == 0 ? const Icon(Icons.star) : null,
+                    ),
+                    title: Text(
+                      sortedPlayers[index].name,
+                      style: const TextStyle(fontSize: 12),
+                    ),
+                    trailing: Text(
+                      sortedPlayers[index].totalAssetsValue.toStringAsFixed(2),
+                    ),
+                  ),
               ],
             ),
           ),
