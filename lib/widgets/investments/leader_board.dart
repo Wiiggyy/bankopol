@@ -24,19 +24,32 @@ class LeaderBoard extends StatelessWidget {
               children: [
                 Text(
                   'Leader Board'.toUpperCase(),
-                  style: TextStyle(
+                  style: const TextStyle(
                       color: Colors.black,
                       fontSize: 20,
                       fontWeight: FontWeight.bold),
                 ),
-                SizedBox(height: 16),
-                for (final player in sortedPlayers)
+                const SizedBox(height: 16),
+                for (int index = 0; index < sortedPlayers.length; index++)
                   Row(
-                    key: ValueKey(player.id),
+                    key: ValueKey(sortedPlayers[index].id),
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(player.name),
-                      Text(player.totalAssetsValue.toStringAsFixed(2)),
+                      Row(
+                        children: [
+                          SizedBox(
+                            width: 30,
+                            child: index == 0 ? const Icon(Icons.star) : null,
+                          ),
+                          Align(
+                            alignment: Alignment.centerLeft,
+                            child: Text(sortedPlayers[index].name),
+                          ),
+                        ],
+                      ),
+                      Text(sortedPlayers[index]
+                          .totalAssetsValue
+                          .toStringAsFixed(2)),
                     ],
                   )
               ],
