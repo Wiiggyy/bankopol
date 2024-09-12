@@ -8,6 +8,7 @@ import 'package:bankopol/widgets/bottom_sheets/sell_investment_bottom_sheet.dart
 import 'package:bankopol/widgets/cards/event_card_widget.dart';
 import 'package:bankopol/widgets/investments/investment_list.dart';
 import 'package:bankopol/widgets/qr_scanner.dart';
+import 'package:bankopol/widgets/score_icon.dart';
 import 'package:flutter/material.dart';
 
 class PlayerScreen extends StatefulWidget {
@@ -25,16 +26,6 @@ class PlayerScreen extends StatefulWidget {
 class _PlayerScreenState extends State<PlayerScreen> {
   bool shouldDrawCard = false;
   bool didFlip = false;
-
-  showLeaderboardBottomSheet() {
-    showModalBottomSheet(
-      context: context,
-      useSafeArea: true,
-      builder: (_) {
-        return LeaderBoardBottomSheet(gameProvider: widget.gameProvider);
-      },
-    );
-  }
 
   showSellInvestmentList() {
     showModalBottomSheet(
@@ -104,10 +95,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
                         alignment: Alignment.centerLeft,
                         child: Row(
                           children: [
-                            IconButton(
-                              onPressed: showLeaderboardBottomSheet,
-                              icon: const Icon(Icons.emoji_events_rounded),
-                            ),
+                            LeaderIcon(gameProvider: widget.gameProvider),
                             Text(player?.totalAssetsValue.toStringAsFixed(0) ??
                                 '0'),
                           ],
