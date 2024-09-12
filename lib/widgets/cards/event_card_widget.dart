@@ -103,13 +103,13 @@ class EventCardWidget extends StatelessWidget {
                         ),
                       if (eventCard.eventAction.amountValue != null)
                         Text(
-                          eventCard.eventAction.amountValue!.toString(),
+                          '${eventCard.eventAction.amountValue!}kr',
                           style: const TextStyle(
                               color: Colors.black, fontWeight: FontWeight.bold),
                         ),
                       if (eventCard.eventAction.percentValue != null)
                         Text(
-                          eventCard.eventAction.percentValue!.toString(),
+                          '${eventCard.eventAction.percentValue!}%',
                           style: const TextStyle(
                               color: Colors.black, fontWeight: FontWeight.bold),
                         ),
