@@ -32,11 +32,7 @@ class _OcrCameraState extends State<OcrCamera>
   /// amount = 1
   ///
   /// recipient = 2
-  final List<DateTime> _lastFeedback = [
-    DateTime.now(),
-    DateTime.now(),
-    DateTime.now(),
-  ];
+  DateTime _lastFeedback = DateTime.now();
   Screen? cutout;
   late AnimationController scanFeedbackAnimationController;
   late Animation<double> scanFeedbackAnimation;
@@ -131,8 +127,8 @@ class _OcrCameraState extends State<OcrCamera>
 
       var shouldFeedback = false;
 
-      if (_lastFeedback[2].millisecondsElapsed(1000)) {
-        _lastFeedback[2] = DateTime.now();
+      if (_lastFeedback.millisecondsElapsed(1000)) {
+        _lastFeedback = DateTime.now();
         shouldFeedback = true;
       }
 
@@ -161,7 +157,7 @@ class _OcrCameraState extends State<OcrCamera>
     final controller = this.controller;
 
     if (initialized == null) {
-      return const CircularProgressIndicator.adaptive();
+      return const Center(child: CircularProgressIndicator.adaptive());
     }
 
     if (initialized == false ||

@@ -28,7 +28,7 @@ class Screen {
   // endregion Image size independent fields
 
   // region Sizes to use for the crops
-  late final _qrSquareSide = 300 * _widthMultiplier;
+  late final _qrSquareSide = 400 * _widthMultiplier;
 
   // endregion Sizes to use for the crops
 

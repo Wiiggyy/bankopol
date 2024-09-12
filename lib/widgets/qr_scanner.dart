@@ -14,41 +14,70 @@ class QrScannerWeb extends StatefulWidget {
 }
 
 class _QrScannerWebState extends State<QrScannerWeb> {
-  final _qrBarCodeScannerDialogPlugin = QrBarCodeScannerDialog();
-  String? code;
+  late final QrBarCodeScannerDialog _qrBarCodeScannerDialogPlugin;
+
+  @override
+  void initState() {
+    if (kIsWeb) _qrBarCodeScannerDialogPlugin = QrBarCodeScannerDialog();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     return ActionButton(
       onPressed: () {
-        if (kIsWeb || true) {
+        if (kIsWeb) {
           _qrBarCodeScannerDialogPlugin.getScannedQrBarCode(
               context: context,
               onCode: (code) {
                 if (code case final code?) {
                   widget.onCode(code);
                 }
-                setState(() {
-                  this.code = code;
-                });
               });
         } else {
           showDialog(
               context: context,
               builder: (context) {
-                return OcrCamera(
-                  onSuccessScanned: (result) {
-                    final code = result;
-                    widget.onCode(code);
-                    setState(() {
-                      this.code = code;
-                    });
-                  },
+                return Expanded(
+                  child: Center(
+                    child: Padding(
+                      padding: const EdgeInsets.all(12),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(12),
+                        child: AspectRatio(
+                          aspectRatio: 1,
+                          child: UnconstrainedBox(
+                            constrainedAxis: Axis.horizontal,
+                            clipBehavior: Clip.antiAlias,
+                            child: OcrCamera(
+                              key: const ValueKey("ocr_camera"),
+                              onSuccessScanned: (result) {
+                                Navigator.of(context).pop();
+                                widget.onCode(result);
+                              },
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                );
+
+                return Center(
+                  child: AspectRatio(
+                    aspectRatio: 1,
+                    child: OcrCamera(
+                      onSuccessScanned: (result) {
+                        Navigator.of(context).pop();
+                        widget.onCode(result);
+                      },
+                    ),
+                  ),
                 );
               });
         }
       },
-      title: code ?? "Skanna",
+      title: "Skanna",
     );
   }
 }

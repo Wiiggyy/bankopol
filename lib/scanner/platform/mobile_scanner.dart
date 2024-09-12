@@ -39,7 +39,7 @@ class MobileScanner extends Scanner {
       imageInfo.cutouts,
     );
 
-    final [qrImage, ocrImage, ...] = [
+    final [qrImage, ...] = [
       await for (final (cutout, imageBytes) in cropStream)
         InputImage.fromBytes(
           bytes: imageBytes,
