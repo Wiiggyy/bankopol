@@ -49,7 +49,7 @@ class GameProvider with ChangeNotifier {
       id: const Uuid().v4(),
       name: name,
       bankAccount: const BankAccount(
-        amount: 1000,
+        amount: 2000,
         interest: 0.025,
       ),
       investments: {},
