@@ -153,7 +153,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
                     //   title: 'Få Investering',
                     // ),
                     if (widget.gameProvider.currentPlayer case final player?)
-                      Expanded(
+                      Flexible(
                         child: InvestmentList(
                           player: player,
                         ),

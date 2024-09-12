@@ -1,0 +1,14 @@
+import 'package:flutter/material.dart';
+
+const investmentListTextStyle = TextStyle(
+  color: Colors.white,
+  fontWeight: FontWeight.bold,
+  fontSize: 16,
+  shadows: [
+    Shadow(
+      offset: Offset(2, 2),
+      blurRadius: 2,
+      color: Colors.black,
+    ),
+  ],
+);

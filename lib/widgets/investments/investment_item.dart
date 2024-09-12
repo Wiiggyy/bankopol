@@ -1,3 +1,4 @@
+import 'package:bankopol/constants/text_style.dart';
 import 'package:bankopol/enums/investment_type.dart';
 import 'package:bankopol/models/investment.dart';
 import 'package:flutter/material.dart';
@@ -12,34 +13,29 @@ class InvestmentItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListTile(
-      leading: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          SizedBox(
-            height: 40,
-            width: 40,
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(40.0),
-              child: Image.asset(
-                'assets/${investment.investmentType.name}.webp',
-                fit: BoxFit.cover,
-              ),
-            ),
+    return Stack(
+      children: [
+        SizedBox(
+          height: 55,
+          width: double.infinity,
+          child: Image.asset(
+            'assets/${investment.investmentType.name}.webp',
+            fit: BoxFit.fitWidth,
           ),
-          const SizedBox(
-            width: 8,
-          ),
-          Text(
+        ),
+        ListTile(
+          leading: Text(
             getInvestmentTypeName(investment.investmentType),
             textAlign: TextAlign.left,
+            style: investmentListTextStyle,
           ),
-        ],
-      ),
-      trailing: Text(
-        '${(investment.value * investment.quantity).toStringAsFixed(0)} (${investment.quantity.toString()})',
-        textAlign: TextAlign.right,
-      ),
+          trailing: Text(
+            '${(investment.value * investment.quantity).toStringAsFixed(0)} (${investment.quantity.toString()})',
+            textAlign: TextAlign.right,
+            style: investmentListTextStyle,
+          ),
+        ),
+      ],
     );
   }
 }

@@ -15,24 +15,31 @@ class InvestmentList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.all(12.0),
-      child: Card(
-        color: Colors.white.withOpacity(0.8),
-        child: Padding(
-          padding: const EdgeInsets.all(16),
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                const InvestmentItemHeader(),
-                InvestmentItem(
-                    investment: Investment.generateRandomInvestment()),
-                InvestmentItem(
-                    investment: Investment.generateRandomInvestment()),
-                for (final investment in player.investments)
-                  InvestmentItem(investment: investment),
-              ],
+      color: Colors.white.withOpacity(0.2),
+      // margin: const EdgeInsets.all(12.0),
+      child: SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const InvestmentItemHeader(),
+            const Divider(
+              height: 1,
+              color: Colors.grey,
             ),
-          ),
+            InvestmentItem(investment: Investment.generateRandomInvestment()),
+            const Divider(
+              height: 1,
+              color: Colors.grey,
+            ),
+            InvestmentItem(investment: Investment.generateRandomInvestment()),
+            for (final investment in player.investments) ...[
+              const Divider(
+                height: 1,
+                color: Colors.grey,
+              ),
+              InvestmentItem(investment: investment),
+            ],
+          ],
         ),
       ),
     );

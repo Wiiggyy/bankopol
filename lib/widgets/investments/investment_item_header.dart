@@ -1,3 +1,4 @@
+import 'package:bankopol/constants/text_style.dart';
 import 'package:flutter/material.dart';
 
 class InvestmentItemHeader extends StatelessWidget {
@@ -15,14 +16,14 @@ class InvestmentItemHeader extends StatelessWidget {
           Text(
             'Investering',
             textAlign: TextAlign.left,
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
+            style: investmentListTextStyle,
           ),
         ],
       ),
       trailing: Text(
         'Värde',
         textAlign: TextAlign.right,
-        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
+        style: investmentListTextStyle,
       ),
     );
   }
