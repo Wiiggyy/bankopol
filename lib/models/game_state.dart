@@ -8,8 +8,8 @@ class GameState {
   });
 
   factory GameState.fromJson(Map<String, dynamic> json) {
-    final players = (json['players'] as List)
-        .map((player) => Player.fromJson(player))
+    final players = (json['players'] as List<Map<String, dynamic>>)
+        .map(Player.fromJson)
         .toSet();
 
     return GameState(
@@ -17,7 +17,7 @@ class GameState {
     );
   }
 
-  copyWith({
+  GameState copyWith({
     Set<Player>? players,
   }) {
     return GameState(
@@ -25,7 +25,7 @@ class GameState {
     );
   }
 
-  toJson() {
+  Map<String, List<Map<String, dynamic>>> toJson() {
     return {
       'players': players.map((player) => player.toJson()).toList(),
     };

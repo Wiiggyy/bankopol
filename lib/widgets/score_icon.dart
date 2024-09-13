@@ -13,7 +13,7 @@ class LeaderIcon extends StatefulWidget {
 class _LeaderIconState extends State<LeaderIcon>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
-  showLeaderboardBottomSheet() {
+  void showLeaderboardBottomSheet() {
     showModalBottomSheet(
       context: context,
       useSafeArea: true,
@@ -29,7 +29,7 @@ class _LeaderIconState extends State<LeaderIcon>
   void initState() {
     super.initState();
     _controller = AnimationController(
-        duration: const Duration(milliseconds: 500), vsync: this);
+        duration: const Duration(milliseconds: 500), vsync: this,);
     widget.gameProvider.addListener(_onGameStateChange);
     _initializePreviousValues();
   }
@@ -59,7 +59,7 @@ class _LeaderIconState extends State<LeaderIcon>
       return;
     }
 
-    for (int i = 0; i < currentAssetsValues.length; i++) {
+    for (var i = 0; i < currentAssetsValues.length; i++) {
       if (_previousAssetsValues[i] != currentAssetsValues[i]) {
         _controller.forward(from: 0.0).then((_) => _controller.reverse());
         _previousAssetsValues = currentAssetsValues;

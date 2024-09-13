@@ -13,15 +13,13 @@ class EventCardWidget extends StatelessWidget {
     super.key,
   });
 
-  _renderContent(context) {
+  Card _renderContent(context) {
     return Card(
       elevation: 0.0,
       margin: const EdgeInsets.only(
-          left: 32.0, right: 32.0, top: 20.0, bottom: 0.0),
+          left: 32.0, right: 32.0, top: 20.0,),
       color: const Color(0x00000000),
       child: FlipCard(
-        direction: FlipDirection.HORIZONTAL,
-        side: CardSide.FRONT,
         speed: 1000,
         onFlip: onFlip,
         onFlipDone: (status) {},
@@ -134,11 +132,10 @@ class EventCardWidget extends StatelessWidget {
               child: _renderContent(context),
             ),
             Expanded(
-              flex: 1,
               child: Container(),
             ),
           ],
-        )
+        ),
       ],
     );
   }

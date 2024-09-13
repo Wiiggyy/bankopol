@@ -63,6 +63,7 @@ class GameProvider with ChangeNotifier {
 
   Future<void> joinGame(String name) async {
     if (name.isEmpty) {
+      // ignore: parameter_assignments
       name =
           'Player ${DateTime.now().millisecondsSinceEpoch.toRadixString(36)}';
     }
@@ -99,16 +100,16 @@ class GameProvider with ChangeNotifier {
 
   void generateCard() {
     if (gameState case final gameState?) {
-      Set<InvestmentType> investmentTypes = {
+      final investmentTypes = <InvestmentType>{
         for (final Player player in gameState.players)
           for (final Investment investment in player.investments)
             investment.investmentType,
       };
 
       if (investmentTypes.isEmpty) return;
-      int randomIndex = Random().nextInt(investmentTypes.length);
+      final randomIndex = Random().nextInt(investmentTypes.length);
 
-      int randomCardIndex = Random().nextInt(2);
+      final randomCardIndex = Random().nextInt(2);
 
       _currentEventCard = eventCards
           .where(
@@ -122,7 +123,7 @@ class GameProvider with ChangeNotifier {
     }
   }
 
-  void sellInvestment(Investment sellInvestment) async {
+  Future<void> sellInvestment(Investment sellInvestment) async {
     if (gameState case final gameState?) {
       final player = gameState.players.firstWhereOrNull(
         (player) => player.id == _currentPlayerId,
@@ -143,9 +144,11 @@ class GameProvider with ChangeNotifier {
         final updatedPlayer = player.copyWith(
           bankAccount: newBankAccount,
           investments: player.investments
-              .where((playerInvestment) =>
-                  playerInvestment.investmentType !=
-                  sellInvestment.investmentType)
+              .where(
+                (playerInvestment) =>
+                    playerInvestment.investmentType !=
+                    sellInvestment.investmentType,
+              )
               .toSet(),
         );
 
@@ -159,7 +162,7 @@ class GameProvider with ChangeNotifier {
     }
   }
 
-  void buyInvestment(Investment newInvestment) async {
+  Future<void> buyInvestment(Investment newInvestment) async {
     if (gameState case final gameState?) {
       final player = gameState.players.firstWhereOrNull(
         (player) => player.id == _currentPlayerId,
@@ -167,8 +170,11 @@ class GameProvider with ChangeNotifier {
 
       if (player != null) {
         final investment = player.investments
-            .where((playerInvestment) =>
-                playerInvestment.investmentType == newInvestment.investmentType)
+            .where(
+              (playerInvestment) =>
+                  playerInvestment.investmentType ==
+                  newInvestment.investmentType,
+            )
             .toList();
 
         if (investment.isNotEmpty) {
@@ -176,8 +182,10 @@ class GameProvider with ChangeNotifier {
             quantity: investment.first.quantity + newInvestment.quantity,
             value: investment.first.value + newInvestment.value,
           );
-          player.investments.removeWhere((playerInvestment) =>
-              playerInvestment.investmentType == newInvestment.investmentType);
+          player.investments.removeWhere(
+            (playerInvestment) =>
+                playerInvestment.investmentType == newInvestment.investmentType,
+          );
           player.investments.add(nextInvestment);
         } else {
           player.investments.add(newInvestment);
@@ -208,17 +216,20 @@ class GameProvider with ChangeNotifier {
     final percentValue = 1 + (_currentEventCard?.eventAction.percentValue ?? 0);
 
     final playersWithInvestment = gameState?.players
-        .where((player) => player.investments
-            .where(
-              (investment) => investment.investmentType == investmentType,
-            )
-            .toList()
-            .isNotEmpty)
+        .where(
+          (player) => player.investments
+              .where(
+                (investment) => investment.investmentType == investmentType,
+              )
+              .toList()
+              .isNotEmpty,
+        )
         .toList();
 
     final updatedPlayersWithInvestments = playersWithInvestment?.map((player) {
       final investment = player.investments.firstWhere(
-          (investment) => investment.investmentType == investmentType);
+        (investment) => investment.investmentType == investmentType,
+      );
 
       final newQuantity = investment.quantity + (amount ?? 0);
       final newAmount = amountValue != null
@@ -237,11 +248,14 @@ class GameProvider with ChangeNotifier {
       }
 
       return player.copyWith(
-          investments: player.investments
-              .map((investment) => investment.investmentType == investmentType
+        investments: player.investments
+            .map(
+              (investment) => investment.investmentType == investmentType
                   ? updatedInvestment
-                  : investment)
-              .toSet());
+                  : investment,
+            )
+            .toSet(),
+      );
     }).toSet();
 
     repository.updateGameState(
@@ -249,7 +263,8 @@ class GameProvider with ChangeNotifier {
         players: {
           ...gameState!.players
             ..removeWhere(
-                (player) => playersWithInvestment?.contains(player) ?? false)
+              (player) => playersWithInvestment?.contains(player) ?? false,
+            )
             ..addAll(updatedPlayersWithInvestments ?? {}),
         },
       ),

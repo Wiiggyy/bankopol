@@ -47,7 +47,7 @@ class _CreatePlayerState extends State<CreatePlayer> {
                             child: TextField(
                               decoration: const InputDecoration(
                                   hintText: 'Spelarnamn',
-                                  hintStyle: TextStyle(color: Colors.black26)),
+                                  hintStyle: TextStyle(color: Colors.black26),),
                               onChanged: (value) {
                                 setState(() {
                                   name = value;

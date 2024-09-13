@@ -9,7 +9,6 @@ const investmentListTextStyle = TextStyle(
     Shadow(
       offset: Offset(2, 2),
       blurRadius: 2,
-      color: Colors.black,
     ),
   ],
 );

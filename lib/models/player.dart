@@ -17,17 +17,20 @@ class Player {
   });
 
   double get totalAssetsValue {
-    return investments.fold(bankAccount.amount,
-        (previousValue, element) => previousValue + element.value);
+    return investments.fold(
+      bankAccount.amount,
+      (previousValue, element) => previousValue + element.value,
+    );
   }
 
   factory Player.fromJson(Map<String, dynamic> json) {
     return Player(
-      id: json['id'],
-      name: json['name'],
-      bankAccount: BankAccount.fromJson(json['bankAccount']),
-      investments: json['investments']
-          .map<Investment>((investment) => Investment.fromJson(investment))
+      id: json['id'] as String,
+      name: json['name'] as String,
+      bankAccount:
+          BankAccount.fromJson(json['bankAccount'] as Map<String, dynamic>),
+      investments: (json['investments'] as List<Map<String, dynamic>>)
+          .map<Investment>(Investment.fromJson)
           .toSet(),
     );
   }
@@ -48,7 +51,7 @@ class Player {
     );
   }
 
-  toJson() {
+  Map<String, dynamic> toJson() {
     return {
       'id': id,
       'name': name,

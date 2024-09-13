@@ -31,7 +31,7 @@ class _BuyInvestmentBottomSheetState extends State<BuyInvestmentBottomSheet> {
     return ListenableBuilder(
       listenable: widget.gameProvider,
       builder: (context, __) {
-        final bool canBuy =
+        final canBuy =
             (widget.gameProvider.currentPlayer?.bankAccount.amount ?? 0) >=
                 widget.investment.value;
         return ClipRRect(
@@ -80,7 +80,7 @@ class _BuyInvestmentBottomSheetState extends State<BuyInvestmentBottomSheet> {
                             ),
                         ],
                       ),
-                    )
+                    ),
                   ],
                 ),
                 const SizedBox(height: 20),

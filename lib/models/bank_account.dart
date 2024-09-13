@@ -9,8 +9,8 @@ class BankAccount {
 
   factory BankAccount.fromJson(Map<String, dynamic> json) {
     return BankAccount(
-      amount: json['amount'],
-      interest: json['interest'],
+      amount: json['amount'] as double,
+      interest: json['interest'] as double,
     );
   }
 
@@ -24,7 +24,7 @@ class BankAccount {
     );
   }
 
-  toJson() {
+  Map<String, double> toJson() {
     return {
       'amount': amount,
       'interest': interest,

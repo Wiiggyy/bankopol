@@ -17,14 +17,14 @@ class Investment {
 
   factory Investment.fromJson(Map<String, dynamic> json) {
     return Investment(
-      investmentType: InvestmentType.values[json['investmentType']],
-      value: json['value'],
-      quantity: json['quantity'],
-      interest: json['interest'],
+      investmentType: InvestmentType.values[json['investmentType'] as int],
+      value: json['value'] as double,
+      quantity: json['quantity'] as int,
+      interest: json['interest'] as double,
     );
   }
 
-  toJson() {
+  Map<String, num> toJson() {
     return {
       'investmentType': investmentType.index,
       'value': value,
@@ -64,7 +64,7 @@ class Investment {
     );
   }
 
-  static Investment fromCode(String code) {
+  factory Investment.fromCode(String code) {
     final separated = code.split(':');
     switch (separated) {
       case ['event', final code]:

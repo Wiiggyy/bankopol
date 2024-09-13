@@ -38,7 +38,7 @@ class _QrScannerState extends State<QrScanner> {
                 if (code case final code?) {
                   widget.onCode(code);
                 }
-              });
+              },);
         } else {
           showDialog(
               context: context,
@@ -65,7 +65,7 @@ class _QrScannerState extends State<QrScanner> {
                     ),
                   ),
                 );
-              });
+              },);
         }
       },
     );

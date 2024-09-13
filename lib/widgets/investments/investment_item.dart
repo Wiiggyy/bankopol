@@ -93,7 +93,7 @@ class InvestmentItem extends StatelessWidget {
             style: investmentListTextStyle,
           ),
           trailing: Text(
-            '${(investment.value * investment.quantity).toStringAsFixed(0)} (${investment.quantity.toString()})',
+            '${(investment.value * investment.quantity).toStringAsFixed(0)} (${investment.quantity})',
             textAlign: TextAlign.right,
             style: investmentListTextStyle,
           ),

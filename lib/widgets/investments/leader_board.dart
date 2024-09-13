@@ -21,7 +21,6 @@ class LeaderBoard extends StatelessWidget {
       child: DraggableScrollableSheet(
         initialChildSize: 1,
         minChildSize: 0.2,
-        maxChildSize: 1,
         builder: (context, _) {
           return Column(
             mainAxisSize: MainAxisSize.min,
@@ -36,7 +35,7 @@ class LeaderBoard extends StatelessWidget {
                     style: const TextStyle(
                         color: Colors.black,
                         fontSize: 20,
-                        fontWeight: FontWeight.bold),
+                        fontWeight: FontWeight.bold,),
                   ),
                 ),
               ),
@@ -66,11 +65,11 @@ class LeaderBoard extends StatelessWidget {
                       ),
                       const Divider(
                         height: 0,
-                      )
-                    ]
+                      ),
+                    ],
                   ],
                 ),
-              )
+              ),
             ],
           );
         },

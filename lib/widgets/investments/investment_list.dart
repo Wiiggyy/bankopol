@@ -13,7 +13,7 @@ class InvestmentList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return ColoredBox(
       color: Colors.white.withOpacity(0.2),
       // margin: const EdgeInsets.all(12.0),
       child: SingleChildScrollView(

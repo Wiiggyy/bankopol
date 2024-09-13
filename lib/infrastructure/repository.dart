@@ -13,8 +13,6 @@ class Repository {
   final WebSocketChannel _channel;
   final Dio _dio;
 
-  const Repository._(this._channel, this._dio);
-
   factory Repository() {
     const uri =
         'wss://hackstatehandler-djcyf9c6bbetfvfy.swedencentral-01.azurewebsites.net/api/Player/connect/';
@@ -24,6 +22,8 @@ class Repository {
     return Repository._(channel, dio);
   }
 
+  const Repository._(this._channel, this._dio);
+
   Stream<GameState> streamGameState() async* {
     await _channel.ready;
     debugPrint('Getting stream');
@@ -32,7 +32,7 @@ class Repository {
       debugPrint('Received message');
       if (message is String) {
         final jsonData = jsonDecode(message);
-        final gameState = GameState.fromJson(jsonData);
+        final gameState = GameState.fromJson(jsonData as Map<String, dynamic>);
         yield gameState;
       }
     }
@@ -40,10 +40,11 @@ class Repository {
 
   Future<GameState?> getCurrentGameState() async {
     final response = await _dio.get(
-        'https://hackstatehandler-djcyf9c6bbetfvfy.swedencentral-01.azurewebsites.net/api/Player/latestState');
+      'https://hackstatehandler-djcyf9c6bbetfvfy.swedencentral-01.azurewebsites.net/api/Player/latestState',
+    );
     if (response.data case final String json?) {
       try {
-        return GameState.fromJson(jsonDecode(json));
+        return GameState.fromJson(jsonDecode(json) as Map<String, dynamic>);
       } catch (e) {
         return null;
       }

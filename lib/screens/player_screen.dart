@@ -26,7 +26,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
   bool shouldDrawCard = false;
   bool didFlip = false;
 
-  showSellInvestmentList() {
+  void showSellInvestmentList() {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -36,7 +36,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
     );
   }
 
-  handleScan(String code) async {
+  Future<void> handleScan(String code) async {
     debugPrint('------------Scanned code: $code');
 
     final investment = Investment.fromCode(code);
@@ -89,54 +89,54 @@ class _PlayerScreenState extends State<PlayerScreen> {
                   ? QrScanner(onCode: handleScan)
                   : null,
           appBar: AppBar(
-              automaticallyImplyLeading: false,
-              flexibleSpace: Padding(
-                padding: const EdgeInsets.only(top: 40.0, right: 16),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Expanded(
-                      flex: 1,
-                      child: Align(
-                        alignment: Alignment.centerLeft,
-                        child: Row(
-                          children: [
-                            LeaderIcon(gameProvider: widget.gameProvider),
-                            Text(
-                                player?.totalAssetsValue.toStringAsFixed(0) ??
-                                    '0',
-                                style: const TextStyle(
-                                    fontWeight: FontWeight.bold)),
-                          ],
-                        ),
-                      ),
-                    ),
-                    Expanded(
-                      flex: 2,
-                      child: Center(
-                        child: Text(player?.name ?? '',
-                            style:
-                                const TextStyle(fontWeight: FontWeight.bold)),
-                      ),
-                    ),
-                    Expanded(
-                      flex: 1,
+            automaticallyImplyLeading: false,
+            flexibleSpace: Padding(
+              padding: const EdgeInsets.only(top: 40.0, right: 16),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(
+                    child: Align(
+                      alignment: Alignment.centerLeft,
                       child: Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
                         children: [
-                          const Icon(Icons.wallet),
-                          const SizedBox(width: 4),
+                          LeaderIcon(gameProvider: widget.gameProvider),
                           Text(
-                              player?.bankAccount.amount.toStringAsFixed(0) ??
-                                  '0',
-                              style:
-                                  const TextStyle(fontWeight: FontWeight.bold)),
+                            player?.totalAssetsValue.toStringAsFixed(0) ?? '0',
+                            style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
                         ],
                       ),
                     ),
-                  ],
-                ),
-              )),
+                  ),
+                  Expanded(
+                    flex: 2,
+                    child: Center(
+                      child: Text(
+                        player?.name ?? '',
+                        style: const TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        const Icon(Icons.wallet),
+                        const SizedBox(width: 4),
+                        Text(
+                          player?.bankAccount.amount.toStringAsFixed(0) ?? '0',
+                          style: const TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
           body: Stack(
             fit: StackFit.expand,
             children: [
@@ -208,7 +208,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
                     //   ),
                     const Padding(
                       padding: EdgeInsets.only(bottom: 40),
-                    )
+                    ),
                   ],
                 ),
               ),
