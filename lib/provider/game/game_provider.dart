@@ -9,7 +9,6 @@ import 'package:bankopol/models/game_state.dart';
 import 'package:bankopol/models/investment.dart';
 import 'package:bankopol/models/player.dart';
 import 'package:collection/collection.dart';
-import 'package:flutter/material.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uuid/uuid.dart';
@@ -49,7 +48,7 @@ class CurrentEventCard extends _$CurrentEventCard {
     return null;
   }
 
-  void setEventCard(EventCard eventCard) {
+  set eventCard(EventCard eventCard) {
     state = eventCard;
   }
 
@@ -110,7 +109,7 @@ class GameStatePod extends _$GameStatePod {
         )
         .elementAt(randomCardIndex);
 
-    ref.read(currentEventCardProvider.notifier).setEventCard(eventCard);
+    ref.read(currentEventCardProvider.notifier).eventCard = eventCard;
   }
 
   void removeCard() {
@@ -255,47 +254,5 @@ class GameStatePod extends _$GameStatePod {
         ..add(updatedPlayer),
     );
     await _repository.updateGameState(nextGameState);
-  }
-}
-
-class GameProvider with ChangeNotifier {
-  final Repository repository = Repository();
-
-  // late Stream<GameState> gameStateStream;
-  GameState? _gameState;
-  EventCard? _currentEventCard;
-  String? _currentPlayerId;
-  bool shouldClose = false;
-
-  GameProvider() {
-    final gameStateStream = repository.streamGameState().asBroadcastStream();
-    gameStateStream.listen(
-      (state) {
-        _gameState = state;
-        notifyListeners();
-      },
-      onDone: () {
-        clearGameState(sendClear: false);
-        shouldClose = true;
-        notifyListeners();
-      },
-      onError: (error) {
-        clearGameState(sendClear: false);
-        shouldClose = true;
-        notifyListeners();
-      },
-    );
-  }
-
-  GameState? get gameState => _gameState;
-
-  EventCard? get currentEventCard => _currentEventCard;
-
-  void clearGameState({bool sendClear = true}) {
-    _gameState = null;
-    _currentEventCard = null;
-    _currentPlayerId = null;
-
-    if (sendClear) repository.clearGame();
   }
 }

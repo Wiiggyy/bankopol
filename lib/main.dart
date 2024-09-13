@@ -1,7 +1,6 @@
-import 'package:bankopol/provider/game/game_provider.dart';
 import 'package:bankopol/screens/start_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 void main() {
   runApp(const ProviderScope(child: MyApp()));
@@ -15,8 +14,6 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  final GameProvider gameProvider = GameProvider();
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -26,7 +23,7 @@ class _MyAppState extends State<MyApp> {
           // ),
           ),
       title: 'Flutter Demo',
-      home: StartScreen(gameProvider: gameProvider),
+      home: const StartScreen(),
       // home: PlayerScreen(),
     );
   }

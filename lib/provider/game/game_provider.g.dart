@@ -22,7 +22,7 @@ final currentPlayerProvider =
 );
 
 typedef _$CurrentPlayer = AutoDisposeAsyncNotifier<Player?>;
-String _$currentEventCardHash() => r'73daab9b11918d376bbe197d8469617ea83f430c';
+String _$currentEventCardHash() => r'848f70cfedd46e57af5cd71eb6db9df3d0afce9d';
 
 /// See also [CurrentEventCard].
 @ProviderFor(CurrentEventCard)
@@ -38,7 +38,7 @@ final currentEventCardProvider =
 );
 
 typedef _$CurrentEventCard = AutoDisposeNotifier<EventCard?>;
-String _$gameStatePodHash() => r'cffb1f886ea2424a9572513fc5fd709bcb01f61e';
+String _$gameStatePodHash() => r'4a01b7aaa2b714f3a4d2fafb8053f4087cf9259b';
 
 /// See also [GameStatePod].
 @ProviderFor(GameStatePod)

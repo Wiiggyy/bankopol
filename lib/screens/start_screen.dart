@@ -6,12 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class StartScreen extends ConsumerWidget {
-  final GameProvider gameProvider;
-
-  const StartScreen({
-    required this.gameProvider,
-    super.key,
-  });
+  const StartScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

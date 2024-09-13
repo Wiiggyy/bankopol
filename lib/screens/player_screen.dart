@@ -86,7 +86,7 @@ class _PlayerScreenState extends ConsumerState<PlayerScreen> {
                     children: [
                       const LeaderIcon(),
                       Text(
-                        player.totalAssetsValue.toStringAsFixed(0) ?? '0',
+                        player.totalAssetsValue.toStringAsFixed(0),
                         style: const TextStyle(
                           fontWeight: FontWeight.bold,
                         ),
@@ -99,7 +99,7 @@ class _PlayerScreenState extends ConsumerState<PlayerScreen> {
                 flex: 2,
                 child: Center(
                   child: Text(
-                    player.name ?? '',
+                    player.name,
                     style: const TextStyle(fontWeight: FontWeight.bold),
                   ),
                 ),
@@ -111,7 +111,7 @@ class _PlayerScreenState extends ConsumerState<PlayerScreen> {
                     const Icon(Icons.wallet),
                     const SizedBox(width: 4),
                     Text(
-                      player.bankAccount.amount.toStringAsFixed(0) ?? '0',
+                      player.bankAccount.amount.toStringAsFixed(0),
                       style: const TextStyle(fontWeight: FontWeight.bold),
                     ),
                   ],

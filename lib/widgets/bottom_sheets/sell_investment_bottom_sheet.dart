@@ -1,4 +1,3 @@
-import 'package:bankopol/models/investment.dart';
 import 'package:bankopol/provider/game/game_provider.dart';
 import 'package:bankopol/widgets/investments/investment_card.dart';
 import 'package:flutter/material.dart';
@@ -36,8 +35,7 @@ class SellInvestmentBottomSheet extends ConsumerWidget {
               Expanded(
                 child: ListView(
                   children: [
-                    for (final investment
-                        in currentPlayer.investments ?? <Investment>{})
+                    for (final investment in currentPlayer.investments)
                       Container(
                         margin: const EdgeInsets.only(bottom: 4),
                         child: Dismissible(
