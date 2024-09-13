@@ -1,18 +1,17 @@
-import 'package:bankopol/models/game_state.dart';
+import 'package:bankopol/provider/game/game_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class LeaderBoard extends StatelessWidget {
-  final GameState gameState;
-
-  const LeaderBoard({
-    required this.gameState,
-    super.key,
-  });
+class LeaderBoard extends ConsumerWidget {
+  const LeaderBoard({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    final sortedPlayers = gameState.players.toList()
-      ..sort((a, b) => b.totalAssetsValue.compareTo(a.totalAssetsValue));
+  Widget build(BuildContext context, WidgetRef ref) {
+    final sortedPlayers = ref.watch(
+      gameStatePodProvider
+          .select((gameState) => gameState.requireValue!.players.toList()),
+    )..sort((a, b) => b.totalAssetsValue.compareTo(a.totalAssetsValue));
+
     return ConstrainedBox(
       constraints: const BoxConstraints(
         maxHeight: 300,
@@ -33,9 +32,10 @@ class LeaderBoard extends StatelessWidget {
                   child: Text(
                     'Leaderboard'.toUpperCase(),
                     style: const TextStyle(
-                        color: Colors.black,
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,),
+                      color: Colors.black,
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
               ),

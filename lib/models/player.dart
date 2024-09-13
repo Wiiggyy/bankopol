@@ -29,7 +29,8 @@ class Player {
       name: json['name'] as String,
       bankAccount:
           BankAccount.fromJson(json['bankAccount'] as Map<String, dynamic>),
-      investments: (json['investments'] as List<Map<String, dynamic>>)
+      investments: (json['investments'] as List<dynamic>)
+          .cast<Map<String, dynamic>>()
           .map<Investment>(Investment.fromJson)
           .toSet(),
     );

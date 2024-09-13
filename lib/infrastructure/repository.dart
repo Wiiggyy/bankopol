@@ -1,28 +1,27 @@
 import 'dart:convert';
 
-import 'package:bankopol/models/bank_account.dart';
 import 'package:bankopol/models/game_state.dart';
-import 'package:bankopol/models/investment.dart';
 import 'package:bankopol/models/player.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:uuid/uuid.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
-class Repository {
-  final WebSocketChannel _channel;
-  final Dio _dio;
+part 'repository.g.dart';
 
-  factory Repository() {
+@riverpod
+class Repository extends _$Repository {
+  late WebSocketChannel _channel;
+  late Dio _dio;
+
+  @override
+  void build() {
     const uri =
         'wss://hackstatehandler-djcyf9c6bbetfvfy.swedencentral-01.azurewebsites.net/api/Player/connect/';
     debugPrint('Connecting to socket');
-    final channel = WebSocketChannel.connect(Uri.parse(uri));
-    final dio = Dio();
-    return Repository._(channel, dio);
+    _channel = WebSocketChannel.connect(Uri.parse(uri));
+    _dio = Dio();
   }
-
-  const Repository._(this._channel, this._dio);
 
   Stream<GameState> streamGameState() async* {
     await _channel.ready;
@@ -30,10 +29,16 @@ class Repository {
 
     await for (final message in _channel.stream) {
       debugPrint('Received message');
-      if (message is String) {
-        final jsonData = jsonDecode(message);
-        final gameState = GameState.fromJson(jsonData as Map<String, dynamic>);
-        yield gameState;
+      try {
+        if (message is String) {
+          final jsonData = jsonDecode(message);
+          final gameState =
+              GameState.fromJson(jsonData as Map<String, dynamic>);
+          yield gameState;
+        }
+      } catch (e, stackTrace) {
+        debugPrint(e.toString());
+        debugPrintStack(stackTrace: stackTrace);
       }
     }
   }
@@ -45,7 +50,9 @@ class Repository {
     if (response.data case final String json?) {
       try {
         return GameState.fromJson(jsonDecode(json) as Map<String, dynamic>);
-      } catch (e) {
+      } catch (e, stackTrace) {
+        debugPrint(e.toString());
+        debugPrintStack(stackTrace: stackTrace);
         return null;
       }
     } else {
@@ -63,16 +70,7 @@ class Repository {
     }
   }
 
-  Future<Player> joinGame([Player? player]) async {
-    player ??= Player(
-      id: const Uuid().v4(),
-      name: 'Z',
-      bankAccount: const BankAccount(
-        amount: 1000,
-        interest: 1000,
-      ),
-      investments: {Investment.generateRandomInvestment()},
-    );
+  Future<Player> joinGame(Player player) async {
     final currentGameState = await getCurrentGameState();
     debugPrint('Current game state: $currentGameState');
     debugPrint('Players: ${currentGameState?.players.length}');

@@ -26,9 +26,7 @@ class _MyAppState extends State<MyApp> {
           // ),
           ),
       title: 'Flutter Demo',
-      home: StartScreen(
-        gameProvider: gameProvider,
-      ),
+      home: StartScreen(gameProvider: gameProvider),
       // home: PlayerScreen(),
     );
   }

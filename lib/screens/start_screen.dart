@@ -3,8 +3,9 @@ import 'package:bankopol/screens/create_player_screen.dart';
 import 'package:bankopol/screens/loading_screen.dart';
 import 'package:bankopol/screens/player_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class StartScreen extends StatefulWidget {
+class StartScreen extends ConsumerWidget {
   final GameProvider gameProvider;
 
   const StartScreen({
@@ -13,27 +14,14 @@ class StartScreen extends StatefulWidget {
   });
 
   @override
-  State<StartScreen> createState() => _StartScreenState();
-}
+  Widget build(BuildContext context, WidgetRef ref) {
+    final player = ref.watch(currentPlayerProvider);
 
-class _StartScreenState extends State<StartScreen> {
-  @override
-  void initState() {
-    widget.gameProvider.tryRejoin();
-    super.initState();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return ListenableBuilder(
-      listenable: widget.gameProvider,
-      builder: (context, __) {
-        return switch (widget.gameProvider.isLoggedIn) {
-          null => const LoadingScreen(),
-          true => PlayerScreen(gameProvider: widget.gameProvider),
-          false => CreatePlayer(gameProvider: widget.gameProvider),
-        };
-      },
-    );
+    return switch (player) {
+      AsyncLoading() => const LoadingScreen(),
+      AsyncData(value: _?) => const PlayerScreen(),
+      AsyncData() => const CreatePlayer(),
+      AsyncError(:final error) => throw error,
+    };
   }
 }

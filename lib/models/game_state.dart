@@ -8,7 +8,8 @@ class GameState {
   });
 
   factory GameState.fromJson(Map<String, dynamic> json) {
-    final players = (json['players'] as List<Map<String, dynamic>>)
+    final players = (json['players'] as List<dynamic>)
+        .cast<Map<String, dynamic>>()
         .map(Player.fromJson)
         .toSet();
 

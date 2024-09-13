@@ -1,24 +1,26 @@
+import 'package:bankopol/models/game_state.dart';
 import 'package:bankopol/provider/game/game_provider.dart';
-import 'package:bankopol/widgets/bottom_sheets/leader_board_bottom_sheet.dart';
+import 'package:bankopol/widgets/investments/leader_board.dart';
 import 'package:flutter/material.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class LeaderIcon extends StatefulWidget {
-  final GameProvider gameProvider;
-  const LeaderIcon({super.key, required this.gameProvider});
+class LeaderIcon extends ConsumerStatefulWidget {
+  const LeaderIcon({super.key});
 
   @override
-  State<LeaderIcon> createState() => _LeaderIconState();
+  ConsumerState<LeaderIcon> createState() => _LeaderIconState();
 }
 
-class _LeaderIconState extends State<LeaderIcon>
+class _LeaderIconState extends ConsumerState<LeaderIcon>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
+
   void showLeaderboardBottomSheet() {
     showModalBottomSheet(
       context: context,
       useSafeArea: true,
       builder: (_) {
-        return LeaderBoardBottomSheet(gameProvider: widget.gameProvider);
+        return const LeaderBoard();
       },
     );
   }
@@ -29,30 +31,33 @@ class _LeaderIconState extends State<LeaderIcon>
   void initState() {
     super.initState();
     _controller = AnimationController(
-        duration: const Duration(milliseconds: 500), vsync: this,);
-    widget.gameProvider.addListener(_onGameStateChange);
-    _initializePreviousValues();
+      duration: const Duration(milliseconds: 500),
+      vsync: this,
+    );
+    ref.listenManual(
+      gameStatePodProvider,
+      (oldState, newState) {
+        _onGameStateChange(newState.requireValue!);
+      },
+    );
+
+    _initializePreviousValues(ref.read(gameStatePodProvider).requireValue!);
   }
 
   @override
   void dispose() {
-    widget.gameProvider.removeListener(_onGameStateChange);
     _controller.dispose();
     super.dispose();
   }
 
-  void _initializePreviousValues() {
-    _previousAssetsValues = widget.gameProvider.gameState?.players
-            .map((player) => player.totalAssetsValue)
-            .toList() ??
-        [];
+  void _initializePreviousValues(GameState gameState) {
+    _previousAssetsValues =
+        gameState.players.map((player) => player.totalAssetsValue).toList();
   }
 
-  void _onGameStateChange() {
-    final currentAssetsValues = widget.gameProvider.gameState?.players
-            .map((player) => player.totalAssetsValue)
-            .toList() ??
-        [];
+  void _onGameStateChange(GameState gameState) {
+    final currentAssetsValues =
+        gameState.players.map((player) => player.totalAssetsValue).toList();
 
     if (_previousAssetsValues.length != currentAssetsValues.length) {
       _previousAssetsValues = currentAssetsValues;
