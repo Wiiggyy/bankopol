@@ -10,12 +10,14 @@ class StartScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final player = ref.watch(currentPlayerProvider);
+    final hasPlayer = ref.watch(
+      currentPlayerProvider.select((e) => e.whenData((e) => e != null)),
+    );
 
-    return switch (player) {
+    return switch (hasPlayer) {
       AsyncLoading() => const LoadingScreen(),
-      AsyncData(value: _?) => const PlayerScreen(),
-      AsyncData() => const CreatePlayer(),
+      AsyncData(value: true) => const PlayerScreen(),
+      AsyncData(value: false) => const CreatePlayer(),
       AsyncError(:final error) => throw error,
     };
   }

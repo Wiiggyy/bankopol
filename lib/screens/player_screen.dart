@@ -19,8 +19,7 @@ class PlayerScreen extends StatefulHookConsumerWidget {
 }
 
 class _PlayerScreenState extends ConsumerState<PlayerScreen> {
-  bool shouldDrawCard = false;
-  bool didFlip = false;
+  // bool shouldDrawCard = false;
 
   void showSellInvestmentList() {
     showModalBottomSheet(
@@ -45,17 +44,11 @@ class _PlayerScreenState extends ConsumerState<PlayerScreen> {
           investment: investment,
           onPressed: () {
             ref.read(gameStatePodProvider.notifier).generateCard();
-            setState(() {
-              shouldDrawCard = true;
-            });
             Navigator.of(context).pop();
           },
           onPressedSell: showSellInvestmentList,
           onPressedClose: () {
             ref.read(gameStatePodProvider.notifier).generateCard();
-            setState(() {
-              shouldDrawCard = true;
-            });
             Navigator.of(context).pop();
           },
         );
@@ -69,56 +62,42 @@ class _PlayerScreenState extends ConsumerState<PlayerScreen> {
     final currentEventCard = ref.watch(currentEventCardProvider);
 
     return Scaffold(
-      floatingActionButton: !shouldDrawCard && currentEventCard == null
-          ? QrScanner(onCode: handleScan)
-          : null,
+      floatingActionButton:
+          currentEventCard == null ? QrScanner(onCode: handleScan) : null,
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        flexibleSpace: Padding(
-          padding: const EdgeInsets.only(top: 40.0, right: 16),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Expanded(
-                child: Align(
-                  alignment: Alignment.centerLeft,
-                  child: Row(
-                    children: [
-                      const LeaderIcon(),
-                      Text(
-                        player.totalAssetsValue.toStringAsFixed(0),
-                        style: const TextStyle(
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ],
-                  ),
+        flexibleSpace: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            const Expanded(
+              child: Align(
+                alignment: Alignment.centerLeft,
+                child: LeaderIcon(),
+              ),
+            ),
+            Expanded(
+              flex: 2,
+              child: Center(
+                child: Text(
+                  player.name,
+                  style: const TextStyle(fontWeight: FontWeight.bold),
                 ),
               ),
-              Expanded(
-                flex: 2,
-                child: Center(
-                  child: Text(
-                    player.name,
+            ),
+            Expanded(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  const Icon(Icons.wallet),
+                  const SizedBox(width: 4),
+                  Text(
+                    player.bankAccount.amount.toStringAsFixed(0),
                     style: const TextStyle(fontWeight: FontWeight.bold),
                   ),
-                ),
+                ],
               ),
-              Expanded(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    const Icon(Icons.wallet),
-                    const SizedBox(width: 4),
-                    Text(
-                      player.bankAccount.amount.toStringAsFixed(0),
-                      style: const TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
       body: Stack(
@@ -147,24 +126,6 @@ class _PlayerScreenState extends ConsumerState<PlayerScreen> {
                       null => const SizedBox.shrink(),
                       final currentEventCard => EventCardWidget(
                           eventCard: currentEventCard,
-                          onFlip: () {
-                            if (didFlip) {
-                              setState(() {
-                                didFlip = false;
-                                shouldDrawCard = false;
-                              });
-                              ref
-                                  .read(gameStatePodProvider.notifier)
-                                  .removeCard();
-                            } else {
-                              ref
-                                  .read(gameStatePodProvider.notifier)
-                                  .updatePlayers();
-                              setState(() {
-                                didFlip = true;
-                              });
-                            }
-                          },
                         ),
                     },
                   ),
