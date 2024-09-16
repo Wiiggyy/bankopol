@@ -10,6 +10,7 @@ pubspec.lock
 *.iml
 *.ipr
 *.iws
+**.DS_Store
 **/.idea/
 
 # Directory created by dartdoc

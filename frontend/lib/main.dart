@@ -18,14 +18,9 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-          // textTheme: GoogleFonts.rubikTextTheme(
-          //   Theme.of(context).textTheme,
-          // ),
-          ),
+      theme: ThemeData(),
       title: 'Flutter Demo',
       home: const StartScreen(),
-      // home: PlayerScreen(),
     );
   }
 }
