@@ -94,9 +94,12 @@ class _PlayerScreenState extends ConsumerState<PlayerScreen> {
                           .setPlayerName(newName);
                     }
                   },
-                  child: Text(
-                    player.name,
-                    style: const TextStyle(fontWeight: FontWeight.bold),
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(
+                      player.name,
+                      style: const TextStyle(fontWeight: FontWeight.bold),
+                    ),
                   ),
                 ),
               ),

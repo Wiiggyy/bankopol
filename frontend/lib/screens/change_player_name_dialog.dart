@@ -9,36 +9,33 @@ class ChangePlayerNameDialog extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    return HookBuilder(
-      builder: (context) {
-        final nameController = useTextEditingController(
-          text: player.name,
-        );
+    final nameController = useTextEditingController(
+      text: player.name,
+    );
 
-        void finish() {
-          if (nameController.text.isNotEmpty) {
-            Navigator.of(context).pop(nameController.text);
-          }
-        }
+    void finish() {
+      if (nameController.text.isNotEmpty) {
+        Navigator.of(context).pop(nameController.text);
+      }
+    }
 
-        return AlertDialog(
-          content: TextField(
-            controller: nameController,
-            onSubmitted: (_) => finish(),
-          ),
-          actions: [
-            TextButton(
-              onPressed: finish,
-              child: const Text('Spara'),
-            ),
-            TextButton(
-              onPressed: finish,
-              child: const Text('Avbryt'),
-            ),
-          ],
-          // content:,
-        );
-      },
+    return AlertDialog(
+      title: const Text('Ändra namn:'),
+      content: TextField(
+        controller: nameController,
+        onSubmitted: (_) => finish(),
+      ),
+      actions: [
+        TextButton(
+          onPressed: finish,
+          child: const Text('Spara'),
+        ),
+        TextButton(
+          onPressed: finish,
+          child: const Text('Avbryt'),
+        ),
+      ],
+      // content:,
     );
   }
 }
