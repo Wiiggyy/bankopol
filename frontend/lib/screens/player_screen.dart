@@ -140,17 +140,15 @@ class _PlayerScreenState extends ConsumerState<PlayerScreen> {
                 Flexible(
                   child: InvestmentList(player: player),
                 ),
-                Flexible(
-                  child: Padding(
-                    padding: const EdgeInsets.all(16),
-                    child: switch (currentEventCard) {
-                      null => const SizedBox.shrink(),
-                      final currentEventCard => EventCardWidget(
-                          eventCard: currentEventCard,
-                        ),
-                    },
+                if (currentEventCard case final currentEventCard?)
+                  Flexible(
+                    child: Padding(
+                      padding: const EdgeInsets.all(16),
+                      child: EventCardWidget(
+                        eventCard: currentEventCard,
+                      ),
+                    ),
                   ),
-                ),
                 // if (kDebugMode)
                 //   Row(
                 //     children: [
@@ -173,9 +171,6 @@ class _PlayerScreenState extends ConsumerState<PlayerScreen> {
                 //       ),
                 //     ],
                 //   ),
-                const Padding(
-                  padding: EdgeInsets.only(bottom: 40),
-                ),
               ],
             ),
           ),
