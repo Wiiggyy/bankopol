@@ -75,6 +75,7 @@ class _LeaderIconState extends ConsumerState<LeaderIcon>
 
   @override
   Widget build(BuildContext context) {
+    final currentPlayer = ref.watch(currentPlayerProvider).requireValue!;
     return AnimatedBuilder(
       animation: _controller,
       builder: (context, child) {
@@ -93,11 +94,24 @@ class _LeaderIconState extends ConsumerState<LeaderIcon>
         ),
         duration: const Duration(milliseconds: 500),
         builder: (context, color, child) {
-          return IconButton(
-            onPressed: showLeaderboardBottomSheet,
-            icon: Icon(
-              Icons.emoji_events_rounded,
-              color: color,
+          return InkWell(
+            onTap: showLeaderboardBottomSheet,
+            child: Padding(
+              padding: const EdgeInsets.all(8),
+              child: Row(
+                children: [
+                  Icon(
+                    Icons.emoji_events_rounded,
+                    color: color,
+                  ),
+                  Text(
+                    currentPlayer.totalAssetsValue.toStringAsFixed(0),
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
+              ),
             ),
           );
         },

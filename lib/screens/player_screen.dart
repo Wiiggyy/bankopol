@@ -69,20 +69,10 @@ class _PlayerScreenState extends ConsumerState<PlayerScreen> {
         flexibleSpace: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Expanded(
+            const Expanded(
               child: Align(
                 alignment: Alignment.centerLeft,
-                child: Row(
-                  children: [
-                    const LeaderIcon(),
-                    Text(
-                      player.totalAssetsValue.toStringAsFixed(0),
-                      style: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ],
-                ),
+                child: LeaderIcon(),
               ),
             ),
             Expanded(
