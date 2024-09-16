@@ -9,7 +9,7 @@ import 'package:web_socket_channel/web_socket_channel.dart';
 
 part 'repository.g.dart';
 
-@riverpod
+@Riverpod(keepAlive: true)
 class Repository extends _$Repository {
   late WebSocketChannel _channel;
   late Dio _dio;

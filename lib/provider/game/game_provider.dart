@@ -15,25 +15,52 @@ import 'package:uuid/uuid.dart';
 
 part 'game_provider.g.dart';
 
-@riverpod
+@Riverpod(keepAlive: true)
 class CurrentPlayer extends _$CurrentPlayer {
   late SharedPreferences _preferences;
+  late String? _playerId;
 
   @override
   FutureOr<Player?> build() async {
     _preferences = await SharedPreferences.getInstance();
-    final playerId = _preferences.getString('id');
+    _playerId = _preferences.getString('id');
 
-    final gameState = await ref.watch(gameStatePodProvider.future);
+    final gameState = await ref.read(gameStatePodProvider.future);
 
     final currentPlayer = gameState?.players.firstWhereOrNull(
-      (player) => player.id == playerId,
+      (player) => player.id == _playerId,
     );
 
     if (currentPlayer == null) {
       await _preferences.remove('id');
     }
+
+    listenGameState();
+
     return currentPlayer;
+  }
+
+  void listenGameState() {
+    ref.listen(
+      gameStatePodProvider,
+      (_, newState) {
+        switch (newState) {
+          case AsyncData(value: final gameState?):
+            final currentPlayer = gameState.players.firstWhereOrNull(
+              (player) => player.id == _playerId,
+            );
+
+            if (currentPlayer == null) {
+              _preferences.remove('id');
+              state = const AsyncData(null);
+            } else {
+              state = AsyncData(currentPlayer);
+            }
+          case _:
+            state = const AsyncData(null);
+        }
+      },
+    );
   }
 
   Future<void> setPlayerId(String id) {
@@ -41,7 +68,7 @@ class CurrentPlayer extends _$CurrentPlayer {
   }
 }
 
-@riverpod
+@Riverpod(keepAlive: true)
 class CurrentEventCard extends _$CurrentEventCard {
   @override
   EventCard? build() {
@@ -57,7 +84,7 @@ class CurrentEventCard extends _$CurrentEventCard {
   }
 }
 
-@riverpod
+@Riverpod(keepAlive: true)
 class GameStatePod extends _$GameStatePod {
   late Repository _repository;
 

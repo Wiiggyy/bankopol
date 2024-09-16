@@ -19,8 +19,7 @@ class PlayerScreen extends StatefulHookConsumerWidget {
 }
 
 class _PlayerScreenState extends ConsumerState<PlayerScreen> {
-  bool shouldDrawCard = false;
-  bool didFlip = false;
+  // bool shouldDrawCard = false;
 
   void showSellInvestmentList() {
     showModalBottomSheet(
@@ -45,17 +44,11 @@ class _PlayerScreenState extends ConsumerState<PlayerScreen> {
           investment: investment,
           onPressed: () {
             ref.read(gameStatePodProvider.notifier).generateCard();
-            setState(() {
-              shouldDrawCard = true;
-            });
             Navigator.of(context).pop();
           },
           onPressedSell: showSellInvestmentList,
           onPressedClose: () {
             ref.read(gameStatePodProvider.notifier).generateCard();
-            setState(() {
-              shouldDrawCard = true;
-            });
             Navigator.of(context).pop();
           },
         );
@@ -69,9 +62,8 @@ class _PlayerScreenState extends ConsumerState<PlayerScreen> {
     final currentEventCard = ref.watch(currentEventCardProvider);
 
     return Scaffold(
-      floatingActionButton: !shouldDrawCard && currentEventCard == null
-          ? QrScanner(onCode: handleScan)
-          : null,
+      floatingActionButton:
+          currentEventCard == null ? QrScanner(onCode: handleScan) : null,
       appBar: AppBar(
         automaticallyImplyLeading: false,
         flexibleSpace: Padding(
@@ -147,24 +139,6 @@ class _PlayerScreenState extends ConsumerState<PlayerScreen> {
                       null => const SizedBox.shrink(),
                       final currentEventCard => EventCardWidget(
                           eventCard: currentEventCard,
-                          onFlip: () {
-                            if (didFlip) {
-                              setState(() {
-                                didFlip = false;
-                                shouldDrawCard = false;
-                              });
-                              ref
-                                  .read(gameStatePodProvider.notifier)
-                                  .removeCard();
-                            } else {
-                              ref
-                                  .read(gameStatePodProvider.notifier)
-                                  .updatePlayers();
-                              setState(() {
-                                didFlip = true;
-                              });
-                            }
-                          },
                         ),
                     },
                   ),

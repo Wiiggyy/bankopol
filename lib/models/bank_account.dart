@@ -9,8 +9,8 @@ class BankAccount {
 
   factory BankAccount.fromJson(Map<String, dynamic> json) {
     return BankAccount(
-      amount: json['amount'] as double,
-      interest: json['interest'] as double,
+      amount: (json['amount'] as num).toDouble(),
+      interest: (json['interest'] as num).toDouble(),
     );
   }
 

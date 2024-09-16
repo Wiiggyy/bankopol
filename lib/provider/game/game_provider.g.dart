@@ -6,12 +6,12 @@ part of 'game_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$currentPlayerHash() => r'8b5492929b8042edda90a4d6fe7790b0770d025e';
+String _$currentPlayerHash() => r'da862c442570d414894a3349d6574aa208d63013';
 
 /// See also [CurrentPlayer].
 @ProviderFor(CurrentPlayer)
 final currentPlayerProvider =
-    AutoDisposeAsyncNotifierProvider<CurrentPlayer, Player?>.internal(
+    AsyncNotifierProvider<CurrentPlayer, Player?>.internal(
   CurrentPlayer.new,
   name: r'currentPlayerProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
@@ -21,13 +21,13 @@ final currentPlayerProvider =
   allTransitiveDependencies: null,
 );
 
-typedef _$CurrentPlayer = AutoDisposeAsyncNotifier<Player?>;
-String _$currentEventCardHash() => r'848f70cfedd46e57af5cd71eb6db9df3d0afce9d';
+typedef _$CurrentPlayer = AsyncNotifier<Player?>;
+String _$currentEventCardHash() => r'492351e4308a9fee25530b916526a04f39631f7a';
 
 /// See also [CurrentEventCard].
 @ProviderFor(CurrentEventCard)
 final currentEventCardProvider =
-    AutoDisposeNotifierProvider<CurrentEventCard, EventCard?>.internal(
+    NotifierProvider<CurrentEventCard, EventCard?>.internal(
   CurrentEventCard.new,
   name: r'currentEventCardProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
@@ -37,13 +37,13 @@ final currentEventCardProvider =
   allTransitiveDependencies: null,
 );
 
-typedef _$CurrentEventCard = AutoDisposeNotifier<EventCard?>;
-String _$gameStatePodHash() => r'4a01b7aaa2b714f3a4d2fafb8053f4087cf9259b';
+typedef _$CurrentEventCard = Notifier<EventCard?>;
+String _$gameStatePodHash() => r'4553be706f4be308889e7f5b015120bfcb335273';
 
 /// See also [GameStatePod].
 @ProviderFor(GameStatePod)
 final gameStatePodProvider =
-    AutoDisposeStreamNotifierProvider<GameStatePod, GameState?>.internal(
+    StreamNotifierProvider<GameStatePod, GameState?>.internal(
   GameStatePod.new,
   name: r'gameStatePodProvider',
   debugGetCreateSourceHash:
@@ -52,6 +52,6 @@ final gameStatePodProvider =
   allTransitiveDependencies: null,
 );
 
-typedef _$GameStatePod = AutoDisposeStreamNotifier<GameState?>;
+typedef _$GameStatePod = StreamNotifier<GameState?>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, inference_failure_on_uninitialized_variable, inference_failure_on_function_return_type, inference_failure_on_untyped_parameter, deprecated_member_use_from_same_package
