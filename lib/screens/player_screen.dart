@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:bankopol/models/investment.dart';
 import 'package:bankopol/provider/game/game_provider.dart';
+import 'package:bankopol/screens/change_player_name_dialog.dart';
 import 'package:bankopol/widgets/bottom_sheets/buy_investment_bottom_sheet.dart';
 import 'package:bankopol/widgets/bottom_sheets/sell_investment_bottom_sheet.dart';
 import 'package:bankopol/widgets/cards/event_card_widget.dart';
@@ -78,9 +79,25 @@ class _PlayerScreenState extends ConsumerState<PlayerScreen> {
             Expanded(
               flex: 2,
               child: Center(
-                child: Text(
-                  player.name,
-                  style: const TextStyle(fontWeight: FontWeight.bold),
+                child: InkWell(
+                  onTap: () async {
+                    final newName = await showDialog<String>(
+                      context: context,
+                      builder: (context) {
+                        return ChangePlayerNameDialog(player: player);
+                      },
+                    );
+
+                    if (newName != null && newName.isNotEmpty) {
+                      ref
+                          .read(gameStatePodProvider.notifier)
+                          .setPlayerName(newName);
+                    }
+                  },
+                  child: Text(
+                    player.name,
+                    style: const TextStyle(fontWeight: FontWeight.bold),
+                  ),
                 ),
               ),
             ),

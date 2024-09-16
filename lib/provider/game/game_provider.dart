@@ -21,7 +21,7 @@ class CurrentPlayer extends _$CurrentPlayer {
   late String? _playerId;
 
   @override
-  FutureOr<Player?> build() async {
+  Future<Player?> build() async {
     _preferences = await SharedPreferences.getInstance();
     _playerId = _preferences.getString('id');
 
@@ -141,6 +141,23 @@ class GameStatePod extends _$GameStatePod {
 
   void removeCard() {
     ref.read(currentEventCardProvider.notifier).removeCard();
+  }
+
+  Future<void> setPlayerName(String newName) async {
+    final gameState = (await future)!;
+    final currentPlayer = (await ref.read(currentPlayerProvider.future))!;
+
+    _repository.updateGameState(
+      gameState.copyWith(
+        players: {
+          for (final player in gameState.players)
+            if (player.id == currentPlayer.id)
+              player.copyWith(name: newName)
+            else
+              player,
+        },
+      ),
+    );
   }
 
   void updatePlayers() {
