@@ -97,6 +97,7 @@ class _PlayerScreenState extends ConsumerState<PlayerScreen> {
                 ],
               ),
             ),
+            const SizedBox(width: 8),
           ],
         ),
       ),
