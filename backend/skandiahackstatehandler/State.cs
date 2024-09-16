@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Net.WebSockets;
 using System.Text;
 
@@ -20,6 +21,18 @@ namespace skandiahackstatehandler
             }
         }
 
+        /// <summary>
+        /// Only to be used by the message sender worker service
+        /// </summary>
+        /// <returns></returns>
+        public static IEnumerable<WebSocket> GetPlayerSnapshot()
+        {
+            lock (_lock)
+            {
+                return playerData.Select(d => d.socket).ToList();
+            }
+        }
+        public static readonly ConcurrentQueue<(ArraySegment<byte> message, WebSocket? recipient)> OutgoingMessages = new();
 
         public static void WipeData()
         {
@@ -29,7 +42,8 @@ namespace skandiahackstatehandler
                 {
                     try
                     {
-                        item.socket.CloseAsync(WebSocketCloseStatus.Empty, "Admin wipe of game state", CancellationToken.None).GetAwaiter().GetResult();
+                        item.socket.CloseAsync(WebSocketCloseStatus.Empty, "Admin wipe of game state", CancellationToken.None)
+                            .GetAwaiter().GetResult();
                     }
                     catch (Exception)
                     {
@@ -60,18 +74,14 @@ namespace skandiahackstatehandler
                 if (!receiveResult.EndOfMessage)
                     throw new NotImplementedException("Only single part messages supported!");
 
+                //var shortbuffer = buffer[..receiveResult.Count]; //TODO: use this instead of cloning entire buffer
+
                 var outMessage = new ArraySegment<byte>((byte[])buffer.Clone(), 0, receiveResult.Count);
                 lock (_lock)
                 {
                     latestMessage = UTF8Encoding.UTF8.GetString(outMessage);
                 }
-                await SendToAllPlayers(webSocket, outMessage);
-
-                //await webSocket.SendAsync(
-                //    new ArraySegment<byte>(buffer, 0, receiveResult.Count),
-                //    receiveResult.MessageType,
-                //    receiveResult.EndOfMessage,
-                //    CancellationToken.None);
+                SendToAllPlayers(webSocket, outMessage);
 
                 receiveResult = await webSocket.ReceiveAsync(
                     new ArraySegment<byte>(buffer), CancellationToken.None);
@@ -87,7 +97,7 @@ namespace skandiahackstatehandler
             }
         }
 
-        internal static async Task ApplyInterestAndInformClients()
+        internal static void ApplyInterestAndInformClients()
         {
             var data = LatestMessage;
             if (data == null) return;
@@ -111,33 +121,13 @@ namespace skandiahackstatehandler
 
             var outMessage = new ArraySegment<byte>(buffer, 0, buffer.Length);
 
-            await SendToAllPlayers(null, outMessage);
+            SendToAllPlayers(null, outMessage);
         }
 
-        private static async Task SendToAllPlayers(WebSocket? sender, ArraySegment<byte> message)
+        private static void SendToAllPlayers(WebSocket? sender, ArraySegment<byte> message)
         {
-            WebSocket[] recipients;
-            lock (_lock)
-            {
-                recipients = playerData.Select(s => s.socket).ToArray();
-            }
-            foreach (var recipient in recipients)
-            {
-                //if (recipient == sender) continue;
-
-                try
-                {
-                    await recipient.SendAsync(
-                    message,
-                    WebSocketMessageType.Text,
-                    true,
-                    CancellationToken.None);
-                }
-                catch (Exception)
-                {
-                    // TODO: probably should log or handle this.....
-                }
-            }
+            OutgoingMessages.Enqueue((message, null));
+            
         }
 
 

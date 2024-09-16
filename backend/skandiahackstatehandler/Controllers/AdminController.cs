@@ -19,7 +19,7 @@ namespace skandiahackstatehandler.Controllers
         [HttpPost("applyinterest")]
         public async Task ApplyInterest()
         {
-            await State.ApplyInterestAndInformClients();
+            State.ApplyInterestAndInformClients();
         }
 
     }
