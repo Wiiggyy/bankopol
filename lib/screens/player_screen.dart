@@ -66,51 +66,48 @@ class _PlayerScreenState extends ConsumerState<PlayerScreen> {
           currentEventCard == null ? QrScanner(onCode: handleScan) : null,
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        flexibleSpace: Padding(
-          padding: const EdgeInsets.only(top: 40.0, right: 16),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Expanded(
-                child: Align(
-                  alignment: Alignment.centerLeft,
-                  child: Row(
-                    children: [
-                      const LeaderIcon(),
-                      Text(
-                        player.totalAssetsValue.toStringAsFixed(0),
-                        style: const TextStyle(
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              Expanded(
-                flex: 2,
-                child: Center(
-                  child: Text(
-                    player.name,
-                    style: const TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                ),
-              ),
-              Expanded(
+        flexibleSpace: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Expanded(
+              child: Align(
+                alignment: Alignment.centerLeft,
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    const Icon(Icons.wallet),
-                    const SizedBox(width: 4),
+                    const LeaderIcon(),
                     Text(
-                      player.bankAccount.amount.toStringAsFixed(0),
-                      style: const TextStyle(fontWeight: FontWeight.bold),
+                      player.totalAssetsValue.toStringAsFixed(0),
+                      style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ],
                 ),
               ),
-            ],
-          ),
+            ),
+            Expanded(
+              flex: 2,
+              child: Center(
+                child: Text(
+                  player.name,
+                  style: const TextStyle(fontWeight: FontWeight.bold),
+                ),
+              ),
+            ),
+            Expanded(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  const Icon(Icons.wallet),
+                  const SizedBox(width: 4),
+                  Text(
+                    player.bankAccount.amount.toStringAsFixed(0),
+                    style: const TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                ],
+              ),
+            ),
+          ],
         ),
       ),
       body: Stack(
