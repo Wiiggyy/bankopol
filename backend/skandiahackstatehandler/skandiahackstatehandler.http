@@ -1,0 +1,6 @@
+@skandiahackstatehandler_HostAddress = http://localhost:5073
+
+GET {{skandiahackstatehandler_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
