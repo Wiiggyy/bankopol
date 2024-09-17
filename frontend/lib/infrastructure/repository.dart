@@ -2,8 +2,7 @@ import 'dart:convert';
 
 import 'package:bankopol/models/game_state.dart';
 import 'package:bankopol/models/player.dart';
-import 'package:dio/dio.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
@@ -12,15 +11,15 @@ part 'repository.g.dart';
 @Riverpod(keepAlive: true)
 class Repository extends _$Repository {
   late WebSocketChannel _channel;
-  late Dio _dio;
+  late String _host;
 
   @override
   void build() {
-    const uri =
-        'wss://hackstatehandler-djcyf9c6bbetfvfy.swedencentral-01.azurewebsites.net/api/Player/connect/';
+    _host = 'localhost:7226';
+    // 'hackstatehandler-djcyf9c6bbetfvfy.swedencentral-01.azurewebsites.net';
+    final uri = 'wss://$_host/api/Player/connect/';
     debugPrint('Connecting to socket');
     _channel = WebSocketChannel.connect(Uri.parse(uri));
-    _dio = Dio();
   }
 
   Stream<GameState> streamGameState() async* {
@@ -43,23 +42,6 @@ class Repository extends _$Repository {
     }
   }
 
-  Future<GameState?> getCurrentGameState() async {
-    final response = await _dio.get(
-      'https://hackstatehandler-djcyf9c6bbetfvfy.swedencentral-01.azurewebsites.net/api/Player/latestState',
-    );
-    if (response.data case final String json?) {
-      try {
-        return GameState.fromJson(jsonDecode(json) as Map<String, dynamic>);
-      } catch (e, stackTrace) {
-        debugPrint(e.toString());
-        debugPrintStack(stackTrace: stackTrace);
-        return null;
-      }
-    } else {
-      return null;
-    }
-  }
-
   Future<void> updateGameState(GameState gameState) async {
     await _channel.ready;
 
@@ -71,23 +53,27 @@ class Repository extends _$Repository {
   }
 
   Future<Player> joinGame(Player player) async {
-    final currentGameState = await getCurrentGameState();
-    debugPrint('Current game state: $currentGameState');
-    debugPrint('Players: ${currentGameState?.players.length}');
-    GameState nextGameState;
-    if (currentGameState case final currentGameState?) {
-      nextGameState = currentGameState.copyWith(
-        players: currentGameState.players..add(player),
-      );
-    } else {
-      nextGameState = GameState(
-        players: {player},
-      );
-    }
+    // debugPrint('Current game state: $currentGameState');
+    // debugPrint('Players: ${currentGameState?.players.length}');
+    // GameState nextGameState;
+    // if (currentGameState case final currentGameState?) {
+    // nextGameState = currentGameState.copyWith(
+    //   players: currentGameState.players..add(player),
+    // );
+    // } else {
+    //   nextGameState = GameState(
+    //     players: {player},
+    //   );
+    // }
     await _channel.ready;
 
     try {
-      _channel.sink.add(jsonEncode(nextGameState.toJson()));
+      _channel.sink.add(
+        jsonEncode({
+          'action': 'addPlayer',
+          'data': player.toJson(),
+        }),
+      );
     } catch (e) {
       debugPrint('Error: $e');
     }

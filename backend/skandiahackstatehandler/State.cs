@@ -2,6 +2,8 @@
 using System.Collections.Concurrent;
 using System.Net.WebSockets;
 using System.Text;
+using System.Text.Json;
+using skandiahackstatehandler.Data;
 
 namespace skandiahackstatehandler
 {
@@ -33,6 +35,7 @@ namespace skandiahackstatehandler
             }
         }
         public static readonly ConcurrentQueue<(ArraySegment<byte> message, WebSocket? recipient)> OutgoingMessages = new();
+        public static readonly ConcurrentQueue<Event> EventQueue = new();
 
         public static void WipeData()
         {
@@ -81,7 +84,20 @@ namespace skandiahackstatehandler
                 {
                     latestMessage = UTF8Encoding.UTF8.GetString(outMessage);
                 }
-                SendToAllPlayers(webSocket, outMessage);
+
+                try
+                {
+                    var text = Encoding.UTF8.GetString(buffer, 0, receiveResult.Count);
+                    var e = System.Text.Json.JsonSerializer.Deserialize<Event>(text);
+                    if (e != null)
+                    {
+                        EventQueue.Enqueue(e);
+                    }
+                }
+                catch (System.Exception)
+                {
+                    // TODO(Samuel): Log this shizz!
+                }
 
                 receiveResult = await webSocket.ReceiveAsync(
                     new ArraySegment<byte>(buffer), CancellationToken.None);
@@ -127,7 +143,7 @@ namespace skandiahackstatehandler
         private static void SendToAllPlayers(WebSocket? sender, ArraySegment<byte> message)
         {
             OutgoingMessages.Enqueue((message, null));
-            
+
         }
 
 

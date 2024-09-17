@@ -18,7 +18,11 @@ class StartScreen extends ConsumerWidget {
       AsyncLoading() => const LoadingScreen(),
       AsyncData(value: true) => const PlayerScreen(),
       AsyncData(value: false) => const CreatePlayer(),
-      AsyncError(:final error) => throw error,
+      AsyncError() => const Material(
+        child: Center(
+            child: Text('error'),
+          ),
+      ),
     };
   }
 }

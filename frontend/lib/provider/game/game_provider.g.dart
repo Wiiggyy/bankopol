@@ -6,7 +6,7 @@ part of 'game_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$currentPlayerHash() => r'95522b205a17e12050194d489948554146c713b7';
+String _$currentPlayerHash() => r'aa81c46754f75ae7f78ca0289743bd8c6f967fd3';
 
 /// See also [CurrentPlayer].
 @ProviderFor(CurrentPlayer)
@@ -38,7 +38,7 @@ final currentEventCardProvider =
 );
 
 typedef _$CurrentEventCard = Notifier<EventCard?>;
-String _$gameStatePodHash() => r'b56c51889835a08dc7b8a7c1037acf74ad492e9a';
+String _$gameStatePodHash() => r'95404b8ccf53273086ca04a06db6de039a38be26';
 
 /// See also [GameStatePod].
 @ProviderFor(GameStatePod)

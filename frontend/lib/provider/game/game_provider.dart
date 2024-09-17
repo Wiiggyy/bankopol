@@ -9,6 +9,7 @@ import 'package:bankopol/models/game_state.dart';
 import 'package:bankopol/models/investment.dart';
 import 'package:bankopol/models/player.dart';
 import 'package:collection/collection.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uuid/uuid.dart';
@@ -22,22 +23,27 @@ class CurrentPlayer extends _$CurrentPlayer {
 
   @override
   Future<Player?> build() async {
-    _preferences = await SharedPreferences.getInstance();
-    _playerId = _preferences.getString('id');
+    try {
+      _preferences = await SharedPreferences.getInstance();
+      _playerId = _preferences.getString('id');
 
-    final gameState = await ref.read(gameStatePodProvider.future);
+      final gameState = await ref.read(gameStatePodProvider.future);
 
-    final currentPlayer = gameState?.players.firstWhereOrNull(
-      (player) => player.id == _playerId,
-    );
+      final currentPlayer = gameState?.players.firstWhereOrNull(
+        (player) => player.id == _playerId,
+      );
 
-    if (currentPlayer == null) {
-      await _preferences.remove('id');
+      if (currentPlayer == null) {
+        await _preferences.remove('id');
+      }
+
+      listenGameState();
+
+      return currentPlayer;
+    } catch (e, stackTrace) {
+      debugPrint(e.toString());
+      debugPrintStack(stackTrace: stackTrace);
     }
-
-    listenGameState();
-
-    return currentPlayer;
   }
 
   void listenGameState() {
@@ -91,7 +97,8 @@ class GameStatePod extends _$GameStatePod {
   @override
   Stream<GameState?> build() async* {
     _repository = ref.watch(repositoryProvider.notifier);
-    yield await _repository.getCurrentGameState();
+    // TODO: REMOVE
+    yield null;
     yield* _repository.streamGameState();
   }
 
