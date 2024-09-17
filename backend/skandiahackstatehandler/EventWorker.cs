@@ -35,6 +35,9 @@ namespace skandiahackstatehandler
                                 };
                                 State.OutgoingMessages.Enqueue(newEvent);
                                 break;
+                            default:
+                                _logger.LogWarning("Unhandled event type: {eventType}", messageData.action);
+                                break;
                         }
                     }
                     catch (Exception ex)
