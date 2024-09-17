@@ -1,6 +1,9 @@
 ﻿
+using System.Net.WebSockets;
 using System.Text.Json;
+using skandiahackstatehandler;
 using skandiahackstatehandler.Data;
+using skandiahackstatehandler.Data.Enums;
 using skandiahackstatehandler.Data.Events;
 
 namespace skandiahackstatehandler
@@ -20,28 +23,33 @@ namespace skandiahackstatehandler
             {
                 if (State.EventQueue.TryDequeue(out var messageData))
                 {
+                    var eventData = messageData.eventData;
                     try
                     {
-
-                        switch (messageData.action)
+                        switch (eventData.action)
                         {
                             case "addPlayer":
                                 State.AddPlayerToGame(
-                                    messageData.data.Deserialize<GameState.Player>()!
+                                    eventData.data.Deserialize<GameState.Player>()!
                                 );
                                 break;
                             case "updatePlayerName":
-                                var renamePlayerEvent = messageData.data.Deserialize<RenamePlayerEvent>()!;
+                                var renamePlayerEvent = eventData.data.Deserialize<RenamePlayerEvent>()!;
                                 State.UpdatePlayerName(renamePlayerEvent.id, renamePlayerEvent.name);
                                 break;
+                            case "fetchInvestment":
+                                // TODO: Deserialize name instead of index
+                                var investmentType = eventData.data.Deserialize<InvestmentType>();
+                                State.FetchInvestment(messageData.sender, investmentType);
+                                break;
                             default:
-                                _logger.LogWarning("Unhandled event type: {eventType}", messageData.action);
+                                _logger.LogWarning("Unhandled event type: {eventType}", eventData.action);
                                 break;
                         }
                     }
                     catch (Exception ex)
                     {
-                        _logger.LogError(ex, "Failed to handle event of type: {eventType} with data: {data}", messageData.action, messageData.data);
+                        _logger.LogError(ex, "Failed to handle event of type: {eventType} with data: {data}", eventData.action, eventData.data);
                     }
                 }
                 else
@@ -50,7 +58,6 @@ namespace skandiahackstatehandler
                 }
             }
             _logger.LogInformation("Stopping event worker");
-
         }
     }
 }

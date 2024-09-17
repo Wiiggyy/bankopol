@@ -1,4 +1,6 @@
 
+using skandiahackstatehandler.Data.Enums;
+
 namespace skandiahackstatehandler.Data;
 record GameState
 {
@@ -7,7 +9,7 @@ record GameState
     public record BankAccount(double amount, double interest);
 
     public record Investment(
-        int investmentType, double value,
+        InvestmentType investmentType, double value,
         int quantity, double interest);
 
     public record Player(string id, string name)

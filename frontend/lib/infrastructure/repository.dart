@@ -1,6 +1,10 @@
+import 'dart:async';
 import 'dart:convert';
 
+import 'package:bankopol/enums/investment_type.dart';
+import 'package:bankopol/models/event.dart';
 import 'package:bankopol/models/game_state.dart';
+import 'package:bankopol/models/investment.dart';
 import 'package:bankopol/models/player.dart';
 import 'package:flutter/foundation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -13,18 +17,29 @@ class Repository extends _$Repository {
   late WebSocketChannel _channel;
   late String _host;
 
+  late StreamController<GameState> _gameStateController;
+  late StreamController<Event> _eventController;
+
   @override
   void build() {
+    _gameStateController = StreamController();
+    _eventController = StreamController();
+
+    ref.onDispose(_gameStateController.close);
+    ref.onDispose(_eventController.close);
+
     _host = 'localhost:7226';
     // 'hackstatehandler-djcyf9c6bbetfvfy.swedencentral-01.azurewebsites.net';
     final uri = 'wss://$_host/api/Player/connect/';
     debugPrint('Connecting to socket');
     _channel = WebSocketChannel.connect(Uri.parse(uri));
+
+    _connectToServer();
   }
 
-  Stream<GameState> streamGameState() async* {
-    await _channel.ready;
+  Future<void> _connectToServer() async {
     debugPrint('Getting stream');
+    await _channel.ready;
 
     await for (final message in _channel.stream) {
       debugPrint('Received message');
@@ -35,9 +50,18 @@ class Repository extends _$Repository {
           switch (jsonData) {
             case {
                 'action': 'newGameState',
-                'data': final Map<String, dynamic> data
+                'data': final Map<String, dynamic> data,
               }:
-              yield GameState.fromJson(data);
+              _gameStateController.add(GameState.fromJson(data));
+            case {
+                'action': 'investmentOpportunity',
+                'data': final Map<String, dynamic> data,
+              }:
+              _eventController.add(
+                InvestmentOpportunityEvent(Investment.fromJson(data)),
+              );
+            case final _:
+              debugPrint('No action set up for $message');
           }
         }
       } catch (e, stackTrace) {
@@ -45,6 +69,14 @@ class Repository extends _$Repository {
         debugPrintStack(stackTrace: stackTrace);
       }
     }
+  }
+
+  Stream<Event> streamEvents() {
+    return _eventController.stream;
+  }
+
+  Stream<GameState> streamGameState() {
+    return _gameStateController.stream;
   }
 
   Future<void> updateGameState(GameState gameState) async {
@@ -58,18 +90,6 @@ class Repository extends _$Repository {
   }
 
   Future<Player> joinGame(Player player) async {
-    // debugPrint('Current game state: $currentGameState');
-    // debugPrint('Players: ${currentGameState?.players.length}');
-    // GameState nextGameState;
-    // if (currentGameState case final currentGameState?) {
-    // nextGameState = currentGameState.copyWith(
-    //   players: currentGameState.players..add(player),
-    // );
-    // } else {
-    //   nextGameState = GameState(
-    //     players: {player},
-    //   );
-    // }
     _sendEventToServer('addPlayer', player.toJson());
     return player;
   }
@@ -82,9 +102,17 @@ class Repository extends _$Repository {
     });
   }
 
+  Future<void> fetchInvestment(InvestmentType investmentType) async {
+    await _channel.ready;
+    _sendEventToServer(
+      'fetchInvestment',
+      investmentType.index,
+    );
+  }
+
   Future<void> _sendEventToServer(
     String action,
-    Map<String, dynamic> data,
+    Object data,
   ) async {
     await _channel.ready;
     try {

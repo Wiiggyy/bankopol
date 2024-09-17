@@ -18,9 +18,9 @@ class Investment {
   factory Investment.fromJson(Map<String, dynamic> json) {
     return Investment(
       investmentType: InvestmentType.values[json['investmentType'] as int],
-      value: json['value'] as double,
+      value: (json['value'] as num).toDouble(),
       quantity: json['quantity'] as int,
-      interest: json['interest'] as double,
+      interest: (json['interest'] as num).toDouble(),
     );
   }
 

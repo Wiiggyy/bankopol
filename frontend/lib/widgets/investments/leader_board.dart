@@ -9,7 +9,7 @@ class LeaderBoard extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final sortedPlayers = ref.watch(
       gameStatePodProvider
-          .select((gameState) => gameState.requireValue!.players.toList()),
+          .select((gameState) => gameState.requireValue.players.toList()),
     )..sort((a, b) => b.totalAssetsValue.compareTo(a.totalAssetsValue));
 
     return ConstrainedBox(

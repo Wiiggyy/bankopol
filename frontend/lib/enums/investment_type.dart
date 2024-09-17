@@ -1,3 +1,5 @@
+import 'dart:math';
+
 enum InvestmentType {
   savingsAccount, // Sparkonto
   highYieldSavingsAccount, // Högavkastningssparkonto
@@ -31,6 +33,24 @@ enum InvestmentType {
   savingsChallenges, // Sparutmaningar
   diyInvestments, // "Gör-det-själv"-investeringar
   ;
+
+  static final random = Random();
+
+  static InvestmentType fromCode(String code) {
+    final separated = code.split(':');
+    switch (separated) {
+      case ['event', final code]:
+        final intCode = int.tryParse(code);
+        if (intCode == null || intCode >= InvestmentType.values.length) {
+          continue random;
+        }
+        return InvestmentType.values[intCode];
+      random:
+      case _:
+        return InvestmentType
+            .values[random.nextInt(InvestmentType.values.length)];
+    }
+  }
 }
 
 String getInvestmentTypeName(InvestmentType investmentType) {

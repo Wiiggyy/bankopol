@@ -1,10 +1,11 @@
-﻿using System;
+using System;
 using System.Collections.Concurrent;
 using System.Diagnostics;
 using System.Net.WebSockets;
 using System.Text;
 using System.Text.Json;
 using skandiahackstatehandler.Data;
+using skandiahackstatehandler.Data.Enums;
 
 namespace skandiahackstatehandler
 {
@@ -36,8 +37,8 @@ namespace skandiahackstatehandler
                 return playerData.Select(d => d.socket).ToList();
             }
         }
-        public static readonly ConcurrentQueue<OutEvent> OutgoingMessages = new();
-        public static readonly ConcurrentQueue<Event> EventQueue = new();
+        public static readonly ConcurrentQueue<(OutEvent eventData, IEnumerable<WebSocket> recipients)> OutgoingMessages = new();
+        public static readonly ConcurrentQueue<(Event eventData, WebSocket sender)> EventQueue = new();
 
         public static void WipeData()
         {
@@ -113,7 +114,7 @@ namespace skandiahackstatehandler
                         var e = System.Text.Json.JsonSerializer.Deserialize<Event>(text);
                         if (e != null)
                         {
-                            EventQueue.Enqueue(e);
+                            EventQueue.Enqueue((e, webSocket));
                         }
                     }
                     catch (System.Exception)
@@ -183,11 +184,12 @@ namespace skandiahackstatehandler
         {
             lock (_lock)
             {
-
                 var newPlayerState = gameState.players.Select(player =>
                 {
-                    if(player.id == id){
-                        return player with {
+                    if (player.id == id)
+                    {
+                        return player with
+                        {
                             name = name,
                         };
                     }
@@ -211,7 +213,35 @@ namespace skandiahackstatehandler
                     action = "newGameState",
                     data = gameState,
                 };
-                State.OutgoingMessages.Enqueue(newEvent);
+                State.OutgoingMessages.Enqueue((newEvent, Array.Empty<WebSocket>()));
+            }
+        }
+
+        internal static void FetchInvestment(WebSocket sender, InvestmentType investmentType)
+        {
+
+            var investment = generateInvestment();
+
+            var newEvent = new OutEvent
+            {
+                action = "investmentOpportunity",
+                data = investment,
+            };
+
+            State.OutgoingMessages.Enqueue((newEvent, [sender]));
+
+            GameState.Investment generateInvestment()
+            {
+                var value = System.Random.Shared.Next(1, 1000);
+                var quantity = 1; //random.nextInt(100) + 1;
+                var interest = System.Random.Shared.NextDouble() * 0.2;
+
+                return new GameState.Investment(
+                    quantity: quantity,
+                    value: value,
+                    interest: interest,
+                    investmentType: investmentType
+                );
             }
         }
     }

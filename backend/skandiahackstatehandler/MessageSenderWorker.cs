@@ -19,9 +19,12 @@ namespace skandiahackstatehandler
             {
                 if (State.OutgoingMessages.TryDequeue(out var messageData))
                 {
-                    var receivers = State.GetPlayerSnapshot();
+                    var receivers = messageData.recipients.Any()
+                    ? messageData.recipients
+                    : State.GetPlayerSnapshot();
+
                     var message = UTF8Encoding.UTF8.GetBytes(
-                        System.Text.Json.JsonSerializer.Serialize(messageData)
+                        System.Text.Json.JsonSerializer.Serialize(messageData.eventData)
                     );
                     var sendTasks = receivers
                         .Select(r =>

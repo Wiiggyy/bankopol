@@ -37,11 +37,11 @@ class _LeaderIconState extends ConsumerState<LeaderIcon>
     ref.listenManual(
       gameStatePodProvider,
       (oldState, newState) {
-        _onGameStateChange(newState.requireValue!);
+        _onGameStateChange(newState.requireValue);
       },
     );
 
-    _initializePreviousValues(ref.read(gameStatePodProvider).requireValue!);
+    _initializePreviousValues(ref.read(gameStatePodProvider).requireValue);
   }
 
   @override

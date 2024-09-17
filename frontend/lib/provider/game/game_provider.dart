@@ -43,6 +43,7 @@ class CurrentPlayer extends _$CurrentPlayer {
     } catch (e, stackTrace) {
       debugPrint(e.toString());
       debugPrintStack(stackTrace: stackTrace);
+      return null;
     }
   }
 
@@ -51,7 +52,7 @@ class CurrentPlayer extends _$CurrentPlayer {
       gameStatePodProvider,
       (_, newState) {
         switch (newState) {
-          case AsyncData(value: final gameState?):
+          case AsyncData(value: final gameState):
             final currentPlayer = gameState.players.firstWhereOrNull(
               (player) => player.id == _playerId,
             );
@@ -122,7 +123,7 @@ class GameStatePod extends _$GameStatePod {
   }
 
   void generateCard() {
-    final gameState = state.requireValue!;
+    final gameState = state.requireValue;
     final investmentTypes = <InvestmentType>{
       for (final Player player in gameState.players)
         for (final Investment investment in player.investments)
@@ -155,7 +156,7 @@ class GameStatePod extends _$GameStatePod {
   }
 
   void updatePlayers() {
-    final gameState = state.requireValue!;
+    final gameState = state.requireValue;
 
     final currentEventCard = ref.read(currentEventCardProvider);
     final investmentType = currentEventCard?.eventAction.investmentType;
@@ -217,8 +218,12 @@ class GameStatePod extends _$GameStatePod {
     );
   }
 
+  Future<void> fetchInvestment(InvestmentType type) {
+    return _repository.fetchInvestment(type);
+  }
+
   Future<void> buyInvestment(Investment newInvestment) async {
-    final gameState = state.requireValue!;
+    final gameState = state.requireValue;
 
     final currentPlayer = ref.read(currentPlayerProvider).requireValue!;
 
@@ -286,7 +291,7 @@ class GameStatePod extends _$GameStatePod {
 
     final gameState = state.requireValue;
 
-    final nextGameState = gameState!.copyWith(
+    final nextGameState = gameState.copyWith(
       players: {...gameState.players}
         ..removeWhere((player) => player.id == currentPlayer.id)
         ..add(updatedPlayer),

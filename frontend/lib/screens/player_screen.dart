@@ -1,6 +1,9 @@
 import 'dart:ui';
 
+import 'package:bankopol/enums/investment_type.dart';
+import 'package:bankopol/models/event.dart';
 import 'package:bankopol/models/investment.dart';
+import 'package:bankopol/provider/game/event_provider.dart';
 import 'package:bankopol/provider/game/game_provider.dart';
 import 'package:bankopol/screens/change_player_name_dialog.dart';
 import 'package:bankopol/widgets/bottom_sheets/buy_investment_bottom_sheet.dart';
@@ -33,8 +36,12 @@ class _PlayerScreenState extends ConsumerState<PlayerScreen> {
   Future<void> handleScan(String code) async {
     debugPrint('------------Scanned code: $code');
 
-    final investment = Investment.fromCode(code);
+    ref.read(gameStatePodProvider.notifier).fetchInvestment(
+          InvestmentType.fromCode(code),
+        );
+  }
 
+  Future<void> showInvestmentDialog(InvestmentOpportunityEvent event) async {
     await showModalBottomSheet(
       context: context,
       isDismissible: false,
@@ -42,7 +49,7 @@ class _PlayerScreenState extends ConsumerState<PlayerScreen> {
       backgroundColor: Colors.transparent,
       builder: (_) {
         return BuyInvestmentBottomSheet(
-          investment: investment,
+          investment: event.investment,
           onPressed: () {
             ref.read(gameStatePodProvider.notifier).generateCard();
             Navigator.of(context).pop();
@@ -61,6 +68,10 @@ class _PlayerScreenState extends ConsumerState<PlayerScreen> {
   Widget build(BuildContext context) {
     final player = ref.watch(currentPlayerProvider).requireValue!;
     final currentEventCard = ref.watch(currentEventCardProvider);
+    ref.listen(
+      EventProvider<InvestmentOpportunityEvent>(),
+      (_, event) => showInvestmentDialog(event.requireValue),
+    );
 
     return Scaffold(
       floatingActionButton:
