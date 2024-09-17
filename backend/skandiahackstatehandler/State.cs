@@ -62,73 +62,80 @@ namespace skandiahackstatehandler
 
         internal static async Task AddPlayerAndPlay(WebSocket webSocket, TaskCompletionSource socketFinishedTcs)
         {
-            // Send GameState immediately to a new player
-            var message = UTF8Encoding.UTF8.GetBytes(
-                    System.Text.Json.JsonSerializer.Serialize(
-                        new OutEvent
+            try
+            {
+                // Send GameState immediately to a new player
+                var message = UTF8Encoding.UTF8.GetBytes(
+                        System.Text.Json.JsonSerializer.Serialize(
+                            new OutEvent
                             {
                                 action = "newGameState",
                                 data = gameState,
                             }
-                    )
-                );
+                        )
+                    );
 
-            await webSocket.SendAsync(
-                                message,
-                                System.Net.WebSockets.WebSocketMessageType.Text,
-                                true,
-                                CancellationToken.None  //TODO: consider using stoppingToken here
-                                );
+                await webSocket.SendAsync(
+                                    message,
+                                    System.Net.WebSockets.WebSocketMessageType.Text,
+                                    true,
+                                    CancellationToken.None  //TODO: consider using stoppingToken here
+                                    );
 
-            lock (_lock)
-            {
-                playerData.Add((webSocket, socketFinishedTcs));
-            }
-
-            var buffer = new byte[1024 * 1024];
-            var receiveResult = await webSocket.ReceiveAsync(
-                new ArraySegment<byte>(buffer), CancellationToken.None);
-
-            while (!receiveResult.CloseStatus.HasValue)
-            {
-                if (receiveResult.MessageType != WebSocketMessageType.Text)
-                    throw new NotImplementedException("Only text supported!");
-                if (!receiveResult.EndOfMessage)
-                    throw new NotImplementedException("Only single part messages supported!");
-
-                //var shortbuffer = buffer[..receiveResult.Count]; //TODO: use this instead of cloning entire buffer
-
-                var outMessage = new ArraySegment<byte>((byte[])buffer.Clone(), 0, receiveResult.Count);
                 lock (_lock)
                 {
-                    latestMessage = UTF8Encoding.UTF8.GetString(outMessage);
+                    playerData.Add((webSocket, socketFinishedTcs));
                 }
 
-                try
-                {
-                    var text = Encoding.UTF8.GetString(buffer, 0, receiveResult.Count);
-                    var e = System.Text.Json.JsonSerializer.Deserialize<Event>(text);
-                    if (e != null)
-                    {
-                        EventQueue.Enqueue(e);
-                    }
-                }
-                catch (System.Exception)
-                {
-                    // TODO(Samuel): Log this shizz!
-                }
-
-                receiveResult = await webSocket.ReceiveAsync(
+                var buffer = new byte[1024 * 1024];
+                var receiveResult = await webSocket.ReceiveAsync(
                     new ArraySegment<byte>(buffer), CancellationToken.None);
-            }
 
-            await webSocket.CloseAsync(
-                receiveResult.CloseStatus.Value,
-                receiveResult.CloseStatusDescription,
-                CancellationToken.None);
-            lock (_lock)
+                while (!receiveResult.CloseStatus.HasValue)
+                {
+                    if (receiveResult.MessageType != WebSocketMessageType.Text)
+                        throw new NotImplementedException("Only text supported!");
+                    if (!receiveResult.EndOfMessage)
+                        throw new NotImplementedException("Only single part messages supported!");
+
+                    //var shortbuffer = buffer[..receiveResult.Count]; //TODO: use this instead of cloning entire buffer
+
+                    var outMessage = new ArraySegment<byte>((byte[])buffer.Clone(), 0, receiveResult.Count);
+                    lock (_lock)
+                    {
+                        latestMessage = UTF8Encoding.UTF8.GetString(outMessage);
+                    }
+
+                    try
+                    {
+                        var text = Encoding.UTF8.GetString(buffer, 0, receiveResult.Count);
+                        var e = System.Text.Json.JsonSerializer.Deserialize<Event>(text);
+                        if (e != null)
+                        {
+                            EventQueue.Enqueue(e);
+                        }
+                    }
+                    catch (System.Exception)
+                    {
+                        // TODO(Samuel): Log this shizz!
+                    }
+
+                    receiveResult = await webSocket.ReceiveAsync(
+                        new ArraySegment<byte>(buffer), CancellationToken.None);
+                }
+
+                await webSocket.CloseAsync(
+                    receiveResult.CloseStatus.Value,
+                    receiveResult.CloseStatusDescription,
+                    CancellationToken.None
+                );
+            }
+            finally
             {
-                playerData.Remove((webSocket, socketFinishedTcs));
+                lock (_lock)
+                {
+                    playerData.Remove((webSocket, socketFinishedTcs));
+                }
             }
         }
 
