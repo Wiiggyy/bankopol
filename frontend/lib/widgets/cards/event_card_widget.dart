@@ -18,136 +18,123 @@ class EventCardWidget extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final didFlip = useState(false);
 
-    return Stack(
-      fit: StackFit.expand,
-      children: <Widget>[
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: <Widget>[
-            Expanded(
-              flex: 4,
-              child: Card(
-                elevation: 0.0,
-                margin: const EdgeInsets.only(
-                  left: 32.0,
-                  right: 32.0,
-                  top: 20.0,
-                ),
-                color: const Color(0x00000000),
-                child: FlipCard(
-                  speed: 1000,
-                  onFlip: () {
-                    if (!didFlip.value) {
-                      ref.read(gameStatePodProvider.notifier).updatePlayers();
-                      didFlip.value = true;
-                    } else {
-                      ref.read(gameStatePodProvider.notifier).removeCard();
-                    }
-                  },
-                  onFlipDone: (status) {},
-                  front: Container(
-                    height: 200,
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                      // color: darkGreen,
-                      borderRadius:
-                          const BorderRadius.all(Radius.circular(12.0)),
-                      border: Border.all(color: Colors.grey),
-                    ),
-                    child: Stack(
-                      children: [
-                        Positioned.fill(
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(12.0),
-                            child: Image.asset(
-                              'assets/eventCard.webp',
-                              fit: BoxFit.cover,
-                            ),
-                          ),
-                        ),
-                        // const Column(
-                        //   mainAxisAlignment: MainAxisAlignment.center,
-                        //   children: <Widget>[
-                        //     Icon(
-                        //       Icons.question_mark,
-                        //       size: 60,
-                        //       color: Colors.yellow,
-                        //       shadows: [
-                        //         Shadow(
-                        //           blurRadius: 20,
-                        //           color: Colors.black,
-                        //         ),
-                        //       ],
-                        //     ),
-                        //   ],
-                        // ),
-                      ],
-                    ),
-                  ),
-                  back: Container(
-                    // padding: const EdgeInsets.all(16),
-                    height: 200,
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                      // color: primaryGreen,
-                      borderRadius:
-                          const BorderRadius.all(Radius.circular(12.0)),
-                      border: Border.all(color: Colors.grey),
-                    ),
-                    child: Stack(
-                      children: [
-                        Positioned.fill(
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(12.0),
-                            child: Image.asset(
-                              'assets/eventCardB.webp',
-                              fit: BoxFit.cover,
-                            ),
-                          ),
-                        ),
-                        ClipRRect(
-                          borderRadius: BorderRadius.circular(12.0),
-                          child: Container(
-                            padding: const EdgeInsets.all(32),
-                            color: Colors.white.withOpacity(0.6),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: <Widget>[
-                                Text(
-                                  eventCard.description,
-                                  style: eventCardTextStyle,
-                                ),
-                                if (eventCard.eventAction.amount != null)
-                                  Text(
-                                    '${eventCard.eventAction.amount!}st',
-                                    style: eventCardTextStyle,
-                                  ),
-                                if (eventCard.eventAction.amountValue != null)
-                                  Text(
-                                    '${eventCard.eventAction.amountValue!}kr',
-                                    style: eventCardTextStyle,
-                                  ),
-                                if (eventCard.eventAction.percentValue != null)
-                                  Text(
-                                    '${eventCard.eventAction.percentValue! * 100}%',
-                                    style: eventCardTextStyle,
-                                  ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-            ),
-            Expanded(
-              child: Container(),
-            ),
-          ],
+    return AspectRatio(
+      aspectRatio: 7/4,
+      child: Card(
+        elevation: 0.0,
+        margin: const EdgeInsets.only(
+          left: 32.0,
+          right: 32.0,
+          top: 20.0,
         ),
-      ],
+        color: const Color(0x00000000),
+        child: FlipCard(
+          speed: 1000,
+          onFlip: () {
+            if (!didFlip.value) {
+              ref.read(gameStatePodProvider.notifier).updatePlayers();
+              didFlip.value = true;
+            } else {
+              ref.read(gameStatePodProvider.notifier).removeCard();
+            }
+          },
+          onFlipDone: (status) {},
+          front: Container(
+            height: 200,
+            width: double.infinity,
+            decoration: BoxDecoration(
+              // color: darkGreen,
+              borderRadius:
+                  const BorderRadius.all(Radius.circular(12.0)),
+              border: Border.all(color: Colors.grey),
+            ),
+            child: Stack(
+              children: [
+                Positioned.fill(
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(12.0),
+                    child: Image.asset(
+                      'assets/eventCard.webp',
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                ),
+                // const Column(
+                //   mainAxisAlignment: MainAxisAlignment.center,
+                //   children: <Widget>[
+                //     Icon(
+                //       Icons.question_mark,
+                //       size: 60,
+                //       color: Colors.yellow,
+                //       shadows: [
+                //         Shadow(
+                //           blurRadius: 20,
+                //           color: Colors.black,
+                //         ),
+                //       ],
+                //     ),
+                //   ],
+                // ),
+              ],
+            ),
+          ),
+          back: Container(
+            // padding: const EdgeInsets.all(16),
+            height: 200,
+            width: double.infinity,
+            decoration: BoxDecoration(
+              // color: primaryGreen,
+              borderRadius:
+                  const BorderRadius.all(Radius.circular(12.0)),
+              border: Border.all(color: Colors.grey),
+            ),
+            child: Stack(
+              children: [
+                Positioned.fill(
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(12.0),
+                    child: Image.asset(
+                      'assets/eventCardB.webp',
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                ),
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(12.0),
+                  child: Container(
+                    padding: const EdgeInsets.all(32),
+                    color: Colors.white.withOpacity(0.6),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Text(
+                          eventCard.description,
+                          style: eventCardTextStyle,
+                        ),
+                        if (eventCard.eventAction.amount != null)
+                          Text(
+                            '${eventCard.eventAction.amount!}st',
+                            style: eventCardTextStyle,
+                          ),
+                        if (eventCard.eventAction.amountValue != null)
+                          Text(
+                            '${eventCard.eventAction.amountValue!}kr',
+                            style: eventCardTextStyle,
+                          ),
+                        if (eventCard.eventAction.percentValue != null)
+                          Text(
+                            '${eventCard.eventAction.percentValue! * 100}%',
+                            style: eventCardTextStyle,
+                          ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
     );
   }
 }
