@@ -14,24 +14,32 @@ namespace skandiahackstatehandler
         }
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            _logger.LogInformation("Starting message sender worker");
+            _logger.LogInformation("Starting event worker");
             while (!stoppingToken.IsCancellationRequested)
             {
                 if (State.EventQueue.TryDequeue(out var messageData))
                 {
-                    switch (messageData.action)
+                    try
                     {
-                        case "addPlayer":
-                            var newGameState = State.AddPlayerToGame(
-                                messageData.data.Deserialize<GameState.Player>()!
-                            );
-                            var newEvent = new OutEvent
-                            {
-                                action = "newGameState",
-                                data = newGameState,
-                            };
-                            State.OutgoingMessages.Enqueue(newEvent);
-                            break;
+
+                        switch (messageData.action)
+                        {
+                            case "addPlayer":
+                                var newGameState = State.AddPlayerToGame(
+                                    messageData.data.Deserialize<GameState.Player>()!
+                                );
+                                var newEvent = new OutEvent
+                                {
+                                    action = "newGameState",
+                                    data = newGameState,
+                                };
+                                State.OutgoingMessages.Enqueue(newEvent);
+                                break;
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        _logger.LogError(ex, "Failed to handle event of type: {eventType} with data: {data}", messageData.action, messageData.data);
                     }
                 }
                 else
@@ -39,7 +47,7 @@ namespace skandiahackstatehandler
                     await Task.Delay(100);
                 }
             }
-            _logger.LogInformation("Stopping message sender worker");
+            _logger.LogInformation("Stopping event worker");
 
         }
     }
