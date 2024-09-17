@@ -38,7 +38,7 @@ final currentEventCardProvider =
 );
 
 typedef _$CurrentEventCard = Notifier<EventCard?>;
-String _$gameStatePodHash() => r'04bbe35cfe19081a4a1c9c187ffc244fbc4126ee';
+String _$gameStatePodHash() => r'9f4c86990df7e24ee4d0a2193387e4957c4dec5e';
 
 /// See also [GameStatePod].
 @ProviderFor(GameStatePod)

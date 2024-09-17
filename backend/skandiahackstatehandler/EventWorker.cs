@@ -1,6 +1,7 @@
 ﻿
 using System.Text.Json;
 using skandiahackstatehandler.Data;
+using skandiahackstatehandler.Data.Events;
 
 namespace skandiahackstatehandler
 {
@@ -25,15 +26,13 @@ namespace skandiahackstatehandler
                         switch (messageData.action)
                         {
                             case "addPlayer":
-                                var newGameState = State.AddPlayerToGame(
+                                State.AddPlayerToGame(
                                     messageData.data.Deserialize<GameState.Player>()!
                                 );
-                                var newEvent = new OutEvent
-                                {
-                                    action = "newGameState",
-                                    data = newGameState,
-                                };
-                                State.OutgoingMessages.Enqueue(newEvent);
+                                break;
+                            case "updatePlayerName":
+                                var renamePlayerEvent = messageData.data.Deserialize<RenamePlayerEvent>()!;
+                                State.UpdatePlayerName(renamePlayerEvent.id, renamePlayerEvent.name);
                                 break;
                             default:
                                 _logger.LogWarning("Unhandled event type: {eventType}", messageData.action);

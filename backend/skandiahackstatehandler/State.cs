@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Concurrent;
+using System.Diagnostics;
 using System.Net.WebSockets;
 using System.Text;
 using System.Text.Json;
@@ -166,7 +167,7 @@ namespace skandiahackstatehandler
             throw new NotImplementedException();
         }
 
-        internal static object AddPlayerToGame(GameState.Player player)
+        internal static void AddPlayerToGame(GameState.Player player)
         {
             lock (_lock)
             {
@@ -174,7 +175,43 @@ namespace skandiahackstatehandler
                 {
                     players = [.. gameState.players, player],
                 };
-                return gameState;
+            }
+            BroadcastGameState();
+        }
+
+        internal static void UpdatePlayerName(String id, String name)
+        {
+            lock (_lock)
+            {
+
+                var newPlayerState = gameState.players.Select(player =>
+                {
+                    if(player.id == id){
+                        return player with {
+                            name = name,
+                        };
+                    }
+                    return player;
+                });
+
+                gameState = gameState with
+                {
+                    players = [.. newPlayerState],
+                };
+            }
+            BroadcastGameState();
+        }
+
+        private static void BroadcastGameState()
+        {
+            lock (_lock)
+            {
+                var newEvent = new OutEvent
+                {
+                    action = "newGameState",
+                    data = gameState,
+                };
+                State.OutgoingMessages.Enqueue(newEvent);
             }
         }
     }

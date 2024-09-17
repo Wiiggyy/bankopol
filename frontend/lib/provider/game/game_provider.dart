@@ -150,20 +150,8 @@ class GameStatePod extends _$GameStatePod {
   }
 
   Future<void> setPlayerName(String newName) async {
-    final gameState = (await future)!;
-    final currentPlayer = (await ref.read(currentPlayerProvider.future))!;
-
-    _repository.updateGameState(
-      gameState.copyWith(
-        players: {
-          for (final player in gameState.players)
-            if (player.id == currentPlayer.id)
-              player.copyWith(name: newName)
-            else
-              player,
-        },
-      ),
-    );
+    final currentPlayer = await ref.read(currentPlayerProvider.future);
+    return _repository.setPlayerName(currentPlayer!.id, newName);
   }
 
   void updatePlayers() {

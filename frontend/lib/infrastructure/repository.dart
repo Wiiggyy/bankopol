@@ -70,19 +70,33 @@ class Repository extends _$Repository {
     //     players: {player},
     //   );
     // }
-    await _channel.ready;
+    _sendEventToServer('addPlayer', player.toJson());
+    return player;
+  }
 
+  Future<void> setPlayerName(String playerId, String newName) async {
+    await _channel.ready;
+    _sendEventToServer('updatePlayerName', {
+      'id': playerId,
+      'name': newName,
+    });
+  }
+
+  Future<void> _sendEventToServer(
+    String action,
+    Map<String, dynamic> data,
+  ) async {
+    await _channel.ready;
     try {
       _channel.sink.add(
         jsonEncode({
-          'action': 'addPlayer',
-          'data': player.toJson(),
+          'action': action,
+          'data': data,
         }),
       );
     } catch (e) {
       debugPrint('Error: $e');
     }
-    return player;
   }
 
   Future<void> clearGame() async {
