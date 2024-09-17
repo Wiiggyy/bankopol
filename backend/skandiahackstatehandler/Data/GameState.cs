@@ -4,25 +4,15 @@ record GameState
 {
     public List<Player> players { get; init; } = new();
 
-    public record BankAccount
-    {
-        public double amount { get; init; }
-        public double interest { get; init; }
-    }
+    public record BankAccount(double amount, double interest);
 
-    public record Investment
-    {
-        public int investmentType { get; init; }
-        public double value { get; init; }
-        public int quantity { get; init; }
-        public double interest { get; init; }
-    }
+    public record Investment(
+        int investmentType, double value,
+        int quantity, double interest);
 
-    public record Player
+    public record Player(string id, string name)
     {
-        public string id { get; init; }
-        public string name { get; init; }
-        public BankAccount bankAccount { get; init; } = new();
+        public BankAccount bankAccount { get; init; } = new(0, 0);
         public List<Investment> investments { get; init; } = new();
         public List<int> scannedCodes { get; init; } = new();
     }
