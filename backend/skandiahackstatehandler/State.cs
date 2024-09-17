@@ -11,6 +11,7 @@ namespace skandiahackstatehandler
     {
         private static object _lock = new object();
         private static List<(WebSocket socket, TaskCompletionSource socketFinishedTcs)> playerData = new();
+        private static GameState gameState = new GameState();
         private static string? latestMessage = null;
         public static string? LatestMessage
         {
@@ -34,7 +35,7 @@ namespace skandiahackstatehandler
                 return playerData.Select(d => d.socket).ToList();
             }
         }
-        public static readonly ConcurrentQueue<(ArraySegment<byte> message, WebSocket? recipient)> OutgoingMessages = new();
+        public static readonly ConcurrentQueue<OutEvent> OutgoingMessages = new();
         public static readonly ConcurrentQueue<Event> EventQueue = new();
 
         public static void WipeData()
@@ -61,6 +62,24 @@ namespace skandiahackstatehandler
 
         internal static async Task AddPlayerAndPlay(WebSocket webSocket, TaskCompletionSource socketFinishedTcs)
         {
+            // Send GameState immediately to a new player
+            var message = UTF8Encoding.UTF8.GetBytes(
+                    System.Text.Json.JsonSerializer.Serialize(
+                        new OutEvent
+                            {
+                                action = "newGameState",
+                                data = gameState,
+                            }
+                    )
+                );
+
+            await webSocket.SendAsync(
+                                message,
+                                System.Net.WebSockets.WebSocketMessageType.Text,
+                                true,
+                                CancellationToken.None  //TODO: consider using stoppingToken here
+                                );
+
             lock (_lock)
             {
                 playerData.Add((webSocket, socketFinishedTcs));
@@ -115,63 +134,40 @@ namespace skandiahackstatehandler
 
         internal static void ApplyInterestAndInformClients()
         {
-            var data = LatestMessage;
-            if (data == null) return;
-            var gameState = System.Text.Json.JsonSerializer.Deserialize<GameState>(data);
-            if (gameState == null) return;
-            foreach (var player in gameState.players)
-            {
-                player.bankAccount.amount *= 1 + player.bankAccount.interest;
-                foreach (var investment in player.investments)
-                {
-                    investment.value *= 1 + investment.interest;
-                }
-            }
+            // var data = LatestMessage;
+            // if (data == null) return;
+            // var gameState = System.Text.Json.JsonSerializer.Deserialize<GameState>(data);
+            // if (gameState == null) return;
+            // foreach (var player in gameState.players)
+            // {
+            //     player.bankAccount.amount *= 1 + player.bankAccount.interest;
+            //     foreach (var investment in player.investments)
+            //     {
+            //         investment.value *= 1 + investment.interest;
+            //     }
+            // }
 
-            var stringifiedState = System.Text.Json.JsonSerializer.Serialize(gameState);
+            // var stringifiedState = System.Text.Json.JsonSerializer.Serialize(gameState);
+            // lock (_lock)
+            // {
+            //     latestMessage = stringifiedState;
+            // }
+            // var buffer = UTF8Encoding.UTF8.GetBytes(stringifiedState);
+
+            // var outMessage = new ArraySegment<byte>(buffer, 0, buffer.Length);
+
+            throw new NotImplementedException();
+        }
+
+        internal static object AddPlayerToGame(GameState.Player player)
+        {
             lock (_lock)
             {
-                latestMessage = stringifiedState;
-            }
-            var buffer = UTF8Encoding.UTF8.GetBytes(stringifiedState);
-
-            var outMessage = new ArraySegment<byte>(buffer, 0, buffer.Length);
-
-            SendToAllPlayers(null, outMessage);
-        }
-
-        private static void SendToAllPlayers(WebSocket? sender, ArraySegment<byte> message)
-        {
-            OutgoingMessages.Enqueue((message, null));
-
-        }
-
-
-        private class GameState
-        {
-            public List<Player> players { get; set; }
-
-            public class BankAccount
-            {
-                public double amount { get; set; }
-                public double interest { get; set; }
-            }
-
-            public class Investment
-            {
-                public int investmentType { get; set; }
-                public double value { get; set; }
-                public int quantity { get; set; }
-                public double interest { get; set; }
-            }
-
-            public class Player
-            {
-                public string id { get; set; }
-                public string name { get; set; }
-                public BankAccount bankAccount { get; set; }
-                public List<Investment> investments { get; set; }
-                public List<int> scannedCodes { get; set; }
+                gameState = gameState with
+                {
+                    players = [.. gameState.players, player],
+                };
+                return gameState;
             }
         }
     }

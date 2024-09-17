@@ -29,7 +29,7 @@ class CurrentPlayer extends _$CurrentPlayer {
 
       final gameState = await ref.read(gameStatePodProvider.future);
 
-      final currentPlayer = gameState?.players.firstWhereOrNull(
+      final currentPlayer = gameState.players.firstWhereOrNull(
         (player) => player.id == _playerId,
       );
 
@@ -70,6 +70,7 @@ class CurrentPlayer extends _$CurrentPlayer {
   }
 
   Future<void> setPlayerId(String id) {
+    _playerId = id;
     return _preferences.setString('id', id);
   }
 }
@@ -95,10 +96,8 @@ class GameStatePod extends _$GameStatePod {
   late Repository _repository;
 
   @override
-  Stream<GameState?> build() async* {
+  Stream<GameState> build() async* {
     _repository = ref.watch(repositoryProvider.notifier);
-    // TODO: REMOVE
-    yield null;
     yield* _repository.streamGameState();
   }
 

@@ -6,7 +6,7 @@ part of 'game_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$currentPlayerHash() => r'aa81c46754f75ae7f78ca0289743bd8c6f967fd3';
+String _$currentPlayerHash() => r'254e45a7cc4b1dc4b4289a73b669b0f486b6b81f';
 
 /// See also [CurrentPlayer].
 @ProviderFor(CurrentPlayer)
@@ -38,12 +38,12 @@ final currentEventCardProvider =
 );
 
 typedef _$CurrentEventCard = Notifier<EventCard?>;
-String _$gameStatePodHash() => r'95404b8ccf53273086ca04a06db6de039a38be26';
+String _$gameStatePodHash() => r'04bbe35cfe19081a4a1c9c187ffc244fbc4126ee';
 
 /// See also [GameStatePod].
 @ProviderFor(GameStatePod)
 final gameStatePodProvider =
-    StreamNotifierProvider<GameStatePod, GameState?>.internal(
+    StreamNotifierProvider<GameStatePod, GameState>.internal(
   GameStatePod.new,
   name: r'gameStatePodProvider',
   debugGetCreateSourceHash:
@@ -52,6 +52,6 @@ final gameStatePodProvider =
   allTransitiveDependencies: null,
 );
 
-typedef _$GameStatePod = StreamNotifier<GameState?>;
+typedef _$GameStatePod = StreamNotifier<GameState>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, inference_failure_on_uninitialized_variable, inference_failure_on_function_return_type, inference_failure_on_untyped_parameter, deprecated_member_use_from_same_package

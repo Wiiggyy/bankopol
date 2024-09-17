@@ -31,9 +31,14 @@ class Repository extends _$Repository {
       try {
         if (message is String) {
           final jsonData = jsonDecode(message);
-          final gameState =
-              GameState.fromJson(jsonData as Map<String, dynamic>);
-          yield gameState;
+
+          switch (jsonData) {
+            case {
+                'action': 'newGameState',
+                'data': final Map<String, dynamic> data
+              }:
+              yield GameState.fromJson(data);
+          }
         }
       } catch (e, stackTrace) {
         debugPrint(e.toString());

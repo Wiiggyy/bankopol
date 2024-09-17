@@ -1,4 +1,7 @@
 ﻿
+using System.Text;
+using System.Text.Unicode;
+
 namespace skandiahackstatehandler
 {
     public class MessageSenderWorker : BackgroundService
@@ -17,7 +20,9 @@ namespace skandiahackstatehandler
                 if (State.OutgoingMessages.TryDequeue(out var messageData))
                 {
                     var receivers = State.GetPlayerSnapshot();
-                    var message = messageData.message;
+                    var message = UTF8Encoding.UTF8.GetBytes(
+                        System.Text.Json.JsonSerializer.Serialize(messageData)
+                    );
                     var sendTasks = receivers
                         .Select(r =>
                         {
@@ -41,7 +46,7 @@ namespace skandiahackstatehandler
                 else
                 {
                     await Task.Delay(100);
-                }                
+                }
             }
             _logger.LogInformation("Stopping message sender worker");
 
