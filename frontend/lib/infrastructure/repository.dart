@@ -6,6 +6,7 @@ import 'package:bankopol/models/event.dart';
 import 'package:bankopol/models/game_state.dart';
 import 'package:bankopol/models/investment.dart';
 import 'package:bankopol/models/player.dart';
+import 'package:bankopol/provider/game/game_provider.dart';
 import 'package:flutter/foundation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
@@ -40,6 +41,8 @@ class Repository extends _$Repository {
   Future<void> _connectToServer() async {
     debugPrint('Getting stream');
     await _channel.ready;
+
+    _sendEventToServer('join', ref.read(playerIdProvider));
 
     await for (final message in _channel.stream) {
       debugPrint('Received message');
@@ -89,31 +92,36 @@ class Repository extends _$Repository {
     }
   }
 
-  Future<Player> joinGame(Player player) async {
+  Player joinGame(Player player) {
     _sendEventToServer('addPlayer', player.toJson());
     return player;
   }
 
-  Future<void> setPlayerName(String playerId, String newName) async {
-    await _channel.ready;
+  void setPlayerName(String newName) {
     _sendEventToServer('updatePlayerName', {
-      'id': playerId,
       'name': newName,
     });
   }
 
-  Future<void> fetchInvestment(InvestmentType investmentType) async {
-    await _channel.ready;
+  void fetchInvestment(InvestmentType investmentType) {
     _sendEventToServer(
       'fetchInvestment',
       investmentType.index,
     );
   }
 
+  void generateEventCard() {
+    _sendEventToServer('generateEventCard');
+  }
+
+  void buyInvestment(Investment newInvestment) {
+    _sendEventToServer('buyInvestment', newInvestment.toJson());
+  }
+
   Future<void> _sendEventToServer(
-    String action,
-    Object data,
-  ) async {
+    String action, [
+    Object? data,
+  ]) async {
     await _channel.ready;
     try {
       _channel.sink.add(
@@ -130,6 +138,6 @@ class Repository extends _$Repository {
   Future<void> clearGame() async {
     await _channel.ready;
 
-    _channel.sink.add(jsonEncode(const GameState(players: {}).toJson()));
+    _sendEventToServer('clearGame');
   }
 }

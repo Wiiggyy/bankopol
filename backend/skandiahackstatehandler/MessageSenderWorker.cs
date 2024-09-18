@@ -1,6 +1,7 @@
 ﻿
 using System.Text;
 using System.Text.Unicode;
+using skandiahackstatehandler.Data;
 
 namespace skandiahackstatehandler
 {
@@ -23,8 +24,13 @@ namespace skandiahackstatehandler
                     ? messageData.recipients
                     : State.GetPlayerSnapshot();
 
+                    var data = messageData.eventData;
+
+                    if(data is InternalGameState) {
+                    }
+
                     var message = UTF8Encoding.UTF8.GetBytes(
-                        System.Text.Json.JsonSerializer.Serialize(messageData.eventData)
+                        System.Text.Json.JsonSerializer.Serialize(data)
                     );
                     var sendTasks = receivers
                         .Select(r =>

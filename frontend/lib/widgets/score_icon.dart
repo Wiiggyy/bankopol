@@ -75,7 +75,10 @@ class _LeaderIconState extends ConsumerState<LeaderIcon>
 
   @override
   Widget build(BuildContext context) {
-    final currentPlayer = ref.watch(currentPlayerProvider).requireValue!;
+    final player = ref.watch(
+      gameStatePodProvider.select((e) => e.requireValue.player),
+    );
+    
     return AnimatedBuilder(
       animation: _controller,
       builder: (context, child) {
@@ -105,7 +108,7 @@ class _LeaderIconState extends ConsumerState<LeaderIcon>
                     color: color,
                   ),
                   Text(
-                    currentPlayer.totalAssetsValue.toStringAsFixed(0),
+                    player.totalAssetsValue.toStringAsFixed(0),
                     style: const TextStyle(
                       fontWeight: FontWeight.bold,
                     ),

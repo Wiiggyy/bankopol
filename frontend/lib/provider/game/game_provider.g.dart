@@ -6,22 +6,20 @@ part of 'game_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$currentPlayerHash() => r'b163e94491d4610b27960121fb6ae0a6b69e7c93';
+String _$playerIdHash() => r'bf3780c8017aef164f955c5c8ec2649a3d9892f8';
 
-/// See also [CurrentPlayer].
-@ProviderFor(CurrentPlayer)
-final currentPlayerProvider =
-    AsyncNotifierProvider<CurrentPlayer, Player?>.internal(
-  CurrentPlayer.new,
-  name: r'currentPlayerProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$currentPlayerHash,
+/// See also [playerId].
+@ProviderFor(playerId)
+final playerIdProvider = AutoDisposeFutureProvider<String>.internal(
+  playerId,
+  name: r'playerIdProvider',
+  debugGetCreateSourceHash:
+      const bool.fromEnvironment('dart.vm.product') ? null : _$playerIdHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );
 
-typedef _$CurrentPlayer = AsyncNotifier<Player?>;
+typedef PlayerIdRef = AutoDisposeFutureProviderRef<String>;
 String _$currentEventCardHash() => r'492351e4308a9fee25530b916526a04f39631f7a';
 
 /// See also [CurrentEventCard].
@@ -38,7 +36,7 @@ final currentEventCardProvider =
 );
 
 typedef _$CurrentEventCard = Notifier<EventCard?>;
-String _$gameStatePodHash() => r'7fbfc9241a65e2b4158975e53d273dc6b7659f8c';
+String _$gameStatePodHash() => r'a9b09692a551809898b579bc072415713fb7de7e';
 
 /// See also [GameStatePod].
 @ProviderFor(GameStatePod)

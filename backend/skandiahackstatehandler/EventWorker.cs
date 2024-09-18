@@ -42,6 +42,13 @@ namespace skandiahackstatehandler
                                 var investmentType = eventData.data.Deserialize<InvestmentType>();
                                 State.FetchInvestment(messageData.sender, investmentType);
                                 break;
+                            case "buyInvestment":
+                                var investment = eventData.data.Deserialize<GameState.Investment>();
+                                State.BuyInvestment(messageData.sender, investment);
+                                break;
+                            case "generateEventCard":
+                                State.GenerateEventCard(messageData.sender);
+                                break;
                             default:
                                 _logger.LogWarning("Unhandled event type: {eventType}", eventData.action);
                                 break;

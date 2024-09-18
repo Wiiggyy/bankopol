@@ -21,9 +21,11 @@ class BuyInvestmentBottomSheet extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final currentPlayer = ref.watch(currentPlayerProvider).requireValue!;
+    final player = ref.watch(
+      gameStatePodProvider.select((e) => e.requireValue.player),
+    );
 
-    final canBuy = (currentPlayer.bankAccount.amount) >= investment.value;
+    final canBuy = (player.bankAccount.amount) >= investment.value;
     return ClipRRect(
       borderRadius: const BorderRadius.only(
         topLeft: Radius.circular(16.0),

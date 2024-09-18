@@ -1,79 +1,24 @@
-import 'dart:math';
-
-import 'package:bankopol/constants/event_cards.dart';
 import 'package:bankopol/enums/investment_type.dart';
 import 'package:bankopol/infrastructure/repository.dart';
-import 'package:bankopol/models/bank_account.dart';
 import 'package:bankopol/models/event_card.dart';
 import 'package:bankopol/models/game_state.dart';
 import 'package:bankopol/models/investment.dart';
-import 'package:bankopol/models/player.dart';
-import 'package:collection/collection.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uuid/uuid.dart';
 
 part 'game_provider.g.dart';
 
-@Riverpod(keepAlive: true)
-class CurrentPlayer extends _$CurrentPlayer {
-  late SharedPreferences _preferences;
-  late String? _playerId;
+@riverpod
+Future<String> playerId(PlayerIdRef ref) async {
+  final prefs = await SharedPreferences.getInstance();
 
-  @override
-  Future<Player?> build() async {
-    try {
-      _preferences = await SharedPreferences.getInstance();
-      _playerId = _preferences.getString('id');
+  var id = prefs.getString('id');
+  if (id != null) return id;
 
-      final gameState = await ref.read(gameStatePodProvider.future);
-
-      final currentPlayer = gameState.players.firstWhereOrNull(
-        (player) => player.id == _playerId,
-      );
-
-      if (currentPlayer == null) {
-        await _preferences.remove('id');
-      }
-
-      listenGameState();
-
-      return currentPlayer;
-    } catch (e, stackTrace) {
-      debugPrint(e.toString());
-      debugPrintStack(stackTrace: stackTrace);
-      return null;
-    }
-  }
-
-  void listenGameState() {
-    ref.listen(
-      gameStatePodProvider,
-      (_, newState) {
-        switch (newState) {
-          case AsyncData(value: final gameState):
-            final currentPlayer = gameState.players.firstWhereOrNull(
-              (player) => player.id == _playerId,
-            );
-
-            if (currentPlayer == null) {
-              _preferences.remove('id');
-              state = const AsyncData(null);
-            } else {
-              state = AsyncData(currentPlayer);
-            }
-          case _:
-            state = const AsyncData(null);
-        }
-      },
-    );
-  }
-
-  Future<void> setPlayerId(String id) {
-    _playerId = id;
-    return _preferences.setString('id', id);
-  }
+  id = const Uuid().v4();
+  prefs.setString('id', id);
+  return id;
 }
 
 @Riverpod(keepAlive: true)
@@ -102,48 +47,28 @@ class GameStatePod extends _$GameStatePod {
     yield* _repository.streamGameState();
   }
 
-  Future<void> joinGame(String name) async {
-    if (name.isEmpty) {
-      // ignore: parameter_assignments
-      name =
-          'Player ${DateTime.now().millisecondsSinceEpoch.toRadixString(36)}';
-    }
-    final player = Player(
-      id: const Uuid().v4(),
-      name: name,
-      bankAccount: const BankAccount(
-        amount: 2000,
-        interest: 0.025,
-      ),
-      investments: {},
-    );
-    await _repository.joinGame(player);
-
-    ref.read(currentPlayerProvider.notifier).setPlayerId(player.id);
-  }
+  // Future<void> joinGame(String name) async {
+  //   if (name.isEmpty) {
+  //     // ignore: parameter_assignments
+  //     name =
+  //         'Player ${DateTime.now().millisecondsSinceEpoch.toRadixString(36)}';
+  //   }
+  //   final player = Player(
+  //     id: const Uuid().v4(),
+  //     name: name,
+  //     bankAccount: const BankAccount(
+  //       amount: 2000,
+  //       interest: 0.025,
+  //     ),
+  //     investments: {},
+  //   );
+  //   await _repository.joinGame(player);
+  //
+  //   ref.read(currentPlayerProvider.notifier).setPlayerId(player.id);
+  // }
 
   void generateCard() {
-    final gameState = state.requireValue;
-    final investmentTypes = <InvestmentType>{
-      for (final Player player in gameState.players)
-        for (final Investment investment in player.investments)
-          investment.investmentType,
-    };
-
-    if (investmentTypes.isEmpty) return;
-    final randomIndex = Random().nextInt(investmentTypes.length);
-
-    final randomCardIndex = Random().nextInt(2);
-
-    final eventCard = eventCards
-        .where(
-          (eventCard) =>
-              eventCard.eventAction.investmentType ==
-              investmentTypes.elementAt(randomIndex),
-        )
-        .elementAt(randomCardIndex);
-
-    ref.read(currentEventCardProvider.notifier).eventCard = eventCard;
+    _repository.generateEventCard();
   }
 
   void removeCard() {
@@ -151,8 +76,7 @@ class GameStatePod extends _$GameStatePod {
   }
 
   Future<void> setPlayerName(String newName) async {
-    final currentPlayer = await ref.read(currentPlayerProvider.future);
-    return _repository.setPlayerName(currentPlayer!.id, newName);
+    return _repository.setPlayerName(newName);
   }
 
   void updatePlayers() {
@@ -218,84 +142,46 @@ class GameStatePod extends _$GameStatePod {
     );
   }
 
-  Future<void> fetchInvestment(InvestmentType type) {
+  void fetchInvestment(InvestmentType type) {
     return _repository.fetchInvestment(type);
   }
 
-  Future<void> buyInvestment(Investment newInvestment) async {
-    final gameState = state.requireValue;
-
-    final currentPlayer = ref.read(currentPlayerProvider).requireValue!;
-
-    final investment = currentPlayer.investments
-        .where(
-          (playerInvestment) =>
-              playerInvestment.investmentType == newInvestment.investmentType,
-        )
-        .toList();
-
-    if (investment.isNotEmpty) {
-      final nextInvestment = investment.first.copyWith(
-        quantity: investment.first.quantity + newInvestment.quantity,
-        value: investment.first.value + newInvestment.value,
-      );
-      currentPlayer.investments.removeWhere(
-        (playerInvestment) =>
-            playerInvestment.investmentType == newInvestment.investmentType,
-      );
-      currentPlayer.investments.add(nextInvestment);
-    } else {
-      currentPlayer.investments.add(newInvestment);
-    }
-
-    final newBankAccount = currentPlayer.bankAccount.copyWith(
-      amount: currentPlayer.bankAccount.amount - newInvestment.value,
-    );
-
-    final updatedPlayer = currentPlayer.copyWith(
-      bankAccount: newBankAccount,
-    );
-
-    final nextGameState = gameState.copyWith(
-      players: {...gameState.players}
-        ..removeWhere((player) => player.id == currentPlayer.id)
-        ..add(updatedPlayer),
-    );
-    await _repository.updateGameState(nextGameState);
+  void buyInvestment(Investment newInvestment) {
+    _repository.buyInvestment(newInvestment);
   }
 
   Future<void> sellInvestment(Investment sellInvestment) async {
-    final currentPlayer = ref.read(currentPlayerProvider).requireValue!;
-
-    final investment = currentPlayer.investments.firstWhereOrNull(
-      (playerInvestment) =>
-          playerInvestment.investmentType == sellInvestment.investmentType,
-    );
-
-    if (investment == null) return;
-
-    final newBankAccount = currentPlayer.bankAccount.copyWith(
-      amount: currentPlayer.bankAccount.amount + sellInvestment.value,
-    );
-
-    final updatedPlayer = currentPlayer.copyWith(
-      bankAccount: newBankAccount,
-      investments: currentPlayer.investments
-          .where(
-            (playerInvestment) =>
-                playerInvestment.investmentType !=
-                sellInvestment.investmentType,
-          )
-          .toSet(),
-    );
-
-    final gameState = state.requireValue;
-
-    final nextGameState = gameState.copyWith(
-      players: {...gameState.players}
-        ..removeWhere((player) => player.id == currentPlayer.id)
-        ..add(updatedPlayer),
-    );
-    await _repository.updateGameState(nextGameState);
+    // final currentPlayer = ref.read(currentPlayerProvider).requireValue!;
+    //
+    // final investment = currentPlayer.investments.firstWhereOrNull(
+    //   (playerInvestment) =>
+    //       playerInvestment.investmentType == sellInvestment.investmentType,
+    // );
+    //
+    // if (investment == null) return;
+    //
+    // final newBankAccount = currentPlayer.bankAccount.copyWith(
+    //   amount: currentPlayer.bankAccount.amount + sellInvestment.value,
+    // );
+    //
+    // final updatedPlayer = currentPlayer.copyWith(
+    //   bankAccount: newBankAccount,
+    //   investments: currentPlayer.investments
+    //       .where(
+    //         (playerInvestment) =>
+    //             playerInvestment.investmentType !=
+    //             sellInvestment.investmentType,
+    //       )
+    //       .toSet(),
+    // );
+    //
+    // final gameState = state.requireValue;
+    //
+    // final nextGameState = gameState.copyWith(
+    //   players: {...gameState.players}
+    //     ..removeWhere((player) => player.id == currentPlayer.id)
+    //     ..add(updatedPlayer),
+    // );
+    // await _repository.updateGameState(nextGameState);
   }
 }

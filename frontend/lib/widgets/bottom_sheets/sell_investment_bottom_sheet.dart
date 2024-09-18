@@ -8,7 +8,9 @@ class SellInvestmentBottomSheet extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final currentPlayer = ref.watch(currentPlayerProvider).requireValue!;
+    final player = ref.watch(
+      gameStatePodProvider.select((e) => e.requireValue.player),
+    );
 
     return SizedBox(
       height: 500,
@@ -35,7 +37,7 @@ class SellInvestmentBottomSheet extends ConsumerWidget {
               Expanded(
                 child: ListView(
                   children: [
-                    for (final investment in currentPlayer.investments)
+                    for (final investment in player.investments)
                       Container(
                         margin: const EdgeInsets.only(bottom: 4),
                         child: Dismissible(

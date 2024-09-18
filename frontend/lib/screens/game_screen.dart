@@ -2,7 +2,6 @@ import 'dart:ui';
 
 import 'package:bankopol/enums/investment_type.dart';
 import 'package:bankopol/models/event.dart';
-import 'package:bankopol/models/investment.dart';
 import 'package:bankopol/provider/game/event_provider.dart';
 import 'package:bankopol/provider/game/game_provider.dart';
 import 'package:bankopol/screens/change_player_name_dialog.dart';
@@ -15,14 +14,14 @@ import 'package:bankopol/widgets/score_icon.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class PlayerScreen extends StatefulHookConsumerWidget {
-  const PlayerScreen({super.key});
+class GameScreen extends StatefulHookConsumerWidget {
+  const GameScreen({super.key});
 
   @override
-  ConsumerState<PlayerScreen> createState() => _PlayerScreenState();
+  ConsumerState<GameScreen> createState() => _PlayerScreenState();
 }
 
-class _PlayerScreenState extends ConsumerState<PlayerScreen> {
+class _PlayerScreenState extends ConsumerState<GameScreen> {
   // bool shouldDrawCard = false;
 
   void showSellInvestmentList() {
@@ -66,11 +65,14 @@ class _PlayerScreenState extends ConsumerState<PlayerScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final player = ref.watch(currentPlayerProvider).requireValue!;
     final currentEventCard = ref.watch(currentEventCardProvider);
     ref.listen(
       EventProvider<InvestmentOpportunityEvent>(),
       (_, event) => showInvestmentDialog(event.requireValue),
+    );
+
+    final player = ref.watch(
+      gameStatePodProvider.select((e) => e.requireValue.player),
     );
 
     return Scaffold(

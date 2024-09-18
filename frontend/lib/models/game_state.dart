@@ -1,9 +1,11 @@
 import 'package:bankopol/models/player.dart';
 
 class GameState {
+  final Player player;
   final Set<Player> players;
 
   const GameState({
+    required this.player,
     required this.players,
   });
 
@@ -13,9 +15,9 @@ class GameState {
         .map(Player.fromJson)
         .toSet();
 
-    return GameState(
-      players: players,
-    );
+    final playerJson = json['player'] as Map<String, dynamic>;
+
+    return GameState(players: players, player: Player.fromJson(playerJson));
   }
 
   GameState copyWith({
@@ -23,6 +25,7 @@ class GameState {
   }) {
     return GameState(
       players: players ?? this.players,
+      player: player,
     );
   }
 

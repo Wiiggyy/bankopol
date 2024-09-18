@@ -13,7 +13,7 @@ namespace skandiahackstatehandler
     {
         private static object _lock = new object();
         private static List<(WebSocket socket, TaskCompletionSource socketFinishedTcs)> playerData = new();
-        private static GameState gameState = new GameState();
+        private static InternalGameState gameState = new InternalGameState();
         private static string? latestMessage = null;
         public static string? LatestMessage
         {
@@ -243,6 +243,44 @@ namespace skandiahackstatehandler
                     investmentType: investmentType
                 );
             }
+        }
+
+        internal static void BuyInvestment(WebSocket sender, GameState.Investment investment)
+        {
+
+        }
+
+        internal static void GenerateEventCard(WebSocket sender)
+        {
+            /*
+            final gameState = state.requireValue;
+            final investmentTypes = <InvestmentType>{
+            for (final Player player in gameState.players)
+                for (final Investment investment in player.investments)
+                investment.investmentType,
+            };
+
+            if (investmentTypes.isEmpty) return;
+            final randomIndex = Random().nextInt(investmentTypes.length);
+
+            final randomCardIndex = Random().nextInt(2);
+
+            final eventCard = eventCards
+                .where(
+                (eventCard) =>
+                    eventCard.eventAction.investmentType ==
+                    investmentTypes.elementAt(randomIndex),
+                )
+                .elementAt(randomCardIndex);
+
+            ref.read(currentEventCardProvider.notifier).eventCard = eventCard;
+            */
+
+            var investmentTypes = gameState.players.SelectMany(player =>
+                    player.investments.Select(investment => investment.investmentType)
+            ).ToHashSet();
+
+            var temp = "";
         }
     }
 }
