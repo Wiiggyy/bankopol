@@ -87,16 +87,6 @@ class Repository extends _$Repository {
     return _gameStateController.stream;
   }
 
-  Future<void> updateGameState(GameState gameState) async {
-    await _channel.ready;
-
-    try {
-      _channel.sink.add(jsonEncode(gameState.toJson()));
-    } catch (e) {
-      debugPrint('Error: $e');
-    }
-  }
-
   void setPlayerName(String newName) {
     _sendEventToServer('updatePlayerName', newName);
   }

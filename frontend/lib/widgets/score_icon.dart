@@ -1,5 +1,6 @@
 import 'package:bankopol/models/game_state.dart';
 import 'package:bankopol/provider/game/game_provider.dart';
+import 'package:bankopol/widgets/investments/leader_board.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -19,13 +20,10 @@ class _LeaderIconState extends ConsumerState<LeaderIcon>
       context: context,
       useSafeArea: true,
       builder: (_) {
-        return const Placeholder();
-        // return const LeaderBoard();
+        return const LeaderBoard();
       },
     );
   }
-
-  List<double> _previousAssetsValues = [];
 
   @override
   void initState() {
