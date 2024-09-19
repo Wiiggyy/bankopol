@@ -7,23 +7,21 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class BuyInvestmentBottomSheet extends ConsumerWidget {
   final Investment investment;
-  final void Function() onPressed;
   final void Function() onPressedSell;
-  final void Function() onPressedClose;
 
   const BuyInvestmentBottomSheet({
     required this.investment,
-    required this.onPressed,
     required this.onPressedSell,
-    required this.onPressedClose,
     super.key,
   });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final currentPlayer = ref.watch(currentPlayerProvider).requireValue!;
+    final player = ref.watch(
+      gameStatePodProvider.select((e) => e.requireValue.player),
+    );
 
-    final canBuy = (currentPlayer.bankAccount.amount) >= investment.value;
+    final canBuy = (player.bankAccount.amount) >= investment.value;
     return ClipRRect(
       borderRadius: const BorderRadius.only(
         topLeft: Radius.circular(16.0),
@@ -45,7 +43,12 @@ class BuyInvestmentBottomSheet extends ConsumerWidget {
                     children: [
                       Expanded(
                         child: ActionButton(
-                          onPressed: onPressedClose,
+                          onPressed: () {
+                            ref
+                                .read(gameStatePodProvider.notifier)
+                                .generateCard();
+                            Navigator.pop(context);
+                          },
                           title: 'Köp inte',
                         ),
                       ),
@@ -57,7 +60,7 @@ class BuyInvestmentBottomSheet extends ConsumerWidget {
                               ref
                                   .read(gameStatePodProvider.notifier)
                                   .buyInvestment(investment);
-                              onPressed();
+                              Navigator.pop(context);
                             },
                             title: 'Köp',
                           ),

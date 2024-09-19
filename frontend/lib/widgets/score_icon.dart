@@ -25,8 +25,6 @@ class _LeaderIconState extends ConsumerState<LeaderIcon>
     );
   }
 
-  List<double> _previousAssetsValues = [];
-
   @override
   void initState() {
     super.initState();
@@ -37,11 +35,11 @@ class _LeaderIconState extends ConsumerState<LeaderIcon>
     ref.listenManual(
       gameStatePodProvider,
       (oldState, newState) {
-        _onGameStateChange(newState.requireValue!);
+        _onGameStateChange(newState.requireValue);
       },
     );
 
-    _initializePreviousValues(ref.read(gameStatePodProvider).requireValue!);
+    _initializePreviousValues(ref.read(gameStatePodProvider).requireValue);
   }
 
   @override
@@ -51,31 +49,34 @@ class _LeaderIconState extends ConsumerState<LeaderIcon>
   }
 
   void _initializePreviousValues(GameState gameState) {
-    _previousAssetsValues =
-        gameState.players.map((player) => player.totalAssetsValue).toList();
+    // _previousAssetsValues =
+    //     gameState.players.map((player) => player.totalAssetsValue).toList();
   }
 
   void _onGameStateChange(GameState gameState) {
-    final currentAssetsValues =
-        gameState.players.map((player) => player.totalAssetsValue).toList();
-
-    if (_previousAssetsValues.length != currentAssetsValues.length) {
-      _previousAssetsValues = currentAssetsValues;
-      return;
-    }
-
-    for (var i = 0; i < currentAssetsValues.length; i++) {
-      if (_previousAssetsValues[i] != currentAssetsValues[i]) {
-        _controller.forward(from: 0.0).then((_) => _controller.reverse());
-        _previousAssetsValues = currentAssetsValues;
-        return;
-      }
-    }
+    // final currentAssetsValues =
+    //     gameState.players.map((player) => player.totalAssetsValue).toList();
+    //
+    // if (_previousAssetsValues.length != currentAssetsValues.length) {
+    //   _previousAssetsValues = currentAssetsValues;
+    //   return;
+    // }
+    //
+    // for (var i = 0; i < currentAssetsValues.length; i++) {
+    //   if (_previousAssetsValues[i] != currentAssetsValues[i]) {
+    //     _controller.forward(from: 0.0).then((_) => _controller.reverse());
+    //     _previousAssetsValues = currentAssetsValues;
+    //     return;
+    //   }
+    // }
   }
 
   @override
   Widget build(BuildContext context) {
-    final currentPlayer = ref.watch(currentPlayerProvider).requireValue!;
+    final player = ref.watch(
+      gameStatePodProvider.select((e) => e.requireValue.player),
+    );
+
     return AnimatedBuilder(
       animation: _controller,
       builder: (context, child) {
@@ -105,7 +106,7 @@ class _LeaderIconState extends ConsumerState<LeaderIcon>
                     color: color,
                   ),
                   Text(
-                    currentPlayer.totalAssetsValue.toStringAsFixed(0),
+                    player.totalAssetsValue.toStringAsFixed(0),
                     style: const TextStyle(
                       fontWeight: FontWeight.bold,
                     ),

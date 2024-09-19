@@ -40,8 +40,9 @@ class _QrScannerState extends State<QrScanner> {
               return AlertDialog(
                 content: Material(
                   child: TextField(
+                    autofocus: true,
                     onSubmitted: (value) {
-                      Navigator.of(context).pop(value);
+                      Navigator.of(context).pop('event:$value');
                     },
                   ),
                 ),

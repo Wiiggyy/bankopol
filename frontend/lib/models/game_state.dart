@@ -1,34 +1,21 @@
 import 'package:bankopol/models/player.dart';
 
 class GameState {
-  final Set<Player> players;
+  final Player player;
+  final Map<String, num> highScore;
 
   const GameState({
-    required this.players,
+    required this.player,
+    required this.highScore,
   });
 
   factory GameState.fromJson(Map<String, dynamic> json) {
-    final players = (json['players'] as List<dynamic>)
-        .cast<Map<String, dynamic>>()
-        .map(Player.fromJson)
-        .toSet();
+    final playerJson = json['player'] as Map<String, dynamic>;
+    final highScore = json['highScore'] as Map<String, dynamic>;
 
     return GameState(
-      players: players,
+      player: Player.fromJson(playerJson),
+      highScore: highScore.cast(),
     );
-  }
-
-  GameState copyWith({
-    Set<Player>? players,
-  }) {
-    return GameState(
-      players: players ?? this.players,
-    );
-  }
-
-  Map<String, List<Map<String, dynamic>>> toJson() {
-    return {
-      'players': players.map((player) => player.toJson()).toList(),
-    };
   }
 }

@@ -14,6 +14,8 @@ namespace skandiahackstatehandler
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
             builder.Services.AddHostedService<MessageSenderWorker>();
+            builder.Services.AddHostedService<EventWorker>();
+            builder.Services.AddHostedService<TimedEventWorker>();
             builder.Services.AddCors(options =>
             {
                 options.AddPolicy(name: "all",

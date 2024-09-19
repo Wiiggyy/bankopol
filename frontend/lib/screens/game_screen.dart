@@ -1,6 +1,8 @@
 import 'dart:ui';
 
-import 'package:bankopol/models/investment.dart';
+import 'package:bankopol/enums/investment_type.dart';
+import 'package:bankopol/models/event.dart';
+import 'package:bankopol/provider/game/event_provider.dart';
 import 'package:bankopol/provider/game/game_provider.dart';
 import 'package:bankopol/screens/change_player_name_dialog.dart';
 import 'package:bankopol/widgets/bottom_sheets/buy_investment_bottom_sheet.dart';
@@ -12,14 +14,14 @@ import 'package:bankopol/widgets/score_icon.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class PlayerScreen extends StatefulHookConsumerWidget {
-  const PlayerScreen({super.key});
+class GameScreen extends StatefulHookConsumerWidget {
+  const GameScreen({super.key});
 
   @override
-  ConsumerState<PlayerScreen> createState() => _PlayerScreenState();
+  ConsumerState<GameScreen> createState() => _PlayerScreenState();
 }
 
-class _PlayerScreenState extends ConsumerState<PlayerScreen> {
+class _PlayerScreenState extends ConsumerState<GameScreen> {
   // bool shouldDrawCard = false;
 
   void showSellInvestmentList() {
@@ -33,8 +35,12 @@ class _PlayerScreenState extends ConsumerState<PlayerScreen> {
   Future<void> handleScan(String code) async {
     debugPrint('------------Scanned code: $code');
 
-    final investment = Investment.fromCode(code);
+    ref.read(gameStatePodProvider.notifier).fetchInvestment(
+          InvestmentType.fromCode(code),
+        );
+  }
 
+  Future<void> showInvestmentDialog(InvestmentOpportunityEvent event) async {
     await showModalBottomSheet(
       context: context,
       isDismissible: false,
@@ -42,16 +48,8 @@ class _PlayerScreenState extends ConsumerState<PlayerScreen> {
       backgroundColor: Colors.transparent,
       builder: (_) {
         return BuyInvestmentBottomSheet(
-          investment: investment,
-          onPressed: () {
-            ref.read(gameStatePodProvider.notifier).generateCard();
-            Navigator.of(context).pop();
-          },
+          investment: event.investment,
           onPressedSell: showSellInvestmentList,
-          onPressedClose: () {
-            ref.read(gameStatePodProvider.notifier).generateCard();
-            Navigator.of(context).pop();
-          },
         );
       },
     );
@@ -59,8 +57,15 @@ class _PlayerScreenState extends ConsumerState<PlayerScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final player = ref.watch(currentPlayerProvider).requireValue!;
     final currentEventCard = ref.watch(currentEventCardProvider);
+    ref.listen(
+      eventProvider<InvestmentOpportunityEvent>(),
+      (_, event) => showInvestmentDialog(event.requireValue),
+    );
+
+    final player = ref.watch(
+      gameStatePodProvider.select((e) => e.requireValue.player),
+    );
 
     return Scaffold(
       floatingActionButton:
