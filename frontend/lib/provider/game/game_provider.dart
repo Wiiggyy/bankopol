@@ -80,66 +80,66 @@ class GameStatePod extends _$GameStatePod {
   }
 
   void updatePlayers() {
-    final gameState = state.requireValue;
-
-    final currentEventCard = ref.read(currentEventCardProvider);
-    final investmentType = currentEventCard?.eventAction.investmentType;
-    final amount = currentEventCard?.eventAction.amount;
-    final amountValue = currentEventCard?.eventAction.amountValue;
-    final percentValue = 1 + (currentEventCard?.eventAction.percentValue ?? 0);
-
-    final playersWithInvestment = gameState.players
-        .where(
-          (player) => player.investments
-              .where(
-                (investment) => investment.investmentType == investmentType,
-              )
-              .toList()
-              .isNotEmpty,
-        )
-        .toList();
-
-    final updatedPlayersWithInvestments = playersWithInvestment.map((player) {
-      final investment = player.investments.firstWhere(
-        (investment) => investment.investmentType == investmentType,
-      );
-
-      final newQuantity = investment.quantity + (amount ?? 0);
-      final newAmount = amountValue != null
-          ? investment.value + amountValue
-          : investment.value * percentValue;
-      late Investment updatedInvestment;
-      if (newQuantity == 0 || newAmount <= 0) {
-        player.investments.remove(investment);
-      } else {
-        updatedInvestment = investment.copyWith(
-          quantity: newQuantity,
-          value: amountValue != null
-              ? investment.value + amountValue
-              : investment.value * percentValue,
-        );
-      }
-
-      return player.copyWith(
-        investments: player.investments
-            .map(
-              (investment) => investment.investmentType == investmentType
-                  ? updatedInvestment
-                  : investment,
-            )
-            .toSet(),
-      );
-    }).toSet();
-
-    _repository.updateGameState(
-      gameState.copyWith(
-        players: {
-          ...gameState.players
-            ..removeWhere(playersWithInvestment.contains)
-            ..addAll(updatedPlayersWithInvestments),
-        },
-      ),
-    );
+    // final gameState = state.requireValue;
+    //
+    // final currentEventCard = ref.read(currentEventCardProvider);
+    // final investmentType = currentEventCard?.eventAction.investmentType;
+    // final amount = currentEventCard?.eventAction.amount;
+    // final amountValue = currentEventCard?.eventAction.amountValue;
+    // final percentValue = 1 + (currentEventCard?.eventAction.percentValue ?? 0);
+    //
+    // final playersWithInvestment = gameState.players
+    //     .where(
+    //       (player) => player.investments
+    //           .where(
+    //             (investment) => investment.investmentType == investmentType,
+    //           )
+    //           .toList()
+    //           .isNotEmpty,
+    //     )
+    //     .toList();
+    //
+    // final updatedPlayersWithInvestments = playersWithInvestment.map((player) {
+    //   final investment = player.investments.firstWhere(
+    //     (investment) => investment.investmentType == investmentType,
+    //   );
+    //
+    //   final newQuantity = investment.quantity + (amount ?? 0);
+    //   final newAmount = amountValue != null
+    //       ? investment.value + amountValue
+    //       : investment.value * percentValue;
+    //   late Investment updatedInvestment;
+    //   if (newQuantity == 0 || newAmount <= 0) {
+    //     player.investments.remove(investment);
+    //   } else {
+    //     updatedInvestment = investment.copyWith(
+    //       quantity: newQuantity,
+    //       value: amountValue != null
+    //           ? investment.value + amountValue
+    //           : investment.value * percentValue,
+    //     );
+    //   }
+    //
+    //   return player.copyWith(
+    //     investments: player.investments
+    //         .map(
+    //           (investment) => investment.investmentType == investmentType
+    //               ? updatedInvestment
+    //               : investment,
+    //         )
+    //         .toSet(),
+    //   );
+    // }).toSet();
+    //
+    // _repository.updateGameState(
+    //   gameState.copyWith(
+    //     players: {
+    //       ...gameState.players
+    //         ..removeWhere(playersWithInvestment.contains)
+    //         ..addAll(updatedPlayersWithInvestments),
+    //     },
+    //   ),
+    // );
   }
 
   void fetchInvestment(InvestmentType type) {

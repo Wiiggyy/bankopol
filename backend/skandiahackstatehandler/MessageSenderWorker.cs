@@ -34,9 +34,11 @@ namespace skandiahackstatehandler
                             {
                                 try
                                 {
-                                    var data = (outEvent.data as InternalGameState)!.ForPlayer(State.PlayerIdForSocket(r));
+                                    var newOutEvent = outEvent with {
+                                        data = (outEvent.data as InternalGameState)!.ForPlayer(State.PlayerIdForSocket(r))
+                                    };
                                     var message = UTF8Encoding.UTF8.GetBytes(
-                                        System.Text.Json.JsonSerializer.Serialize(data)
+                                        System.Text.Json.JsonSerializer.Serialize(newOutEvent)
                                     );
                                     return r.SendAsync(
                                         message,

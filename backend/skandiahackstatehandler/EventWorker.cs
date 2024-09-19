@@ -35,8 +35,7 @@ namespace skandiahackstatehandler
                                 );
                                 break;
                             case "updatePlayerName":
-                                var renamePlayerEvent = eventData.data.Deserialize<RenamePlayerEvent>()!;
-                                State.UpdatePlayerName(renamePlayerEvent.id, renamePlayerEvent.name);
+                                State.UpdatePlayerName(messageData.sender, eventData.data.GetString()!);
                                 break;
                             case "fetchInvestment":
                                 // TODO: Deserialize name instead of index

@@ -72,24 +72,6 @@ namespace skandiahackstatehandler
         {
             try
             {
-                // Send GameState immediately to a new player
-                var message = UTF8Encoding.UTF8.GetBytes(
-                        System.Text.Json.JsonSerializer.Serialize(
-                            new OutEvent
-                            {
-                                action = "newGameState",
-                                data = gameState,
-                            }
-                        )
-                    );
-
-                await webSocket.SendAsync(
-                                    message,
-                                    System.Net.WebSockets.WebSocketMessageType.Text,
-                                    true,
-                                    CancellationToken.None  //TODO: consider using stoppingToken here
-                                    );
-
                 lock (_lock)
                 {
                     playerData.Add((webSocket, socketFinishedTcs));
@@ -187,15 +169,20 @@ namespace skandiahackstatehandler
             PlayerIdMapping.TryAdd(socket, playerId);
 
             if (!gameState.players.Exists((player) => player.id == playerId))
-            {
+            {                
+                var suffix = DateTime.UtcNow.Ticks % 100_000;
                 gameState = gameState with
                 {
-                    //TODO(Samuel): hitta på slumpning av namn
-                    players = [.. gameState.players, new GameState.Player(playerId, "random name") {
+                    //TODO(Samuel): hitta på _bättre_ slumpning av namn
+                    players = [.. gameState.players, new GameState.Player(
+                        id: playerId,
+                         name: "Player " + suffix
+                         ) {
                         bankAccount = new GameState.BankAccount(amount: 2000, interest: 0.025)
                      }],
                 };
             }
+            BroadcastGameState();
         }
 
         internal static void AddPlayerToGame(GameState.Player player)
@@ -210,10 +197,11 @@ namespace skandiahackstatehandler
             BroadcastGameState();
         }
 
-        internal static void UpdatePlayerName(String id, String name)
+        internal static void UpdatePlayerName(WebSocket socket, String name)
         {
             lock (_lock)
             {
+                var id = PlayerIdForSocket(socket);
                 var newPlayerState = gameState.players.Select(player =>
                 {
                     if (player.id == id)

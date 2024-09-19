@@ -1,6 +1,5 @@
 import 'package:bankopol/models/game_state.dart';
 import 'package:bankopol/provider/game/game_provider.dart';
-import 'package:bankopol/widgets/investments/leader_board.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -20,7 +19,8 @@ class _LeaderIconState extends ConsumerState<LeaderIcon>
       context: context,
       useSafeArea: true,
       builder: (_) {
-        return const LeaderBoard();
+        return const Placeholder();
+        // return const LeaderBoard();
       },
     );
   }
@@ -51,26 +51,26 @@ class _LeaderIconState extends ConsumerState<LeaderIcon>
   }
 
   void _initializePreviousValues(GameState gameState) {
-    _previousAssetsValues =
-        gameState.players.map((player) => player.totalAssetsValue).toList();
+    // _previousAssetsValues =
+    //     gameState.players.map((player) => player.totalAssetsValue).toList();
   }
 
   void _onGameStateChange(GameState gameState) {
-    final currentAssetsValues =
-        gameState.players.map((player) => player.totalAssetsValue).toList();
-
-    if (_previousAssetsValues.length != currentAssetsValues.length) {
-      _previousAssetsValues = currentAssetsValues;
-      return;
-    }
-
-    for (var i = 0; i < currentAssetsValues.length; i++) {
-      if (_previousAssetsValues[i] != currentAssetsValues[i]) {
-        _controller.forward(from: 0.0).then((_) => _controller.reverse());
-        _previousAssetsValues = currentAssetsValues;
-        return;
-      }
-    }
+    // final currentAssetsValues =
+    //     gameState.players.map((player) => player.totalAssetsValue).toList();
+    //
+    // if (_previousAssetsValues.length != currentAssetsValues.length) {
+    //   _previousAssetsValues = currentAssetsValues;
+    //   return;
+    // }
+    //
+    // for (var i = 0; i < currentAssetsValues.length; i++) {
+    //   if (_previousAssetsValues[i] != currentAssetsValues[i]) {
+    //     _controller.forward(from: 0.0).then((_) => _controller.reverse());
+    //     _previousAssetsValues = currentAssetsValues;
+    //     return;
+    //   }
+    // }
   }
 
   @override
@@ -78,7 +78,7 @@ class _LeaderIconState extends ConsumerState<LeaderIcon>
     final player = ref.watch(
       gameStatePodProvider.select((e) => e.requireValue.player),
     );
-    
+
     return AnimatedBuilder(
       animation: _controller,
       builder: (context, child) {

@@ -92,9 +92,7 @@ class Repository extends _$Repository {
   }
 
   void setPlayerName(String newName) {
-    _sendEventToServer('updatePlayerName', {
-      'name': newName,
-    });
+    _sendEventToServer('updatePlayerName', newName);
   }
 
   void fetchInvestment(InvestmentType investmentType) {
