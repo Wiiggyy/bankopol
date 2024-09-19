@@ -20,12 +20,12 @@ final playerIdProvider = AutoDisposeFutureProvider<String>.internal(
 );
 
 typedef PlayerIdRef = AutoDisposeFutureProviderRef<String>;
-String _$currentEventCardHash() => r'492351e4308a9fee25530b916526a04f39631f7a';
+String _$currentEventCardHash() => r'1f6b568ee7596e44915885efaf4c52d3ce379ad9';
 
 /// See also [CurrentEventCard].
 @ProviderFor(CurrentEventCard)
 final currentEventCardProvider =
-    NotifierProvider<CurrentEventCard, EventCard?>.internal(
+    AutoDisposeNotifierProvider<CurrentEventCard, EventCard?>.internal(
   CurrentEventCard.new,
   name: r'currentEventCardProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
@@ -35,8 +35,8 @@ final currentEventCardProvider =
   allTransitiveDependencies: null,
 );
 
-typedef _$CurrentEventCard = Notifier<EventCard?>;
-String _$gameStatePodHash() => r'a9b09692a551809898b579bc072415713fb7de7e';
+typedef _$CurrentEventCard = AutoDisposeNotifier<EventCard?>;
+String _$gameStatePodHash() => r'03c72d25b56c0ada27141b7f041810b496cb354b';
 
 /// See also [GameStatePod].
 @ProviderFor(GameStatePod)

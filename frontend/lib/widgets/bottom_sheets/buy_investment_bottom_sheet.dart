@@ -7,15 +7,11 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class BuyInvestmentBottomSheet extends ConsumerWidget {
   final Investment investment;
-  final void Function() onPressed;
   final void Function() onPressedSell;
-  final void Function() onPressedClose;
 
   const BuyInvestmentBottomSheet({
     required this.investment,
-    required this.onPressed,
     required this.onPressedSell,
-    required this.onPressedClose,
     super.key,
   });
 
@@ -47,7 +43,12 @@ class BuyInvestmentBottomSheet extends ConsumerWidget {
                     children: [
                       Expanded(
                         child: ActionButton(
-                          onPressed: onPressedClose,
+                          onPressed: () {
+                            ref
+                                .read(gameStatePodProvider.notifier)
+                                .generateCard();
+                            Navigator.pop(context);
+                          },
                           title: 'Köp inte',
                         ),
                       ),
@@ -59,7 +60,7 @@ class BuyInvestmentBottomSheet extends ConsumerWidget {
                               ref
                                   .read(gameStatePodProvider.notifier)
                                   .buyInvestment(investment);
-                              onPressed();
+                              Navigator.pop(context);
                             },
                             title: 'Köp',
                           ),

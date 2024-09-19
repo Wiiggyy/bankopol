@@ -9,8 +9,10 @@ record GameState
     public record BankAccount(double amount, double interest);
 
     public record Investment(
-        InvestmentType investmentType, double value,
-        int quantity, double interest
+        InvestmentType investmentType,
+        double value,
+        int quantity,
+        double interest
         );
 
     public record Player(string id, string name)

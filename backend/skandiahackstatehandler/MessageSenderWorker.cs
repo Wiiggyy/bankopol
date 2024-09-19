@@ -59,7 +59,7 @@ namespace skandiahackstatehandler
                     {
 
                         var message = UTF8Encoding.UTF8.GetBytes(
-                            System.Text.Json.JsonSerializer.Serialize(outEvent.data)
+                            System.Text.Json.JsonSerializer.Serialize(outEvent)
                         );
                         var sendTasks = receivers
                             .Select(r =>

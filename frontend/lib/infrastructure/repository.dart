@@ -3,6 +3,7 @@ import 'dart:convert';
 
 import 'package:bankopol/enums/investment_type.dart';
 import 'package:bankopol/models/event.dart';
+import 'package:bankopol/models/event_card.dart';
 import 'package:bankopol/models/game_state.dart';
 import 'package:bankopol/models/investment.dart';
 import 'package:bankopol/provider/game/game_provider.dart';
@@ -22,8 +23,8 @@ class Repository extends _$Repository {
 
   @override
   void build() {
-    _gameStateController = StreamController();
-    _eventController = StreamController();
+    _gameStateController = StreamController.broadcast();
+    _eventController = StreamController.broadcast();
 
     ref.onDispose(_gameStateController.close);
     ref.onDispose(_eventController.close);
@@ -44,7 +45,7 @@ class Repository extends _$Repository {
     _sendEventToServer('joinGame', await ref.read(playerIdProvider.future));
 
     await for (final message in _channel.stream) {
-      debugPrint('Received message');
+      debugPrint('Received message: $message');
       try {
         if (message is String) {
           final jsonData = jsonDecode(message);
@@ -62,6 +63,11 @@ class Repository extends _$Repository {
               _eventController.add(
                 InvestmentOpportunityEvent(Investment.fromJson(data)),
               );
+            case {
+                'action': 'eventCardDrawn',
+                'data': final Map<String, dynamic> data,
+              }:
+              _eventController.add(EventCardEvent(EventCard.fromJson(data)));
             case final _:
               debugPrint('No action set up for $message');
           }
@@ -110,11 +116,16 @@ class Repository extends _$Repository {
     _sendEventToServer('buyInvestment', newInvestment.toJson());
   }
 
+  void activateEventCard(EventCard eventCard) {
+    _sendEventToServer('activateEventCard', eventCard.toJson());
+  }
+
   Future<void> _sendEventToServer(
     String action, [
     Object? data,
   ]) async {
     await _channel.ready;
+    debugPrint('Sending message $action: $data');
     try {
       _channel.sink.add(
         jsonEncode({

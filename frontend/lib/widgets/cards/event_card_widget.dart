@@ -19,7 +19,7 @@ class EventCardWidget extends HookConsumerWidget {
     final didFlip = useState(false);
 
     return AspectRatio(
-      aspectRatio: 7/4,
+      aspectRatio: 7 / 4,
       child: Card(
         elevation: 0.0,
         margin: const EdgeInsets.only(
@@ -32,10 +32,10 @@ class EventCardWidget extends HookConsumerWidget {
           speed: 1000,
           onFlip: () {
             if (!didFlip.value) {
-              ref.read(gameStatePodProvider.notifier).updatePlayers();
+              ref.read(gameStatePodProvider.notifier).activateEventCard();
               didFlip.value = true;
             } else {
-              ref.read(gameStatePodProvider.notifier).removeCard();
+              ref.read(gameStatePodProvider.notifier).removeCardFromScreen();
             }
           },
           onFlipDone: (status) {},
@@ -44,8 +44,7 @@ class EventCardWidget extends HookConsumerWidget {
             width: double.infinity,
             decoration: BoxDecoration(
               // color: darkGreen,
-              borderRadius:
-                  const BorderRadius.all(Radius.circular(12.0)),
+              borderRadius: const BorderRadius.all(Radius.circular(12.0)),
               border: Border.all(color: Colors.grey),
             ),
             child: Stack(
@@ -84,8 +83,7 @@ class EventCardWidget extends HookConsumerWidget {
             width: double.infinity,
             decoration: BoxDecoration(
               // color: primaryGreen,
-              borderRadius:
-                  const BorderRadius.all(Radius.circular(12.0)),
+              borderRadius: const BorderRadius.all(Radius.circular(12.0)),
               border: Border.all(color: Colors.grey),
             ),
             child: Stack(

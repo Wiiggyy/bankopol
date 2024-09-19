@@ -49,15 +49,7 @@ class _PlayerScreenState extends ConsumerState<GameScreen> {
       builder: (_) {
         return BuyInvestmentBottomSheet(
           investment: event.investment,
-          onPressed: () {
-            ref.read(gameStatePodProvider.notifier).generateCard();
-            Navigator.of(context).pop();
-          },
           onPressedSell: showSellInvestmentList,
-          onPressedClose: () {
-            ref.read(gameStatePodProvider.notifier).generateCard();
-            Navigator.of(context).pop();
-          },
         );
       },
     );
@@ -67,7 +59,7 @@ class _PlayerScreenState extends ConsumerState<GameScreen> {
   Widget build(BuildContext context) {
     final currentEventCard = ref.watch(currentEventCardProvider);
     ref.listen(
-      EventProvider<InvestmentOpportunityEvent>(),
+      eventProvider<InvestmentOpportunityEvent>(),
       (_, event) => showInvestmentDialog(event.requireValue),
     );
 

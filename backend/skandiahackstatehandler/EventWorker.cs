@@ -47,7 +47,11 @@ namespace skandiahackstatehandler
                                 State.BuyInvestment(messageData.sender, investment);
                                 break;
                             case "generateEventCard":
-                                State.GenerateEventCard(messageData.sender);
+                                State.DrawEventCard(messageData.sender);
+                                break;
+                            case "activateEventCard":
+                                var eventCard = eventData.data.Deserialize<EventCard>()!;
+                                State.ActivateEventCard(messageData.sender, eventCard);
                                 break;
                             default:
                                 _logger.LogWarning("Unhandled event type: {eventType}", eventData.action);

@@ -169,7 +169,7 @@ namespace skandiahackstatehandler
             PlayerIdMapping.TryAdd(socket, playerId);
 
             if (!gameState.players.Exists((player) => player.id == playerId))
-            {                
+            {
                 var suffix = DateTime.UtcNow.Ticks % 100_000;
                 gameState = gameState with
                 {
@@ -265,40 +265,135 @@ namespace skandiahackstatehandler
 
         internal static void BuyInvestment(WebSocket sender, GameState.Investment investment)
         {
+            var id = PlayerIdForSocket(sender);
+            var newPlayerState = gameState.players.Select(player =>
+            {
+                if (player.id == id)
+                {
+                    return player with
+                    {
+                        bankAccount = player.bankAccount with
+                        {
+                            amount = investment.value
+                        },
+                        // TODO: Update already existing investment of the same type, adding the new values
+                        investments = [.. player.investments, investment],
+                    };
+                }
+                return player;
+            });
 
-        }
-
-        internal static void GenerateEventCard(WebSocket sender)
-        {
-            /*
-            final gameState = state.requireValue;
-            final investmentTypes = <InvestmentType>{
-            for (final Player player in gameState.players)
-                for (final Investment investment in player.investments)
-                investment.investmentType,
+            gameState = gameState with
+            {
+                players = [.. newPlayerState],
             };
 
-            if (investmentTypes.isEmpty) return;
-            final randomIndex = Random().nextInt(investmentTypes.length);
+            BroadcastGameState();
+            DrawEventCard(sender);
+        }
 
-            final randomCardIndex = Random().nextInt(2);
-
-            final eventCard = eventCards
-                .where(
-                (eventCard) =>
-                    eventCard.eventAction.investmentType ==
-                    investmentTypes.elementAt(randomIndex),
-                )
-                .elementAt(randomCardIndex);
-
-            ref.read(currentEventCardProvider.notifier).eventCard = eventCard;
-            */
-
+        internal static void DrawEventCard(WebSocket sender)
+        {
             var investmentTypes = gameState.players.SelectMany(player =>
                     player.investments.Select(investment => investment.investmentType)
-            ).ToHashSet();
+            ).ToHashSet().ToList();
 
-            var temp = "";
+            if (investmentTypes.Count == 0) return;
+
+            var randomIndex = System.Random.Shared.Next(investmentTypes.Count);
+            var randomType = investmentTypes[randomIndex];
+
+            var eventCardsForType = EventCards.events
+            .Where((e) => e.eventAction.investmentType == randomType)
+            .ToList();
+
+            var eventCard = eventCardsForType[Random.Shared.Next(eventCardsForType.Count)];
+
+            var newEvent = new OutEvent
+            {
+                action = "eventCardDrawn",
+                data = eventCard,
+            };
+            State.OutgoingMessages.Enqueue((newEvent, [sender]));
+        }
+
+        internal static void ActivateEventCard(WebSocket sender, EventCard eventCard)
+        {
+
+            // final gameState = state.requireValue;
+            //
+            // final currentEventCard = ref.read(currentEventCardProvider);
+            // final investmentType = currentEventCard?.eventAction.investmentType;
+            // final amount = currentEventCard?.eventAction.amount;
+            // final amountValue = currentEventCard?.eventAction.amountValue;
+            // final percentValue = 1 + (currentEventCard?.eventAction.percentValue ?? 0);
+            //
+            // final playersWithInvestment = gameState.players
+            //     .where(
+            //       (player) => player.investments
+            //           .where(
+            //             (investment) => investment.investmentType == investmentType,
+            //           )
+            //           .toList()
+            //           .isNotEmpty,
+            //     )
+            //     .toList();
+            //
+            // final updatedPlayersWithInvestments = playersWithInvestment.map((player) {
+            //   final investment = player.investments.firstWhere(
+            //     (investment) => investment.investmentType == investmentType,
+            //   );
+            //
+            //   final newQuantity = investment.quantity + (amount ?? 0);
+            //   final newAmount = amountValue != null
+            //       ? investment.value + amountValue
+            //       : investment.value * percentValue;
+            //   late Investment updatedInvestment;
+            //   if (newQuantity == 0 || newAmount <= 0) {
+            //     player.investments.remove(investment);
+            //   } else {
+            //     updatedInvestment = investment.copyWith(
+            //       quantity: newQuantity,
+            //       value: amountValue != null
+            //           ? investment.value + amountValue
+            //           : investment.value * percentValue,
+            //     );
+            //   }
+            //
+            //   return player.copyWith(
+            //     investments: player.investments
+            //         .map(
+            //           (investment) => investment.investmentType == investmentType
+            //               ? updatedInvestment
+            //               : investment,
+            //         )
+            //         .toSet(),
+            //   );
+            // }).toSet();
+            //
+            // _repository.updateGameState(
+            //   gameState.copyWith(
+            //     players: {
+            //       ...gameState.players
+            //         ..removeWhere(playersWithInvestment.contains)
+            //         ..addAll(updatedPlayersWithInvestments),
+            //     },
+            //   ),
+            // );
+
+            var amount = eventCard?.eventAction.amount ?? 0;
+            var amountValue = eventCard?.eventAction.amountValue ?? 0;
+            var percentValue = 1 + (eventCard?.eventAction.percentValue ?? 0);
+
+            gameState = gameState with
+            {
+                players = [..gameState.players.Select((player) => {
+                    // TODO: update player's investments with values from above
+                    return player;
+                })],
+            };
+
+            BroadcastGameState();
         }
     }
 }
