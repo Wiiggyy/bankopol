@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Concurrent;
+using System.Collections.Immutable;
 using System.Diagnostics;
 using System.Net.WebSockets;
 using System.Text;
@@ -270,14 +271,40 @@ namespace skandiahackstatehandler
             {
                 if (player.id == id)
                 {
+                    List<GameState.Investment> newInvestmentList = new List<GameState.Investment>(player.investments.Count + 1);
+
+                    var didExist = false;
+                    foreach (var ownedInvestment in player.investments)
+                    {
+                        if (ownedInvestment.investmentType == investment.investmentType)
+                        {
+                            newInvestmentList.Add(ownedInvestment with
+                            {
+                                quantity = ownedInvestment.quantity + investment.quantity,
+                                value = ownedInvestment.value + investment.quantity,
+                                interest = (ownedInvestment.interest * ownedInvestment.quantity
+                                + investment.interest * investment.quantity)
+                                / (ownedInvestment.quantity + investment.quantity)
+                            });
+                            didExist = true;
+                        }
+                        else
+                        {
+                            newInvestmentList.Add(ownedInvestment);
+                        }
+                    }
+                    if (!didExist)
+                    {
+                        newInvestmentList.Add(investment);
+                    }
+
                     return player with
                     {
                         bankAccount = player.bankAccount with
                         {
-                            amount = investment.value
+                            amount = player.bankAccount.amount - investment.value
                         },
-                        // TODO: Update already existing investment of the same type, adding the new values
-                        investments = [.. player.investments, investment],
+                        investments = newInvestmentList.ToImmutableList(),
                     };
                 }
                 return player;
@@ -319,77 +346,40 @@ namespace skandiahackstatehandler
 
         internal static void ActivateEventCard(WebSocket sender, EventCard eventCard)
         {
-
-            // final gameState = state.requireValue;
-            //
-            // final currentEventCard = ref.read(currentEventCardProvider);
-            // final investmentType = currentEventCard?.eventAction.investmentType;
-            // final amount = currentEventCard?.eventAction.amount;
-            // final amountValue = currentEventCard?.eventAction.amountValue;
-            // final percentValue = 1 + (currentEventCard?.eventAction.percentValue ?? 0);
-            //
-            // final playersWithInvestment = gameState.players
-            //     .where(
-            //       (player) => player.investments
-            //           .where(
-            //             (investment) => investment.investmentType == investmentType,
-            //           )
-            //           .toList()
-            //           .isNotEmpty,
-            //     )
-            //     .toList();
-            //
-            // final updatedPlayersWithInvestments = playersWithInvestment.map((player) {
-            //   final investment = player.investments.firstWhere(
-            //     (investment) => investment.investmentType == investmentType,
-            //   );
-            //
-            //   final newQuantity = investment.quantity + (amount ?? 0);
-            //   final newAmount = amountValue != null
-            //       ? investment.value + amountValue
-            //       : investment.value * percentValue;
-            //   late Investment updatedInvestment;
-            //   if (newQuantity == 0 || newAmount <= 0) {
-            //     player.investments.remove(investment);
-            //   } else {
-            //     updatedInvestment = investment.copyWith(
-            //       quantity: newQuantity,
-            //       value: amountValue != null
-            //           ? investment.value + amountValue
-            //           : investment.value * percentValue,
-            //     );
-            //   }
-            //
-            //   return player.copyWith(
-            //     investments: player.investments
-            //         .map(
-            //           (investment) => investment.investmentType == investmentType
-            //               ? updatedInvestment
-            //               : investment,
-            //         )
-            //         .toSet(),
-            //   );
-            // }).toSet();
-            //
-            // _repository.updateGameState(
-            //   gameState.copyWith(
-            //     players: {
-            //       ...gameState.players
-            //         ..removeWhere(playersWithInvestment.contains)
-            //         ..addAll(updatedPlayersWithInvestments),
-            //     },
-            //   ),
-            // );
-
-            var amount = eventCard?.eventAction.amount ?? 0;
-            var amountValue = eventCard?.eventAction.amountValue ?? 0;
-            var percentValue = 1 + (eventCard?.eventAction.percentValue ?? 0);
+            var amount = eventCard.eventAction.amount ?? 0;
+            var amountValue = eventCard.eventAction.amountValue ?? 0;
+            var percentValue = 1 + (eventCard.eventAction.percentValue ?? 0);
 
             gameState = gameState with
             {
                 players = [..gameState.players.Select((player) => {
-                    // TODO: update player's investments with values from above
-                    return player;
+
+                    List<GameState.Investment> newInvestmentList = new List<GameState.Investment>(player.investments.Count);
+
+                    foreach (var investment in player.investments)
+                    {
+                        if (investment.investmentType == eventCard.eventAction.investmentType)
+                        {
+                            var newQuantity = investment.quantity + amount;
+                            var newValue = investment.value * percentValue + amountValue;
+                            if(newQuantity != 0 && newValue != 0){
+                            newInvestmentList.Add(investment with
+                            {
+                                quantity = newQuantity,
+                                value = newValue,
+                            });
+                            }
+                        }
+                        else
+                        {
+                            newInvestmentList.Add(investment);
+                        }
+                    }
+
+                    return player with
+                    {
+                        investments = newInvestmentList.ToImmutableList(),
+                    };
                 })],
             };
 

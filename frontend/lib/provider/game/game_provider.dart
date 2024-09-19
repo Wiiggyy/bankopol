@@ -64,7 +64,7 @@ class GameStatePod extends _$GameStatePod {
   }
 
   void activateEventCard() {
-    final eventCard = ref.read(currentEventCardProvider.notifier).removeCard();
+    final eventCard = ref.read(currentEventCardProvider);
     if (eventCard == null) return;
 
     _repository.activateEventCard(eventCard);

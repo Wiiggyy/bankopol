@@ -1,4 +1,5 @@
 
+using System.Collections.Immutable;
 using skandiahackstatehandler.Data.Enums;
 
 namespace skandiahackstatehandler.Data;
@@ -18,14 +19,14 @@ record GameState
     public record Player(string id, string name)
     {
         required public BankAccount bankAccount { get; init; } = new(0, 0);
-        public List<Investment> investments { get; init; } = [];
-        public List<int> scannedCodes { get; init; } = [];
+        public ImmutableList<Investment> investments { get; init; } = [];
+        public ImmutableList<int> scannedCodes { get; init; } = [];
     }
 }
 
 record InternalGameState
 {
-    public List<GameState.Player> players { get; init; } = [];
+    public ImmutableList<GameState.Player> players { get; init; } = [];
 
     public GameState ForPlayer(string id)
     {
