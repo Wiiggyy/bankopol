@@ -28,9 +28,10 @@ namespace skandiahackstatehandler
                     {
                         switch (eventData.action)
                         {
-                            case "addPlayer":
-                                State.AddPlayerToGame(
-                                    eventData.data.Deserialize<GameState.Player>()!
+                            case "joinGame":
+                                State.JoinGame(
+                                    messageData.sender,
+                                    eventData.data.GetString()!
                                 );
                                 break;
                             case "updatePlayerName":
@@ -43,7 +44,7 @@ namespace skandiahackstatehandler
                                 State.FetchInvestment(messageData.sender, investmentType);
                                 break;
                             case "buyInvestment":
-                                var investment = eventData.data.Deserialize<GameState.Investment>();
+                                var investment = eventData.data.Deserialize<GameState.Investment>()!;
                                 State.BuyInvestment(messageData.sender, investment);
                                 break;
                             case "generateEventCard":

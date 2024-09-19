@@ -2,8 +2,8 @@ using System.Text.Json;
 
 namespace skandiahackstatehandler.Data;
 
-public class OutEvent
+public record OutEvent
 {
-    required public string action { get; set; }
-    required public object data { get; set; }
+    required public string action { get; init; }
+    required public object data { get; init; }
 }

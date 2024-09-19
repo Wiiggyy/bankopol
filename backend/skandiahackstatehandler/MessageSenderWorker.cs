@@ -24,33 +24,61 @@ namespace skandiahackstatehandler
                     ? messageData.recipients
                     : State.GetPlayerSnapshot();
 
-                    var data = messageData.eventData;
+                    var outEvent = messageData.eventData;
 
-                    if(data is InternalGameState) {
-                    }
+                    if (outEvent.data is InternalGameState)
+                    {
 
-                    var message = UTF8Encoding.UTF8.GetBytes(
-                        System.Text.Json.JsonSerializer.Serialize(data)
-                    );
-                    var sendTasks = receivers
-                        .Select(r =>
-                        {
-                            try
+                        var sendTasks = receivers
+                            .Select(r =>
                             {
-                                return r.SendAsync(
-                                    message,
-                                    System.Net.WebSockets.WebSocketMessageType.Text,
-                                    true,
-                                    CancellationToken.None  //TODO: consider using stoppingToken here
+                                try
+                                {
+                                    var data = (outEvent.data as InternalGameState)!.ForPlayer(State.PlayerIdForSocket(r));
+                                    var message = UTF8Encoding.UTF8.GetBytes(
+                                        System.Text.Json.JsonSerializer.Serialize(data)
                                     );
-                            }
-                            catch (Exception)
+                                    return r.SendAsync(
+                                        message,
+                                        System.Net.WebSockets.WebSocketMessageType.Text,
+                                        true,
+                                        CancellationToken.None  //TODO: consider using stoppingToken here
+                                        );
+                                }
+                                catch (Exception)
+                                {
+                                    //TODO: log, handle, remove faulty clients?
+                                    return Task.CompletedTask;
+                                }
+                            });
+                        await Task.WhenAll(sendTasks.ToArray());
+                    }
+                    else
+                    {
+
+                        var message = UTF8Encoding.UTF8.GetBytes(
+                            System.Text.Json.JsonSerializer.Serialize(outEvent.data)
+                        );
+                        var sendTasks = receivers
+                            .Select(r =>
                             {
-                                //TODO: log, handle, remove faulty clients?
-                                return Task.CompletedTask;
-                            }
-                        });
-                    await Task.WhenAll(sendTasks.ToArray());
+                                try
+                                {
+                                    return r.SendAsync(
+                                        message,
+                                        System.Net.WebSockets.WebSocketMessageType.Text,
+                                        true,
+                                        CancellationToken.None  //TODO: consider using stoppingToken here
+                                        );
+                                }
+                                catch (Exception)
+                                {
+                                    //TODO: log, handle, remove faulty clients?
+                                    return Task.CompletedTask;
+                                }
+                            });
+                        await Task.WhenAll(sendTasks.ToArray());
+                    }
                 }
                 else
                 {

@@ -39,6 +39,7 @@ namespace skandiahackstatehandler
         }
         public static readonly ConcurrentQueue<(OutEvent eventData, IEnumerable<WebSocket> recipients)> OutgoingMessages = new();
         public static readonly ConcurrentQueue<(Event eventData, WebSocket sender)> EventQueue = new();
+        private static ConcurrentDictionary<WebSocket, string> PlayerIdMapping = [];
 
         public static void WipeData()
         {
@@ -60,6 +61,11 @@ namespace skandiahackstatehandler
                 latestMessage = "{}";
                 playerData.Clear();
             }
+        }
+
+        internal static string PlayerIdForSocket(WebSocket socket)
+        {
+            return PlayerIdMapping[socket];
         }
 
         internal static async Task AddPlayerAndPlay(WebSocket webSocket, TaskCompletionSource socketFinishedTcs)
@@ -166,6 +172,30 @@ namespace skandiahackstatehandler
             // var outMessage = new ArraySegment<byte>(buffer, 0, buffer.Length);
 
             throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Takes the socket of the user and a player id and adds it to the
+        /// list of current active players.
+        /// If the player id does not exist in the game, we add a new player
+        /// with that id.
+        /// </summary>
+        /// <param name="socket"></param>
+        /// <param name="playerId"></param>
+        internal static void JoinGame(WebSocket socket, string playerId)
+        {
+            PlayerIdMapping.TryAdd(socket, playerId);
+
+            if (!gameState.players.Exists((player) => player.id == playerId))
+            {
+                gameState = gameState with
+                {
+                    //TODO(Samuel): hitta på slumpning av namn
+                    players = [.. gameState.players, new GameState.Player(playerId, "random name") {
+                        bankAccount = new GameState.BankAccount(amount: 2000, interest: 0.025)
+                     }],
+                };
+            }
         }
 
         internal static void AddPlayerToGame(GameState.Player player)

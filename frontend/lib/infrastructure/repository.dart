@@ -5,7 +5,6 @@ import 'package:bankopol/enums/investment_type.dart';
 import 'package:bankopol/models/event.dart';
 import 'package:bankopol/models/game_state.dart';
 import 'package:bankopol/models/investment.dart';
-import 'package:bankopol/models/player.dart';
 import 'package:bankopol/provider/game/game_provider.dart';
 import 'package:flutter/foundation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -42,7 +41,7 @@ class Repository extends _$Repository {
     debugPrint('Getting stream');
     await _channel.ready;
 
-    _sendEventToServer('join', ref.read(playerIdProvider));
+    _sendEventToServer('joinGame', await ref.read(playerIdProvider.future));
 
     await for (final message in _channel.stream) {
       debugPrint('Received message');
@@ -90,11 +89,6 @@ class Repository extends _$Repository {
     } catch (e) {
       debugPrint('Error: $e');
     }
-  }
-
-  Player joinGame(Player player) {
-    _sendEventToServer('addPlayer', player.toJson());
-    return player;
   }
 
   void setPlayerName(String newName) {

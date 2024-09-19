@@ -15,7 +15,7 @@ record GameState
 
     public record Player(string id, string name)
     {
-        public BankAccount bankAccount { get; init; } = new(0, 0);
+        required public BankAccount bankAccount { get; init; } = new(0, 0);
         public List<Investment> investments { get; init; } = [];
         public List<int> scannedCodes { get; init; } = [];
     }
@@ -24,4 +24,12 @@ record GameState
 record InternalGameState
 {
     public List<GameState.Player> players { get; init; } = [];
+
+    public GameState ForPlayer(string id)
+    {
+        return new GameState
+        {
+            player = players.First((player) => player.id == id)
+        };
+    }
 }
