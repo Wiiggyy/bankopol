@@ -1,5 +1,4 @@
 import 'package:bankopol/constants/text_style.dart';
-import 'package:bankopol/enums/investment_type.dart';
 import 'package:bankopol/models/investment.dart';
 import 'package:flutter/material.dart';
 
@@ -50,7 +49,7 @@ class InvestmentItem extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              getInvestmentTypeName(investment.investmentType),
+                              investment.investmentType.typeName,
                               style: const TextStyle(
                                 fontSize: 20.0,
                                 fontWeight: FontWeight.bold,
@@ -58,7 +57,7 @@ class InvestmentItem extends StatelessWidget {
                               ),
                             ),
                             Text(
-                              getInvestmentDescription(investment.investmentType),
+                              investment.investmentType.description,
                               style: const TextStyle(
                                 fontSize: 18.0,
                                 fontWeight: FontWeight.bold,
@@ -88,7 +87,7 @@ class InvestmentItem extends StatelessWidget {
             );
           },
           leading: Text(
-            getInvestmentTypeName(investment.investmentType),
+            investment.investmentType.typeName,
             textAlign: TextAlign.left,
             style: investmentListTextStyle,
           ),

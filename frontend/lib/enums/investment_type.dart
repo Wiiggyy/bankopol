@@ -51,128 +51,94 @@ enum InvestmentType {
             .values[random.nextInt(InvestmentType.values.length)];
     }
   }
-}
 
-String getInvestmentTypeName(InvestmentType investmentType) {
-  switch (investmentType) {
-    case InvestmentType.savingsAccount:
-      return 'Sparkonto';
-    case InvestmentType.highYieldSavingsAccount:
-      return 'Högavkastningssparkonto';
-    case InvestmentType.fixedRateAccount:
-      return 'Fasträntekonto';
-    case InvestmentType.investmentSavingsAccount:
-      return 'ISK (Investeringssparkonto)';
-    case InvestmentType.capitalInsurance:
-      return 'Kapitalförsäkring';
-    case InvestmentType.stocks:
-      return 'Aktier';
-    case InvestmentType.funds:
-      return 'Fonder';
-    case InvestmentType.bonds:
-      return 'Obligationer';
-    case InvestmentType.commodities:
-      return 'Råvaror';
-    case InvestmentType.realEstate:
-      return 'Fastigheter';
-    case InvestmentType.crowdfunding:
-      return 'Crowdfunding';
-    case InvestmentType.peerToPeerLending:
-      return 'Peer-to-peer-lån';
-    case InvestmentType.art:
-      return 'Konst';
-    case InvestmentType.jewelryAndGemstones:
-      return 'Smycken och ädelstenar';
-    case InvestmentType.wine:
-      return 'Vin';
-    case InvestmentType.collectibles:
-      return 'Samlarobjekt';
-    case InvestmentType.cryptocurrencies:
-      return 'Kryptovalutor';
-    case InvestmentType.nfts:
-      return 'NFT:er (Non-Fungible Tokens)';
-    case InvestmentType.greenBonds:
-      return 'Gröna obligationer';
-    case InvestmentType.sustainabilityFunds:
-      return 'Hållbarhetsfonder';
-    case InvestmentType.socialEnterprises:
-      return 'Sociala företag';
-    case InvestmentType.microfinancing:
-      return 'Mikrofinansiering';
-    case InvestmentType.pensionInsurance:
-      return 'Pensionsförsäkring';
-    case InvestmentType.childInsurance:
-      return 'Barnförsäkring';
-    case InvestmentType.lifeInsurance:
-      return 'Livförsäkring';
-    case InvestmentType.piggyBank:
-      return 'Spargris';
-    case InvestmentType.savingsChallenges:
-      return 'Sparutmaningar';
-    case InvestmentType.diyInvestments:
-      return '"Gör-det-själv"-investeringar';
-  }
-}
+  String get typeName => switch (this) {
+        InvestmentType.savingsAccount => 'Sparkonto',
+        InvestmentType.highYieldSavingsAccount => 'Högavkastningssparkonto',
+        InvestmentType.fixedRateAccount => 'Fasträntekonto',
+        InvestmentType.investmentSavingsAccount =>
+          'ISK (Investeringssparkonto)',
+        InvestmentType.capitalInsurance => 'Kapitalförsäkring',
+        InvestmentType.stocks => 'Aktier',
+        InvestmentType.funds => 'Fonder',
+        InvestmentType.bonds => 'Obligationer',
+        InvestmentType.commodities => 'Råvaror',
+        InvestmentType.realEstate => 'Fastigheter',
+        InvestmentType.crowdfunding => 'Crowdfunding',
+        InvestmentType.peerToPeerLending => 'Peer-to-peer-lån',
+        InvestmentType.art => 'Konst',
+        InvestmentType.jewelryAndGemstones => 'Smycken och ädelstenar',
+        InvestmentType.wine => 'Vin',
+        InvestmentType.collectibles => 'Samlarobjekt',
+        InvestmentType.cryptocurrencies => 'Kryptovalutor',
+        InvestmentType.nfts => 'NFT:er (Non-Fungible Tokens)',
+        InvestmentType.greenBonds => 'Gröna obligationer',
+        InvestmentType.sustainabilityFunds => 'Hållbarhetsfonder',
+        InvestmentType.socialEnterprises => 'Sociala företag',
+        InvestmentType.microfinancing => 'Mikrofinansiering',
+        InvestmentType.pensionInsurance => 'Pensionsförsäkring',
+        InvestmentType.childInsurance => 'Barnförsäkring',
+        InvestmentType.lifeInsurance => 'Livförsäkring',
+        InvestmentType.piggyBank => 'Spargris',
+        InvestmentType.savingsChallenges => 'Sparutmaningar',
+        InvestmentType.diyInvestments => '"Gör-det-själv"-investeringar',
+      };
 
-String getInvestmentDescription(InvestmentType investmentType) {
-  switch (investmentType) {
-    case InvestmentType.savingsAccount:
-      return 'Ett grundläggande konto med låg ränta, säkert för att spara pengar.';
-    case InvestmentType.highYieldSavingsAccount:
-      return 'Erbjuder högre ränta än ett vanligt sparkonto, men kan ha vissa villkor.';
-    case InvestmentType.fixedRateAccount:
-      return 'Pengarna låses in under en viss period till en fast ränta.';
-    case InvestmentType.investmentSavingsAccount:
-      return 'Konto för att investera i aktier och fonder, beskattas schablonmässigt.';
-    case InvestmentType.capitalInsurance:
-      return 'Liknar ISK, men med fler investeringsmöjligheter och förmånstagare.';
-    case InvestmentType.stocks:
-      return 'Köp andelar i företag, potential för hög avkastning men också risk.';
-    case InvestmentType.funds:
-      return 'En samling av olika värdepapper, diversifierar risken.';
-    case InvestmentType.bonds:
-      return 'Lån ut pengar till företag eller staten, får ränta i gengäld.';
-    case InvestmentType.commodities:
-      return 'Investera i guld, silver, olja etc., kan vara volatilt.';
-    case InvestmentType.realEstate:
-      return 'Köp hus eller lägenheter för att hyra ut eller sälja med vinst.';
-    case InvestmentType.crowdfunding:
-      return 'Investera i nya företag eller projekt via onlineplattformar.';
-    case InvestmentType.peerToPeerLending:
-      return 'Låna ut pengar direkt till andra privatpersoner via en plattform.';
-    case InvestmentType.art:
-      return 'Köp konstverk i hopp om att de ökar i värde.';
-    case InvestmentType.jewelryAndGemstones:
-      return 'Kan öka i värde över tid, särskilt om de är unika.';
-    case InvestmentType.wine:
-      return 'Investera i exklusiva viner som kan lagras och säljas senare.';
-    case InvestmentType.collectibles:
-      return 'Allt från frimärken till serietidningar kan bli värdefulla.';
-    case InvestmentType.cryptocurrencies:
-      return 'Digitala valutor som Bitcoin, hög risk och volatilitet.';
-    case InvestmentType.nfts:
-      return 'r (Non-Fungible Tokens): Unika digitala tillgångar, ofta kopplade till konst eller samlarobjekt.';
-    case InvestmentType.greenBonds:
-      return 'Finansierar miljövänliga projekt.';
-    case InvestmentType.sustainabilityFunds:
-      return 'Investerar i företag med fokus på ESG (miljö, socialt ansvar, bolagsstyrning).';
-    case InvestmentType.socialEnterprises:
-      return 'Investera i företag som har ett socialt eller miljömässigt syfte.';
-    case InvestmentType.microfinancing:
-      return 'Låna ut små summor till entreprenörer i utvecklingsländer.';
-    case InvestmentType.pensionInsurance:
-      return 'Sparande till pensionen med skattelättnader.';
-    case InvestmentType.childInsurance:
-      return 'Sparande till barn med förmånstagare.';
-    case InvestmentType.lifeInsurance:
-      return 'Ger utbetalning vid dödsfall.';
-    case InvestmentType.piggyBank:
-      return 'Traditionellt sätt att spara mynt och sedlar.';
-    case InvestmentType.savingsChallenges:
-      return 'Sätt upp mål och belöningar för att motivera sparandet.';
-    case InvestmentType.diyInvestments:
-      return 'Lär dig att investera på egen hand via aktiehandelsplattformar.';
-  }
+  String get description => switch (this) {
+        InvestmentType.savingsAccount =>
+          'Ett grundläggande konto med låg ränta, säkert för att spara pengar.',
+        InvestmentType.highYieldSavingsAccount =>
+          'Erbjuder högre ränta än ett vanligt sparkonto, men kan ha vissa villkor.',
+        InvestmentType.fixedRateAccount =>
+          'Pengarna låses in under en viss period till en fast ränta.',
+        InvestmentType.investmentSavingsAccount =>
+          'Konto för att investera i aktier och fonder, beskattas schablonmässigt.',
+        InvestmentType.capitalInsurance =>
+          'Liknar ISK, men med fler investeringsmöjligheter och förmånstagare.',
+        InvestmentType.stocks =>
+          'Köp andelar i företag, potential för hög avkastning men också risk.',
+        InvestmentType.funds =>
+          'En samling av olika värdepapper, diversifierar risken.',
+        InvestmentType.bonds =>
+          'Lån ut pengar till företag eller staten, får ränta i gengäld.',
+        InvestmentType.commodities =>
+          'Investera i guld, silver, olja etc., kan vara volatilt.',
+        InvestmentType.realEstate =>
+          'Köp hus eller lägenheter för att hyra ut eller sälja med vinst.',
+        InvestmentType.crowdfunding =>
+          'Investera i nya företag eller projekt via onlineplattformar.',
+        InvestmentType.peerToPeerLending =>
+          'Låna ut pengar direkt till andra privatpersoner via en plattform.',
+        InvestmentType.art => 'Köp konstverk i hopp om att de ökar i värde.',
+        InvestmentType.jewelryAndGemstones =>
+          'Kan öka i värde över tid, särskilt om de är unika.',
+        InvestmentType.wine =>
+          'Investera i exklusiva viner som kan lagras och säljas senare.',
+        InvestmentType.collectibles =>
+          'Allt från frimärken till serietidningar kan bli värdefulla.',
+        InvestmentType.cryptocurrencies =>
+          'Digitala valutor som Bitcoin, hög risk och volatilitet.',
+        InvestmentType.nfts =>
+          'r (Non-Fungible Tokens): Unika digitala tillgångar, ofta kopplade till konst eller samlarobjekt.',
+        InvestmentType.greenBonds => 'Finansierar miljövänliga projekt.',
+        InvestmentType.sustainabilityFunds =>
+          'Investerar i företag med fokus på ESG (miljö, socialt ansvar, bolagsstyrning).',
+        InvestmentType.socialEnterprises =>
+          'Investera i företag som har ett socialt eller miljömässigt syfte.',
+        InvestmentType.microfinancing =>
+          'Låna ut små summor till entreprenörer i utvecklingsländer.',
+        InvestmentType.pensionInsurance =>
+          'Sparande till pensionen med skattelättnader.',
+        InvestmentType.childInsurance =>
+          'Sparande till barn med förmånstagare.',
+        InvestmentType.lifeInsurance => 'Ger utbetalning vid dödsfall.',
+        InvestmentType.piggyBank =>
+          'Traditionellt sätt att spara mynt och sedlar.',
+        InvestmentType.savingsChallenges =>
+          'Sätt upp mål och belöningar för att motivera sparandet.',
+        InvestmentType.diyInvestments =>
+          'Lär dig att investera på egen hand via aktiehandelsplattformar.',
+      };
 }
 
 /*
