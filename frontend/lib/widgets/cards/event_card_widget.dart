@@ -105,6 +105,7 @@ class EventCardWidget extends HookConsumerWidget {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
+                        const Spacer(),
                         Text(
                           eventCard.description,
                           style: eventCardTextStyle,
@@ -124,6 +125,11 @@ class EventCardWidget extends HookConsumerWidget {
                             '${eventCard.eventAction.percentValue! * 100}%',
                             style: eventCardTextStyle,
                           ),
+                        const Spacer(),
+                        Text(
+                          eventCard.eventAction.investmentType.typeName,
+                          style: eventCardTextStyle,
+                        ),
                       ],
                     ),
                   ),

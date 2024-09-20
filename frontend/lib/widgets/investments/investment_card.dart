@@ -28,7 +28,7 @@ class InvestmentCard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                getInvestmentTypeName(investment.investmentType),
+                investment.investmentType.typeName,
                 style: const TextStyle(
                   fontSize: 20.0,
                   fontWeight: FontWeight.bold,
@@ -36,7 +36,7 @@ class InvestmentCard extends StatelessWidget {
                 ),
               ),
               Text(
-                getInvestmentDescription(investment.investmentType),
+                investment.investmentType.description,
                 style: const TextStyle(
                   fontSize: 18.0,
                   fontWeight: FontWeight.bold,
