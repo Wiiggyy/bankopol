@@ -26,6 +26,7 @@ namespace skandiahackstatehandler
                     var eventData = messageData.eventData;
                     try
                     {
+                        InvestmentType investmentType;
                         switch (eventData.action)
                         {
                             case "joinGame":
@@ -39,12 +40,16 @@ namespace skandiahackstatehandler
                                 break;
                             case "fetchInvestment":
                                 // TODO: Deserialize name instead of index
-                                var investmentType = eventData.data.Deserialize<InvestmentType>();
+                                investmentType = eventData.data.Deserialize<InvestmentType>();
                                 State.FetchInvestment(messageData.sender, investmentType);
                                 break;
                             case "buyInvestment":
                                 var investment = eventData.data.Deserialize<GameState.Investment>()!;
                                 State.BuyInvestment(messageData.sender, investment);
+                                break;
+                            case "sellInvestment":
+                                investmentType = eventData.data.Deserialize<InvestmentType>();
+                                State.SellInvestment(messageData.sender, investmentType);
                                 break;
                             case "generateEventCard":
                                 State.DrawEventCard(messageData.sender);

@@ -83,37 +83,6 @@ class GameStatePod extends _$GameStatePod {
   }
 
   Future<void> sellInvestment(Investment sellInvestment) async {
-    // final currentPlayer = ref.read(currentPlayerProvider).requireValue!;
-    //
-    // final investment = currentPlayer.investments.firstWhereOrNull(
-    //   (playerInvestment) =>
-    //       playerInvestment.investmentType == sellInvestment.investmentType,
-    // );
-    //
-    // if (investment == null) return;
-    //
-    // final newBankAccount = currentPlayer.bankAccount.copyWith(
-    //   amount: currentPlayer.bankAccount.amount + sellInvestment.value,
-    // );
-    //
-    // final updatedPlayer = currentPlayer.copyWith(
-    //   bankAccount: newBankAccount,
-    //   investments: currentPlayer.investments
-    //       .where(
-    //         (playerInvestment) =>
-    //             playerInvestment.investmentType !=
-    //             sellInvestment.investmentType,
-    //       )
-    //       .toSet(),
-    // );
-    //
-    // final gameState = state.requireValue;
-    //
-    // final nextGameState = gameState.copyWith(
-    //   players: {...gameState.players}
-    //     ..removeWhere((player) => player.id == currentPlayer.id)
-    //     ..add(updatedPlayer),
-    // );
-    // await _repository.updateGameState(nextGameState);
+    _repository.sellInvestment(sellInvestment.investmentType);
   }
 }
