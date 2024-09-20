@@ -26,11 +26,6 @@ jobs:
         working-directory: ./frontend
         run: flutter build web --release
       
-      - name: Setup NodeJS
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
-          cache: "npm"
       - name: Install Netlify
         run: npm install netlify-cli@17.10.1 -g
       
