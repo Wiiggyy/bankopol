@@ -24,7 +24,7 @@ jobs:
 
       - name: Build app
         working-directory: ./frontend
-        run: flutter build web --release --wasm
+        run: flutter build web --release
       
       - name: Setup NodeJS
         uses: actions/setup-node@v4
