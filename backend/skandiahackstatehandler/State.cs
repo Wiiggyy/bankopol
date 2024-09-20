@@ -319,6 +319,42 @@ namespace skandiahackstatehandler
             DrawEventCard(sender);
         }
 
+        internal static void SellInvestment(WebSocket sender, InvestmentType investmentType)
+        {
+            var playerId = PlayerIdForSocket(sender);
+            gameState = gameState with
+            {
+                players = [..gameState.players.Select((player) => {
+                    if (player.id != playerId) return player;
+
+                    List<GameState.Investment> newInvestmentList = new List<GameState.Investment>(player.investments.Count);
+
+                    double value = 0;
+                    foreach (var investment in player.investments)
+                    {
+                        if (investment.investmentType == investmentType)
+                        {
+                            value = investment.value;
+                        }
+                        else{
+                            newInvestmentList.Add(investment);
+
+                        }
+                    }
+
+                    return player with
+                    {
+                        investments = newInvestmentList.ToImmutableList(),
+                        bankAccount = player.bankAccount with {
+                            amount = player.bankAccount.amount + value
+                        }
+                    };
+                })],
+            };
+
+            BroadcastGameState();
+        }
+
         internal static void DrawEventCard(WebSocket sender)
         {
             var investmentTypes = gameState.players.SelectMany(player =>
@@ -362,7 +398,7 @@ namespace skandiahackstatehandler
                         {
                             var newQuantity = investment.quantity + amount;
                             var newValue = investment.value * percentValue + amountValue;
-                            if(newQuantity != 0 && newValue != 0){
+                            if(newQuantity > 0 && newValue > 0){
                             newInvestmentList.Add(investment with
                             {
                                 quantity = newQuantity,

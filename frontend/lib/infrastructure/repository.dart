@@ -29,9 +29,11 @@ class Repository extends _$Repository {
     ref.onDispose(_gameStateController.close);
     ref.onDispose(_eventController.close);
 
-    // _host = 'localhost:7226';
     _host =
         'hackstatehandler-djcyf9c6bbetfvfy.swedencentral-01.azurewebsites.net';
+    if (kDebugMode) {
+      _host = 'localhost:7226';
+    }
     final uri = 'wss://$_host/api/Player/connect/';
     debugPrint('Connecting to socket');
     _channel = WebSocketChannel.connect(Uri.parse(uri));
@@ -105,6 +107,10 @@ class Repository extends _$Repository {
 
   void buyInvestment(Investment newInvestment) {
     _sendEventToServer('buyInvestment', newInvestment.toJson());
+  }
+
+  void sellInvestment(InvestmentType investmentType) {
+    _sendEventToServer('sellInvestment', investmentType.index);
   }
 
   void activateEventCard(EventCard eventCard) {
