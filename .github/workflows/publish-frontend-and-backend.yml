@@ -1,0 +1,23 @@
+name: Frontend + Backend
+
+on:
+  workflow_dispatch: # Manual trigger
+
+jobs:
+  frontend:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger Frontend build
+        uses: actions/workflow-run@v3
+        with:
+          workflow_id: 'publish-frontend.yml'
+          ref: main  # Adjust if your action is on a different branch
+
+  backend:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger Backend build
+        uses: actions/workflow-run@v3
+        with:
+          workflow_id: 'publish-backend.yml'
+          ref: main  # Adjust if your action is on a different branch
