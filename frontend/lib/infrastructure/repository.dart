@@ -29,8 +29,9 @@ class Repository extends _$Repository {
     ref.onDispose(_gameStateController.close);
     ref.onDispose(_eventController.close);
 
-    _host = 'localhost:7226';
-    // 'hackstatehandler-djcyf9c6bbetfvfy.swedencentral-01.azurewebsites.net';
+    // _host = 'localhost:7226';
+    _host =
+        'hackstatehandler-djcyf9c6bbetfvfy.swedencentral-01.azurewebsites.net';
     final uri = 'wss://$_host/api/Player/connect/';
     debugPrint('Connecting to socket');
     _channel = WebSocketChannel.connect(Uri.parse(uri));
