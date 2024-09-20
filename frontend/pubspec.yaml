@@ -28,6 +28,7 @@ dependencies:
 dev_dependencies:
   build_runner: ^2.4.12
   custom_lint: ^0.5.6
+  flutter_launcher_icons: ^0.13.1
   flutter_test:
     sdk: flutter
 
@@ -40,3 +41,22 @@ flutter:
 
   assets:
     - assets/
+
+flutter_launcher_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/icon/bankopol_android.png"
+  adaptive_icon_background: "#FDFDF1"
+  min_sdk_android: 21 # android min sdk min:16, default 21
+  web:
+    generate: true
+    image_path: "assets/icon/bankopol_web.png"
+    background_color: "#FDFDF1"
+    theme_color: "#70B57C"
+  windows:
+    generate: true
+    image_path: "assets/icon/bankopol.jpeg"
+    icon_size: 48 # min:48, max:256, default: 48
+  macos:
+    generate: true
+    image_path: "assets/icon/bankopol.jpeg"
