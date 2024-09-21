@@ -31,7 +31,7 @@ jobs:
         run: flutter build web --release
       
       - name: Install Netlify
-        run: npm install netlify-cli@17.10.1 -g
+        run: npm install netlify-cli -g
       
       - name: Deploy to Netlify
         working-directory: ./frontend
