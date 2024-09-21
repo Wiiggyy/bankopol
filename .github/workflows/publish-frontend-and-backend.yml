@@ -6,6 +6,8 @@ on:
 jobs:
   frontend:
     uses: ./.github/workflows/publish-frontend.yml
+    secrets: inherit
 
   backend:
     uses: ./.github/workflows/publish-backend.yml
+    secrets: inherit
