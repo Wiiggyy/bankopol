@@ -30,17 +30,38 @@ jobs:
         working-directory: ./frontend
         run: flutter build web --release
       
+      - name: Upload artifact for deployment job
+        uses: actions/upload-artifact@v4
+        with:
+          name: app
+          path: ./frontend/build/web
+
+
+  deploy:
+    permissions:
+      contents: none
+    runs-on: ubuntu-latest
+    needs: build
+    environment:
+      name: 'Development'
+      url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
+
+    steps:
+      - name: Download artifact from build job
+        uses: actions/download-artifact@v4
+        with:
+          name: app
+
       - name: Install Netlify
         run: npm install netlify-cli -g
       
       - name: Deploy to Netlify
-        working-directory: ./frontend
         id: netlify_deploy
         run: |
           prod_flag=""
           if [ "$BRANCH_NAME" = "main" ]; then prod_flag="--prod"; fi
           netlify deploy \
-            --dir build/web \
+            --dir . \
             --site ${{ secrets.NETLIFY_SITE_ID }} \
             --auth ${{ secrets.NETLIFY_API_TOKEN }} \
             $prod_flag
