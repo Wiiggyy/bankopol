@@ -8,22 +8,25 @@ class InvestmentItemHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const ListTile(
-      dense: true,
-      leading: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Text(
-            'Investering',
-            textAlign: TextAlign.left,
-            style: investmentListTextStyle,
-          ),
-        ],
-      ),
-      trailing: Text(
-        'Värde',
-        textAlign: TextAlign.right,
-        style: investmentListTextStyle,
+    return ColoredBox(
+      color: Colors.white.withOpacity(0.2),
+      child: const ListTile(
+        dense: true,
+        leading: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              'Investering',
+              textAlign: TextAlign.left,
+              style: investmentListTextStyle,
+            ),
+          ],
+        ),
+        trailing: Text(
+          'Värde',
+          textAlign: TextAlign.right,
+          style: investmentListTextStyle,
+        ),
       ),
     );
   }

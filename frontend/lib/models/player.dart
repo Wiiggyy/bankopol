@@ -9,7 +9,7 @@ class Player with PlayerMappable {
   final String id;
   final String name;
   final BankAccount bankAccount;
-  final Set<Investment> investments;
+  final List<Investment> investments;
   final Set<int> scannedCodes;
 
   const Player({

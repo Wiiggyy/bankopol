@@ -91,10 +91,16 @@ class InvestmentItem extends StatelessWidget {
             textAlign: TextAlign.left,
             style: investmentListTextStyle,
           ),
-          trailing: Text(
-            '${(investment.value * investment.quantity).toStringAsFixed(0)} (${investment.quantity})',
-            textAlign: TextAlign.right,
-            style: investmentListTextStyle,
+          trailing: AnimatedSwitcher(
+            duration: const Duration(seconds: 1),
+            child: Text(
+              key: ValueKey(
+                '${(investment.value * investment.quantity).toStringAsFixed(0)} (${investment.quantity})',
+              ),
+              '${(investment.value * investment.quantity).toStringAsFixed(0)} (${investment.quantity})',
+              textAlign: TextAlign.right,
+              style: investmentListTextStyle,
+            ),
           ),
         ),
       ],

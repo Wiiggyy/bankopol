@@ -29,8 +29,8 @@ class PlayerMapper extends ClassMapperBase<Player> {
   static BankAccount _$bankAccount(Player v) => v.bankAccount;
   static const Field<Player, BankAccount> _f$bankAccount =
       Field('bankAccount', _$bankAccount);
-  static Set<Investment> _$investments(Player v) => v.investments;
-  static const Field<Player, Set<Investment>> _f$investments =
+  static List<Investment> _$investments(Player v) => v.investments;
+  static const Field<Player, List<Investment>> _f$investments =
       Field('investments', _$investments);
   static Set<int> _$scannedCodes(Player v) => v.scannedCodes;
   static const Field<Player, Set<int>> _f$scannedCodes =
@@ -101,11 +101,13 @@ extension PlayerValueCopy<$R, $Out> on ObjectCopyWith<$R, Player, $Out> {
 abstract class PlayerCopyWith<$R, $In extends Player, $Out>
     implements ClassCopyWith<$R, $In, $Out> {
   BankAccountCopyWith<$R, BankAccount, BankAccount> get bankAccount;
+  ListCopyWith<$R, Investment, InvestmentCopyWith<$R, Investment, Investment>>
+      get investments;
   $R call(
       {String? id,
       String? name,
       BankAccount? bankAccount,
-      Set<Investment>? investments,
+      List<Investment>? investments,
       Set<int>? scannedCodes});
   PlayerCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(Then<$Out2, $R2> t);
 }
@@ -120,11 +122,15 @@ class _PlayerCopyWithImpl<$R, $Out> extends ClassCopyWithBase<$R, Player, $Out>
   BankAccountCopyWith<$R, BankAccount, BankAccount> get bankAccount =>
       $value.bankAccount.copyWith.$chain((v) => call(bankAccount: v));
   @override
+  ListCopyWith<$R, Investment, InvestmentCopyWith<$R, Investment, Investment>>
+      get investments => ListCopyWith($value.investments,
+          (v, t) => v.copyWith.$chain(t), (v) => call(investments: v));
+  @override
   $R call(
           {String? id,
           String? name,
           BankAccount? bankAccount,
-          Set<Investment>? investments,
+          List<Investment>? investments,
           Set<int>? scannedCodes}) =>
       $apply(FieldCopyWithData({
         if (id != null) #id: id,

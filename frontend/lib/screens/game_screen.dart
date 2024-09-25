@@ -140,13 +140,14 @@ class _PlayerScreenState extends ConsumerState<GameScreen> {
           ),
           SafeArea(
             bottom: false,
-            child: Column(
-              children: [
-                Flexible(
-                  child: InvestmentList(player: player),
+            child: CustomScrollView(
+              slivers: [
+                InvestmentList(
+                  key: const ValueKey('PlayerScreen.InvestmentList'),
+                  player: player,
                 ),
                 if (currentEventCard case final currentEventCard?)
-                  Flexible(
+                  SliverToBoxAdapter(
                     child: Padding(
                       padding: const EdgeInsets.all(16),
                       child: EventCardWidget(
