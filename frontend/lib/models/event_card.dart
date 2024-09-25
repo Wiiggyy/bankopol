@@ -1,6 +1,10 @@
 import 'package:bankopol/models/event_action.dart';
+import 'package:dart_mappable/dart_mappable.dart';
 
-class EventCard {
+part 'event_card.mapper.dart';
+
+@MappableClass()
+class EventCard with EventCardMappable {
   final String description;
   final EventAction eventAction;
 
@@ -8,18 +12,4 @@ class EventCard {
     required this.description,
     required this.eventAction,
   });
-
-  factory EventCard.fromJson(Map<String, dynamic> json) {
-    return EventCard(
-      description: json['description'] as String,
-      eventAction: EventAction.fromJson(
-        json['eventAction'] as Map<String, dynamic>,
-      ),
-    );
-  }
-
-  Map<String, dynamic> toJson() => {
-        'description': description,
-        'eventAction': eventAction.toJson(),
-      };
 }

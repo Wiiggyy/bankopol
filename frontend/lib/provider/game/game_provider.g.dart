@@ -36,7 +36,7 @@ final currentEventCardProvider =
 );
 
 typedef _$CurrentEventCard = AutoDisposeNotifier<EventCard?>;
-String _$gameStatePodHash() => r'8a984fb2633612465c73aa6c57793819f1170d7a';
+String _$gameStatePodHash() => r'ff6cf60e570acf6bb6159415ab20c977a0e97488';
 
 /// See also [GameStatePod].
 @ProviderFor(GameStatePod)

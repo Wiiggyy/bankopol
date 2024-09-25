@@ -1,5 +1,10 @@
 import 'dart:math';
 
+import 'package:dart_mappable/dart_mappable.dart';
+
+part 'investment_type.mapper.dart';
+
+@MappableEnum(mode: ValuesMode.indexed)
 enum InvestmentType {
   savingsAccount, // Sparkonto
   highYieldSavingsAccount, // Högavkastningssparkonto

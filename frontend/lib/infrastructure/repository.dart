@@ -58,19 +58,20 @@ class Repository extends _$Repository {
                 'action': 'newGameState',
                 'data': final Map<String, dynamic> data,
               }:
-              _gameStateController.add(GameState.fromJson(data));
+              _gameStateController.add(GameStateMapper.fromMap(data));
             case {
                 'action': 'investmentOpportunity',
                 'data': final Map<String, dynamic> data,
               }:
               _eventController.add(
-                InvestmentOpportunityEvent(Investment.fromJson(data)),
+                InvestmentOpportunityEvent(InvestmentMapper.fromMap(data)),
               );
             case {
                 'action': 'eventCardDrawn',
                 'data': final Map<String, dynamic> data,
               }:
-              _eventController.add(EventCardEvent(EventCard.fromJson(data)));
+              _eventController
+                  .add(EventCardEvent(EventCardMapper.fromMap(data)));
             case final _:
               debugPrint('No action set up for $message');
           }
@@ -106,7 +107,7 @@ class Repository extends _$Repository {
   }
 
   void buyInvestment(Investment newInvestment) {
-    _sendEventToServer('buyInvestment', newInvestment.toJson());
+    _sendEventToServer('buyInvestment', newInvestment.toMap());
   }
 
   void sellInvestment(InvestmentType investmentType) {
@@ -114,7 +115,7 @@ class Repository extends _$Repository {
   }
 
   void activateEventCard(EventCard eventCard) {
-    _sendEventToServer('activateEventCard', eventCard.toJson());
+    _sendEventToServer('activateEventCard', eventCard.toMap());
   }
 
   Future<void> _sendEventToServer(

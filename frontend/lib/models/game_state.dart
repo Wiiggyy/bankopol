@@ -1,6 +1,10 @@
 import 'package:bankopol/models/player.dart';
+import 'package:dart_mappable/dart_mappable.dart';
 
-class GameState {
+part 'game_state.mapper.dart';
+
+@MappableClass()
+class GameState with GameStateMappable {
   final Player player;
   final Map<String, num> highScore;
 
@@ -8,14 +12,4 @@ class GameState {
     required this.player,
     required this.highScore,
   });
-
-  factory GameState.fromJson(Map<String, dynamic> json) {
-    final playerJson = json['player'] as Map<String, dynamic>;
-    final highScore = json['highScore'] as Map<String, dynamic>;
-
-    return GameState(
-      player: Player.fromJson(playerJson),
-      highScore: highScore.cast(),
-    );
-  }
 }

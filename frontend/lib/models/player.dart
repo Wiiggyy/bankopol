@@ -1,7 +1,11 @@
 import 'package:bankopol/models/bank_account.dart';
 import 'package:bankopol/models/investment.dart';
+import 'package:dart_mappable/dart_mappable.dart';
 
-class Player {
+part 'player.mapper.dart';
+
+@MappableClass()
+class Player with PlayerMappable {
   final String id;
   final String name;
   final BankAccount bankAccount;
@@ -21,45 +25,5 @@ class Player {
       bankAccount.amount,
       (previousValue, element) => previousValue + element.value,
     );
-  }
-
-  factory Player.fromJson(Map<String, dynamic> json) {
-    return Player(
-      id: json['id'] as String,
-      name: json['name'] as String,
-      bankAccount:
-          BankAccount.fromJson(json['bankAccount'] as Map<String, dynamic>),
-      investments: (json['investments'] as List<dynamic>)
-          .cast<Map<String, dynamic>>()
-          .map<Investment>(Investment.fromJson)
-          .toSet(),
-    );
-  }
-
-  Player copyWith({
-    String? id,
-    String? name,
-    BankAccount? bankAccount,
-    Set<Investment>? investments,
-    Set<int>? scannedCodes,
-  }) {
-    return Player(
-      id: id ?? this.id,
-      name: name ?? this.name,
-      bankAccount: bankAccount ?? this.bankAccount,
-      investments: investments ?? this.investments,
-      scannedCodes: scannedCodes ?? this.scannedCodes,
-    );
-  }
-
-  Map<String, dynamic> toJson() {
-    return {
-      'id': id,
-      'name': name,
-      'bankAccount': bankAccount.toJson(),
-      'investments':
-          investments.map((investment) => investment.toJson()).toList(),
-      'scannedCodes': scannedCodes.toList(),
-    };
   }
 }

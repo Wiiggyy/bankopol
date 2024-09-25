@@ -1,8 +1,12 @@
 import 'dart:math';
 
 import 'package:bankopol/enums/investment_type.dart';
+import 'package:dart_mappable/dart_mappable.dart';
 
-class Investment {
+part 'investment.mapper.dart';
+
+@MappableClass()
+class Investment with InvestmentMappable {
   final InvestmentType investmentType;
   final double value;
   final int quantity;
@@ -14,38 +18,6 @@ class Investment {
     required this.quantity,
     required this.interest,
   });
-
-  factory Investment.fromJson(Map<String, dynamic> json) {
-    return Investment(
-      investmentType: InvestmentType.values[json['investmentType'] as int],
-      value: (json['value'] as num).toDouble(),
-      quantity: json['quantity'] as int,
-      interest: (json['interest'] as num).toDouble(),
-    );
-  }
-
-  Map<String, num> toJson() {
-    return {
-      'investmentType': investmentType.index,
-      'value': value,
-      'quantity': quantity,
-      'interest': interest,
-    };
-  }
-
-  Investment copyWith({
-    InvestmentType? investmentType,
-    double? value,
-    int? quantity,
-    double? interest,
-  }) {
-    return Investment(
-      investmentType: investmentType ?? this.investmentType,
-      value: value ?? this.value,
-      quantity: quantity ?? this.quantity,
-      interest: interest ?? this.interest,
-    );
-  }
 
   static final random = Random();
 

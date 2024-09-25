@@ -1,4 +1,3 @@
-import 'package:bankopol/enums/investment_type.dart';
 import 'package:bankopol/models/investment.dart';
 import 'package:flutter/material.dart';
 
